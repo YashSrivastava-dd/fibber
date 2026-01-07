@@ -152,7 +152,7 @@ export default function Footer() {
       </div>
 
       {/* Large Brand Logo */}
-      <div className="overflow-hidden py-8 md:py-12 flex justify-center px-4">
+      <div className="overflow-hidden pt-8 md:pt-12 flex justify-center px-4">
         <div className="relative w-full max-w-6xl h-32 md:h-44 lg:h-56 opacity-1000">
           <Image
             src="/fiberise fit light logo.png"
