@@ -56,12 +56,11 @@ export default function FeaturedProductsSection() {
           <p 
             className="text-xl md:text-2xl lg:text-3xl text-black leading-relaxed font-normal mb-4"
           >
-            Fyber delivers daily supplements designed to support digestion, balance, and overall well-being.
-          </p>
+Control Appetite. Refine Weight          </p>
           <p 
             className="text-base md:text-lg lg:text-xl text-black/70 leading-relaxed font-normal"
           >
-            Clean, digestible, effortless daily wellness.
+       A science-driven approach to feeling full, lighter, and in control.
           </p>
         </div>
 

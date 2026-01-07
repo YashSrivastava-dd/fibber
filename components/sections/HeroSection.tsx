@@ -25,14 +25,11 @@ export default function HeroSection() {
         {/* Text Content */}
         <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-12 lg:p-16">
           <p className="text-sm md:text-base uppercase tracking-wider mb-3 text-white/80">
-            The Future of Wellness
+            SCIENCE BACKED | NATURAL WEIGHT-MANAGEMENT SOLUTION
         </p>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-6 leading-[0.95] tracking-tight">
-          GEAR UP FOR
-          <br />
-            GREAT
-            <br />
-            HEALTH
+          <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-6 leading-[0.95] tracking-tight">
+          <span className="block whitespace-nowrap mb-2">CONTROL CRAVINGS</span>
+          <span className="block whitespace-nowrap">MANAGE WEIGHT</span>
         </h1>
         <Link
           href="/collections/all"
@@ -46,10 +43,10 @@ export default function HeroSection() {
       {/* Right Side - Image (hidden on mobile) */}
       <div className="hidden md:block relative md:w-1/2 h-screen bg-[#e8e4dd]">
         <Image
-          src="/Replace_the_girl_202601061238.jpg"
+          src="/ChatGPT Image Jan 7, 2026 at 06_22_48 PM.png"
           alt="Wellness lifestyle"
           fill
-          className="object-cover object-center"
+          className="object-cover object-top"
           priority
         />
       </div>

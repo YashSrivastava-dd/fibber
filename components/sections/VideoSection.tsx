@@ -5,38 +5,38 @@ import Image from 'next/image'
 const features = [
   {
     icon: '/icons/nogmo-2.png',
-    title: 'NON-GMO',
-    description: 'We carefully evaluate every ingredient, ensuring they are non-GMO.',
+    title: 'Mobilises Fat',
+    description: 'Supports the body’s natural fat-utilisation pathways',
     position: 'left-top',
   },
   {
     icon: '/icons/eng-ico.png',
-    title: 'ENGINEERED FOR EFFECTIVENESS',
-    description: 'Our formulations are crafted to maximize potency and absorption.',
+    title: 'Controls Hunger',
+    description: 'Helps you feel satisfied, longer.',
     position: 'left-middle',
   },
   {
     icon: '/icons/vegan-2.png',
-    title: 'VEGAN',
-    description: 'Plant-based formulas suitable for all dietary preferences.',
+    title: 'Improves Energy Levels',
+    description: 'Clean support for mental and physical clarity.',
     position: 'left-bottom',
   },
   {
     icon: '/icons/quality.png',
-    title: 'QUALITY INGREDIENTS',
-    description: "We're dedicated to using scientifically backed, high-quality natural ingredients.",
+    title: 'Reduces Caloric Intake',
+    description: "Encourages mindful eating through better fullness.",
     position: 'right-top',
   },
   {
     icon: '/icons/lab.png',
-    title: 'THIRD-PARTY TESTED',
-    description: 'We hold ourselves and our ingredients to the highest standards.',
+    title: 'Pre-Biotic',
+    description: 'Encourages mindful eating through better fullness.',
     position: 'right-middle',
   },
   {
     icon: '/icons/nometal-2.png',
-    title: 'NO HEAVY METALS',
-    description: 'Rigorously tested to ensure purity and safety in every batch.',
+    title: 'Pro-Biotic',
+    description: 'Supports a balanced and resilient gut ecosystem.',
     position: 'right-bottom',
   },
 ]
@@ -49,7 +49,7 @@ export default function VideoSection() {
     <section className="w-full bg-fyber-ivory-dream py-10 md:py-14 lg:py-16">
       {/* Section Title */}
       <h2 className="text-center text-xl md:text-2xl lg:text-3xl font-semibold tracking-wider uppercase mb-8 md:mb-12 px-4">
-        SCIENCE-DRIVEN CONFIDENCE BOOST
+        SCIENCE MEETS EVERYDAY CONTROL
       </h2>
 
       <div className="max-w-6xl mx-auto px-4">

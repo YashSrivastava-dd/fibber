@@ -17,23 +17,23 @@ export default function MeditationImageSection() {
       <div className="absolute top-1/2 left-0 right-0 -translate-y-1/2 z-20 py-4 overflow-hidden">
         <div className="whitespace-nowrap animate-marquee">
           <span className="inline-block mx-12 text-white text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl font-normal uppercase tracking-wider" style={{ fontFamily: 'QuadratGrotesk, sans-serif' }}>
-            YOUR WELLNESS , OUR PRIORITY
+            Designed by Nature<span className="mx-8 md:mx-12 lg:mx-16"> </span>Refined by Science<span className="mx-8 md:mx-12 lg:mx-16"> </span>
           </span>
           <span className="inline-block mx-12 text-white text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl font-normal uppercase tracking-wider" style={{ fontFamily: 'QuadratGrotesk, sans-serif' }}>
-            YOUR WELLNESS , OUR PRIORITY
+            Designed by Nature<span className="mx-8 md:mx-12 lg:mx-16"> </span>Refined by Science<span className="mx-8 md:mx-12 lg:mx-16"> </span>
           </span>
           <span className="inline-block mx-12 text-white text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl font-normal uppercase tracking-wider" style={{ fontFamily: 'QuadratGrotesk, sans-serif' }}>
-            YOUR WELLNESS , OUR PRIORITY
+            Designed by Nature<span className="mx-8 md:mx-12 lg:mx-16"> </span>Refined by Science<span className="mx-8 md:mx-12 lg:mx-16"> </span>
           </span>
           {/* Duplicate set for seamless loop */}
           <span className="inline-block mx-12 text-white text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl font-normal uppercase tracking-wider" style={{ fontFamily: 'QuadratGrotesk, sans-serif' }}>
-            YOUR WELLNESS , OUR PRIORITY
+            Designed by Nature<span className="mx-8 md:mx-12 lg:mx-16"> </span>Refined by Science<span className="mx-8 md:mx-12 lg:mx-16"> </span>
           </span>
           <span className="inline-block mx-12 text-white text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl font-normal uppercase tracking-wider" style={{ fontFamily: 'QuadratGrotesk, sans-serif' }}>
-            YOUR WELLNESS , OUR PRIORITY
+            Designed by Nature<span className="mx-8 md:mx-12 lg:mx-16"> </span>Refined by Science<span className="mx-8 md:mx-12 lg:mx-16"> </span>
           </span>
           <span className="inline-block mx-12 text-white text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl font-normal uppercase tracking-wider" style={{ fontFamily: 'QuadratGrotesk, sans-serif' }}>
-            YOUR WELLNESS , OUR PRIORITY
+            Designed by Nature<span className="mx-8 md:mx-12 lg:mx-16"> </span>Refined by Science<span className="mx-8 md:mx-12 lg:mx-16"> </span>
           </span>
         </div>
       </div>
