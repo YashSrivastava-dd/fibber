@@ -16,7 +16,7 @@ export default function HeroSection() {
           playsInline
           className="absolute inset-0 w-full h-full object-cover"
         >
-          <source src="/videos/Untitled design.mp4" type="video/mp4" />
+          <source src="/videos/int.webm" type="video/webm" />
         </video>
         
         {/* Gradient Overlay for text readability */}
@@ -43,10 +43,10 @@ export default function HeroSection() {
       {/* Right Side - Image (hidden on mobile) */}
       <div className="hidden md:block relative md:w-1/2 h-screen bg-[#e8e4dd]">
         <Image
-          src="/ChatGPT Image Jan 7, 2026 at 06_22_48 PM.png"
+          src="/Remove_the_text_2k_202601081252.jpeg"
           alt="Wellness lifestyle"
           fill
-          className="object-cover object-top"
+          className="object-cover object-center"
           priority
         />
       </div>

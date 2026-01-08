@@ -4,37 +4,37 @@ import Image from 'next/image'
 
 const features = [
   {
-    icon: '/icons/nogmo-2.png',
+    icon: '/icons/Group 642.svg',
     title: 'Mobilises Fat',
     description: 'Supports the body’s natural fat-utilisation pathways',
     position: 'left-top',
   },
   {
-    icon: '/icons/eng-ico.png',
+    icon: '/icons/Group 639.svg',
     title: 'Controls Hunger',
     description: 'Helps you feel satisfied, longer.',
     position: 'left-middle',
   },
   {
-    icon: '/icons/vegan-2.png',
+    icon: '/icons/Group 644.svg',
     title: 'Improves Energy Levels',
     description: 'Clean support for mental and physical clarity.',
     position: 'left-bottom',
   },
   {
-    icon: '/icons/quality.png',
+    icon: '/icons/Group 643.svg',
     title: 'Reduces Caloric Intake',
     description: "Encourages mindful eating through better fullness.",
     position: 'right-top',
   },
   {
-    icon: '/icons/lab.png',
+    icon: '/icons/Group 640.svg',
     title: 'Pre-Biotic',
     description: 'Encourages mindful eating through better fullness.',
     position: 'right-middle',
   },
   {
-    icon: '/icons/nometal-2.png',
+    icon: '/icons/Group 638.svg',
     title: 'Pro-Biotic',
     description: 'Supports a balanced and resilient gut ecosystem.',
     position: 'right-bottom',
@@ -63,7 +63,7 @@ export default function VideoSection() {
                     src={feature.icon}
                     alt={feature.title}
                     fill
-                    className="object-contain"
+                    className="object-contain opacity-50"
                   />
                 </div>
                 <h3 className="text-xs md:text-sm font-semibold tracking-wider uppercase mb-1">
@@ -100,7 +100,7 @@ export default function VideoSection() {
                     src={feature.icon}
                     alt={feature.title}
                     fill
-                    className="object-contain"
+                    className="object-contain opacity-70"
                   />
                 </div>
                 <h3 className="text-xs md:text-sm font-semibold tracking-wider uppercase mb-1">

@@ -14,32 +14,32 @@ const mockReels: Reel[] = [
   {
     id: '1',
     title: 'Customer Testimonial',
-    videoUrl: '/videos/408eb64fd41d4df89cbd1b4aa80ae42c.HD-1080p-7.2Mbps-41137630.mp4',
+    videoUrl: '/videos/1.webm',
   },
   {
     id: '2',
     title: 'Product Review',
-    videoUrl: '/videos/5702c2e5a1764787b0423a5809fdcd9c.HD-1080p-7.2Mbps-41137234.mp4',
+    videoUrl: '/videos/2.webm',
   },
   {
     id: '3',
     title: 'Wellness Journey',
-    videoUrl: '/videos/62c7a55bd2464953a7883389affce416.HD-1080p-7.2Mbps-41162082.mp4',
+    videoUrl: '/videos/3.webm',
   },
   {
     id: '4',
     title: 'Daily Routine',
-    videoUrl: '/videos/8cb6df095e464dbd8e219a53a0f6afac.HD-1080p-2.5Mbps-41162163.mp4',
+    videoUrl: '/videos/4.webm',
   },
   {
     id: '5',
     title: 'Success Story',
-    videoUrl: '/videos/ae1780bea1d3427f9919b8c8bd9dffef.HD-1080p-3.3Mbps-41162255.mp4',
+    videoUrl: '/videos/5.webm',
   },
   {
     id: '6',
     title: 'Real Recommendations',
-    videoUrl: '/videos/f80275ae9c3b45b99879498c22b099ca.HD-1080p-7.2Mbps-41137264.mp4',
+    videoUrl: '/videos/6.webm',
   },
 ]
 
@@ -240,10 +240,10 @@ export default function ReelsSection() {
         <div className="py-4 md:py-5">
           <div className="animate-marquee-text whitespace-nowrap flex">
             {/* Repeat text multiple times for seamless loop */}
-            {[...Array(10)].map((_, i) => (
+            {[...Array(20)].map((_, i) => (
               <span 
                 key={i} 
-                className="text-sm md:text-base font-medium tracking-widest text-gray-800 uppercase mx-6 md:mx-10"
+                className="text-sm md:text-base font-medium tracking-widest text-gray-800 uppercase mx-6 md:mx-10 flex-shrink-0"
               >
                 +10000 HAPPY CUSTOMERS
               </span>

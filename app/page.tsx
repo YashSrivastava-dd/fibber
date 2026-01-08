@@ -19,7 +19,7 @@ export default function Home() {
       <FeaturedProductsSection />
       <MeditationImageSection />
       <VideoSection />
-      <ProductShowcaseSection />
+      {/* <ProductShowcaseSection /> */}
       <ReelsSection />
       <ImageTextSection />
       <EnergyResetSection />

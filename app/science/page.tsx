@@ -94,10 +94,10 @@ export default function SciencePage() {
       {/* Meet Our Team Marquee */}
       <section className="w-full bg-[#F5F3EF] pt-12 md:pt-16 pb-4 md:pb-6 overflow-hidden">
         <div className="flex animate-marquee-text whitespace-nowrap">
-          {[...Array(10)].map((_, i) => (
+          {[...Array(20)].map((_, i) => (
             <span 
               key={i} 
-              className="text-lg md:text-xl lg:text-2xl font-bold text-black mx-6 md:mx-10 tracking-wider"
+              className="text-lg md:text-xl lg:text-2xl font-bold text-black mx-6 md:mx-10 tracking-wider flex-shrink-0"
               style={{ fontFamily: 'QuadratGrotesk, sans-serif' }}
             >
               MEET OUR PERFECT TEAM

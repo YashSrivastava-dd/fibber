@@ -53,10 +53,10 @@ export default function EmpoweringSection() {
   const blueOpacity = blueProgress < 0.9 ? (blueProgress > 0.05 ? 1 : 0) : Math.max(0, 1 - (blueProgress - 0.9) * 10)
 
   return (
-    <div ref={containerRef} className="relative" style={{ height: '400vh' }}>
+    <div ref={containerRef} className="relative m-0 p-0" style={{ height: '400vh' }}>
       {/* Fixed content when in view */}
       <div 
-        className={`${isInView ? 'fixed' : 'absolute'} top-0 left-0 w-full h-screen bg-[#F5F3EF] flex flex-col items-center justify-start pt-16 md:pt-20 px-4 overflow-hidden z-20`}
+        className={`${isInView ? 'fixed' : 'absolute'} top-0 left-0 w-full h-screen bg-[#F5F3EF] flex flex-col items-center justify-start pt-0 md:pt-20 px-4 overflow-hidden z-20`}
         style={!isInView && scrollProgress >= 1 ? { top: 'auto', bottom: 0 } : {}}
       >
         
@@ -109,26 +109,25 @@ export default function EmpoweringSection() {
         </div>
 
         {/* Text Content */}
-        <div className="max-w-5xl mx-auto text-center relative z-10 mt-4 md:mt-8">
+        <div className="max-w-5xl mx-auto text-center relative z-10 mt-0 md:mt-8">
           {/* Main Headline */}
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[0.95] mb-6 md:mb-8">
-            EMPOWERING<br />
-            YOUR HEALTH<br />
-            NATURALLY
+            MADE FOR THE<br />
+            
+            INTELLIGENT
           </h1>
 
           {/* Subtitle */}
-          <p className="text-sm md:text-base text-gray-700 max-w-xl mx-auto mb-6 md:mb-8 leading-relaxed">
-            At Fiberise, we believe that true vitality starts from within. That's why we create high-quality, natural supplements designed to support your well-being, enhance your energy, and help you thrive every day.
-          </p>
+          <p className="text-sm md:text-base text-gray-700 max-w-xl mx-auto mb-6 md:mb-8 leading-relaxed tracking-wide">
+          At Fiberise, we create health solutions with purpose and precision. Every formulation is built using the highest quality, clinically researched ingredients—selected for real biological impact, not trends or marketing appeal. We believe in functional science that supports long-term wellness, metabolic health, and longevity. No fillers. No shortcuts. Just intelligent, evidence-driven nutrition designed to elevate health over time.          </p>
 
           {/* CTA Button */}
-          <a
+          {/* <a
             href="/about"
             className="inline-block bg-black text-white px-8 py-4 text-sm font-semibold tracking-widest uppercase hover:bg-gray-800 transition-colors mb-8"
           >
             ABOUT US
-          </a>
+          </a> */}
 
           {/* Scroll Down Arrow */}
           <div className="mt-6">
