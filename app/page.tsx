@@ -6,6 +6,8 @@ import EnergyResetSection from '@/components/sections/EnergyResetSection'
 import VideoSection from '@/components/sections/VideoSection'
 import ProductShowcaseSection from '@/components/sections/ProductShowcaseSection'
 import ImageTextSection from '@/components/sections/ImageTextSection'
+import JourneySection from '@/components/sections/JourneySection'
+import RitualSection from '@/components/sections/RitualSection'
 import EmpoweringSection from '@/components/sections/EmpoweringSection'
 import BlogSection from '@/components/sections/BlogSection'
 import FullWidthVideoSection from '@/components/sections/FullWidthVideoSection'
@@ -22,6 +24,8 @@ export default function Home() {
       {/* <ProductShowcaseSection /> */}
       <ReelsSection />
       <ImageTextSection />
+      <JourneySection />
+      <RitualSection />
       <EnergyResetSection />
       <EmpoweringSection />
       <BlogSection />

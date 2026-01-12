@@ -56,33 +56,35 @@ export default function EmpoweringSection() {
     <div ref={containerRef} className="relative m-0 p-0" style={{ height: '400vh' }}>
       {/* Fixed content when in view */}
       <div 
-        className={`${isInView ? 'fixed' : 'absolute'} top-0 left-0 w-full h-screen bg-[#F5F3EF] flex flex-col items-center justify-start pt-0 md:pt-20 px-4 overflow-hidden z-20`}
+        className={`${isInView ? 'fixed' : 'absolute'} top-0 left-0 w-full h-screen bg-[#F5F3EF] flex flex-col items-center justify-start pt-0 md:pt-20 px-4 overflow-visible z-20`}
         style={!isInView && scrollProgress >= 1 ? { top: 'auto', bottom: 0 } : {}}
       >
         
-        {/* Yellow Circle - LEFT SIDE */}
-        <div 
-          className="absolute left-4 md:left-12 lg:left-20 z-30"
-          style={{
-            top: `${yellowY}%`,
-            transform: 'translateY(-50%)',
-            opacity: yellowOpacity,
-            transition: 'opacity 0.2s ease-out',
-          }}
-        >
-          <div className="relative w-56 h-56 md:w-72 md:h-72 lg:w-80 lg:h-80">
-            <div className="absolute inset-0 bg-[#F5B041] rounded-full shadow-2xl" />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <Image
-                src="/unnamed-4.png"
-                alt="Supplement capsule"
-                width={200}
-                height={300}
-                className="w-32 md:w-40 lg:w-44 h-auto drop-shadow-2xl -rotate-12"
-              />
+          {/* Yellow Circle - LEFT SIDE */}
+          <div 
+            className="absolute left-4 md:left-12 lg:left-20 z-30"
+            style={{
+              top: `${yellowY}%`,
+              transform: 'translateY(-50%)',
+              opacity: yellowOpacity,
+              transition: 'opacity 0.2s ease-out',
+            }}
+          >
+            <div className="relative w-56 h-56 md:w-72 md:h-72 lg:w-80 lg:h-80 overflow-visible">
+              <div className="absolute inset-0 bg-[#102333] rounded-full shadow-2xl" />
+              <div className="absolute inset-0 flex items-center justify-center overflow-visible">
+                <Image
+                  src="/team-photos/lime and lemon mockup front.png"
+                  alt="Lime and lemon supplement product"
+                  width={600}
+                  height={900}
+                  className="w-96 md:w-[28rem] lg:w-[36rem] h-auto drop-shadow-2xl -rotate-12"
+                  style={{ maxWidth: 'none' }}
+                  priority
+                />
+              </div>
             </div>
           </div>
-        </div>
 
         {/* Blue Circle - RIGHT SIDE */}
         <div 
@@ -94,32 +96,33 @@ export default function EmpoweringSection() {
             transition: 'opacity 0.2s ease-out',
           }}
         >
-          <div className="relative w-56 h-56 md:w-72 md:h-72 lg:w-80 lg:h-80">
-            <div className="absolute inset-0 bg-[#3498DB] rounded-full shadow-2xl" />
-            <div className="absolute inset-0 flex items-center justify-center">
+          <div className="relative w-56 h-56 md:w-72 md:h-72 lg:w-80 lg:h-80 overflow-visible">
+            <div className="absolute inset-0 bg-[#168B6A] rounded-full shadow-2xl" />
+            <div className="absolute inset-0 flex items-center justify-center overflow-visible">
               <Image
-                src="/unnamed-3.png"
-                alt="Supplement product"
-                width={180}
-                height={280}
-                className="w-28 md:w-36 lg:w-40 h-auto drop-shadow-2xl rotate-6"
+                src="/team-photos/unflavoured mockup front.png"
+                alt="Unflavoured supplement product"
+                width={600}
+                height={900}
+                className="w-96 md:w-[28rem] lg:w-[36rem] h-auto drop-shadow-2xl rotate-6"
+                style={{ maxWidth: 'none' }}
+                priority
               />
             </div>
           </div>
         </div>
 
         {/* Text Content */}
-        <div className="max-w-5xl mx-auto text-center relative z-10 mt-0 md:mt-8">
+        <div className="max-w-5xl mx-auto text-center relative z-10 mt-20 md:mt-32 lg:mt-40">
           {/* Main Headline */}
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[0.95] mb-6 md:mb-8">
-            MADE FOR THE<br />
-            
-            INTELLIGENT
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[0.95] mb-8 md:mb-12 lg:mb-16">
+            MADE FOR THE<br /><span className="block mt-1.5 md:mt-3 lg:mt-5">INTELLIGENT</span>
           </h1>
 
           {/* Subtitle */}
-          <p className="text-sm md:text-base text-gray-700 max-w-xl mx-auto mb-6 md:mb-8 leading-relaxed tracking-wide">
-          At Fiberise, we create health solutions with purpose and precision. Every formulation is built using the highest quality, clinically researched ingredients—selected for real biological impact, not trends or marketing appeal. We believe in functional science that supports long-term wellness, metabolic health, and longevity. No fillers. No shortcuts. Just intelligent, evidence-driven nutrition designed to elevate health over time.          </p>
+          <p className="text-sm md:text-base text-gray-700 max-w-xl mx-auto mb-4 md:mb-6 leading-relaxed tracking-wide">
+            At Fiberise, we create health solutions with purpose and precision. Every formulation is built using the highest quality, clinically researched ingredients—selected for real biological impact, not trends or marketing appeal. We believe in functional science that supports long-term wellness, metabolic health, and longevity. No fillers. No shortcuts. Just intelligent, evidence-driven nutrition designed to elevate health over time.
+          </p>
 
           {/* CTA Button */}
           {/* <a
@@ -144,7 +147,7 @@ export default function EmpoweringSection() {
         </div>
 
         {/* Featured On Marquee */}
-        <div className="absolute bottom-0 left-0 right-0 bg-[#F5F3EF] pt-10 pb-10 z-40">
+        {/* <div className="absolute bottom-0 left-0 right-0 bg-[#F5F3EF] pt-10 pb-10 z-40">
           <p className="text-center text-xs tracking-[0.3em] uppercase text-gray-500 mb-8">
             Available on
           </p>
@@ -174,7 +177,7 @@ export default function EmpoweringSection() {
               ))}
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   )

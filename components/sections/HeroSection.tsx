@@ -35,7 +35,7 @@ export default function HeroSection() {
           href="/collections/all"
             className="inline-block w-fit bg-white text-black px-6 py-3 md:px-8 md:py-4 rounded-full font-medium uppercase tracking-wide text-sm hover:bg-gray-100 transition-colors"
         >
-            Check Now
+            Order Now
         </Link>
         </div>
       </div>
@@ -43,10 +43,11 @@ export default function HeroSection() {
       {/* Right Side - Image (hidden on mobile) */}
       <div className="hidden md:block relative md:w-1/2 h-screen bg-[#e8e4dd]">
         <Image
-          src="/Remove_the_text_2k_202601081252.jpeg"
+          src="/ritual/image.jpeg"
           alt="Wellness lifestyle"
           fill
-          className="object-cover object-center"
+          className="object-cover"
+          style={{ objectPosition: 'center 40%' }}
           priority
         />
       </div>

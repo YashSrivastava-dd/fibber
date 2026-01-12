@@ -15,6 +15,9 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   title: 'FIberiseFit Store - The Future of FIberiseFit',
   description: 'Gear up for great health with premium FIberiseFit products',
+  icons: {
+    icon: '/icons/I Mark - BC 01.png',
+  },
 }
 
 export default function RootLayout({

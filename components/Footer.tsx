@@ -4,12 +4,10 @@ import Image from 'next/image'
 export default function Footer() {
   const footerLinks = {
     products: [
-      { name: 'Collagen Capsules', href: '/products/collagen' },
-      { name: 'Hair, Skin & Nails Capsules', href: '/products/hair-skin-nails' },
-      { name: 'Immunity Boost Capsules', href: '/products/immunity' },
-      { name: "Men's Multi Capsules", href: '/products/mens-multi' },
-      { name: 'Stress Relief Capsules', href: '/products/stress-relief' },
-      { name: "Women's Multi Capsules", href: '/products/womens-multi' },
+      { name: '7 Day Pack ', href: '/products/collagen' },
+      { name: '30 Day Pack', href: '/products/hair-skin-nails' },
+      { name: '90 Day Pack', href: '/products/immunity' },
+      { name: "LYTE", href: '/products/mens-multi' },
     ],
     about: [
       { name: 'About Us', href: '/about' },
