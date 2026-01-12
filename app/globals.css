@@ -124,3 +124,23 @@ html {
   display: none;
 }
 
+/* Doctors Marquee Animation */
+@keyframes doctors-marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-doctors-marquee {
+  animation: doctors-marquee 30s linear infinite;
+  display: flex;
+  will-change: transform;
+}
+
+.animate-doctors-marquee:hover {
+  animation-play-state: paused;
+}
+

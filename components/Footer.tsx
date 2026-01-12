@@ -9,11 +9,6 @@ export default function Footer() {
       { name: '90 Day Pack', href: '/products/immunity' },
       { name: "LYTE", href: '/products/mens-multi' },
     ],
-    about: [
-      { name: 'About Us', href: '/about' },
-      { name: 'Our Mission', href: '/mission' },
-      { name: 'Contact', href: '/contact' },
-    ],
     social: [
       { name: 'TikTok', href: '#' },
       { name: 'Facebook', href: '#' },
@@ -25,7 +20,7 @@ export default function Footer() {
     <footer className="bg-[#000000] text-white">
       {/* Main Footer Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
           {/* Products Column */}
           <div>
             <h3 className="text-sm font-semibold uppercase tracking-wider mb-6">
@@ -33,25 +28,6 @@ export default function Footer() {
             </h3>
             <ul className="space-y-3">
               {footerLinks.products.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-gray-400 hover:text-white transition-colors"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* About Column */}
-          <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider mb-6">
-              About
-            </h3>
-            <ul className="space-y-3">
-              {footerLinks.about.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}

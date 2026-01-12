@@ -1,0 +1,79 @@
+'use client'
+
+import { motion } from 'framer-motion'
+import Image from 'next/image'
+
+export default function ProductShowcase() {
+  return (
+    <section className="py-32 bg-black text-white overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Cinematic spacing with large device render */}
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+          className="text-center mb-24"
+        >
+          <h2
+            className="text-5xl md:text-6xl lg:text-7xl font-serif leading-tight mb-8 tracking-tight"
+            style={{ fontFamily: 'Georgia, serif' }}
+          >
+            <span className="block text-white">Your body.</span>
+            <span className="block text-white mt-2">Optimized.</span>
+          </h2>
+          <p className="text-xl text-gray-400 max-w-2xl mx-auto font-light leading-relaxed">
+            The most advanced health monitoring device. Engineered for athletes, optimized for life.
+          </p>
+        </motion.div>
+
+        {/* Large product image with Apple-style lighting */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
+          className="relative h-[600px] md:h-[700px] lg:h-[800px] rounded-3xl overflow-hidden bg-gradient-to-br from-gray-900 to-black"
+        >
+          <Image
+            src="/ritual/image.jpeg"
+            alt="LYTE Device"
+            fill
+            className="object-cover"
+            priority
+          />
+          {/* Apple-style product lighting effect */}
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/60" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_0%,_black/40_100%)]" />
+        </motion.div>
+
+        {/* Stats grid - Apple style minimal */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1, delay: 0.3 }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-12 mt-32"
+        >
+          {[
+            { value: '24/7', label: 'Continuous Monitoring' },
+            { value: '14+', label: 'Days Battery Life' },
+            { value: '99%', label: 'Accuracy Rate' },
+          ].map((stat, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: index * 0.1 }}
+              className="text-center"
+            >
+              <div className="text-5xl md:text-6xl font-light text-white mb-3">{stat.value}</div>
+              <div className="text-sm text-gray-400 uppercase tracking-widest">{stat.label}</div>
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  )
+}

@@ -1,9 +1,9 @@
 import Image from 'next/image'
 
-export default function RitualSection() {
+export default function JourneySection() {
   return (
     <section className="w-full bg-white pt-8 md:pt-12 lg:pt-16 pb-16 md:pb-24 lg:pb-32 relative overflow-visible">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+      <div className="max-w-[96rem] mx-auto px-6 sm:px-8 lg:px-12 relative">
         {/* Main Heading - Left Aligned */}
         <div className="mb-0">
           <h2 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-serif font-medium text-[#868B7A] leading-relaxed max-w-5xl">
@@ -36,10 +36,10 @@ export default function RitualSection() {
               {/* Smaller image on left */}
               <div className="relative w-2/5 h-[240px] md:h-[300px] lg:h-[360px]">
                 <Image
-                  src="/dummy/Group 64930.png"
+                  src="/ritual/Group 64930.png"
                   alt="Wellness product"
                   fill
-                  className="object-cover object-center rounded-sm"
+                  className="object-contain object-center rounded-sm"
                   sizes="(max-width: 768px) 40vw, (max-width: 1024px) 20vw, 16vw"
                 />
               </div>
@@ -47,7 +47,7 @@ export default function RitualSection() {
               <div className="flex flex-col flex-1">
                 <div className="relative w-full h-[240px] md:h-[300px] lg:h-[360px]">
                   <Image
-                    src="/ritual/Soft Tones Visual Minimalist Dessert Inspiration.jpg"
+                    src="/ritual/Soft%20Tones%20Visual%20Minimalist%20Dessert%20Inspiration.jpg"
                     alt="Product dropper"
                     fill
                     className="object-cover object-center rounded-lg"
@@ -65,7 +65,7 @@ export default function RitualSection() {
               {/* Larger image on left */}
               <div className="relative flex-1 h-[240px] md:h-[300px] lg:h-[360px] rounded-2xl overflow-hidden">
                 <Image
-                  src="/ritual/Modern Aesthetic AI Stock Photos for Your Brand.jpg"
+                  src="/ritual/Modern%20Aesthetic%20AI%20Stock%20Photos%20for%20Your%20Brand.jpg"
                   alt="Wellness fitness"
                   fill
                   className="object-contain object-center"
@@ -144,29 +144,22 @@ export default function RitualSection() {
             {/* Images Left - Side by Side */}
             <div className="flex flex-row w-full -ml-8 sm:-ml-12 lg:-ml-16 pl-8 md:pl-12 lg:pl-16">
               {/* Larger image on left */}
-              <div className="relative w-full h-[240px] md:h-[300px] lg:h-[360px]">
+              <div className="relative flex-[3] h-[240px] md:h-[300px] lg:h-[360px] rounded-2xl overflow-hidden">
                 <Image
                   src="/ritual/Make_the_man_2k_202601120957.jpeg"
                   alt="Wellness fitness"
                   fill
-                  className="object-contain object-center"
+                  className="object-cover object-center"
                   sizes="(max-width: 768px) 60vw, (max-width: 1024px) 30vw, 24vw"
                 />
               </div>
               {/* Smaller image on right */}
-              <div className="relative w-2/5 h-[240px] md:h-[300px] lg:h-[360px]">
-                <Image
-                  src="/ritual/Group 64928.png"
-                  alt="Wellness product"
-                  fill
-                  className="object-contain object-center rounded-lg"
-                  sizes="(max-width: 768px) 40vw, (max-width: 1024px) 20vw, 16vw"
-                />
+              <div className="relative flex-1 h-[240px] md:h-[300px] lg:h-[360px]">
+                <Image src="/ritual/Group 64928.png" alt="Wellness product" fill className="object-contain object-center rounded-lg" sizes="(max-width: 768px) 40vw, (max-width: 1024px) 20vw, 16vw" />
               </div>
             </div>
-
             {/* Text Right */}
-            <div className="max-w-lg ml-4 md:ml-6 lg:ml-8">
+            <div className="max-w-lg ml-12 md:ml-16 lg:ml-20 xl:ml-24 2xl:ml-28">
               {/* Small Heading */}
               <div className="mb-4 md:mb-6">
                 <h3 className="text-2xl md:text-3xl lg:text-4xl font-montserrat font-medium text-[#868B7A]">

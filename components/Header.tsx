@@ -32,9 +32,9 @@ export default function Header() {
 
   const navLinks = [
     { name: 'SHOP', href: '/collections/all', hasDropdown: true },
-    { name: 'ABOUT', href: '/science' },
     { name: 'SCIENCE', href: '/science' },
     { name: 'CONTACT', href: '/contact' },
+    { name: 'LYTE', href: '/lyte' },
   ]
 
   return (
@@ -157,19 +157,6 @@ export default function Header() {
                         isScrolled ? 'text-black' : 'text-black'
                       )}
                     >
-                      ABOUT
-                    </NavigationMenuLink>
-                  </Link>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <Link href="/science" legacyBehavior passHref>
-                    <NavigationMenuLink
-                      className={cn(
-                        navigationMenuTriggerStyle(),
-                        'text-xs font-semibold uppercase tracking-wider bg-transparent hover:bg-transparent hover:opacity-70 h-auto px-3 py-2',
-                        isScrolled ? 'text-black' : 'text-black'
-                      )}
-                    >
                       SCIENCE
                     </NavigationMenuLink>
                   </Link>
@@ -184,6 +171,19 @@ export default function Header() {
                       )}
                     >
                       CONTACT
+                    </NavigationMenuLink>
+                  </Link>
+                </NavigationMenuItem>
+                <NavigationMenuItem>
+                  <Link href="/lyte" legacyBehavior passHref>
+                    <NavigationMenuLink
+                      className={cn(
+                        navigationMenuTriggerStyle(),
+                        'text-xs font-semibold uppercase tracking-wider bg-transparent hover:bg-transparent hover:opacity-70 h-auto px-3 py-2',
+                        isScrolled ? 'text-black' : 'text-black'
+                      )}
+                    >
+                      LYTE
                     </NavigationMenuLink>
                   </Link>
                 </NavigationMenuItem>

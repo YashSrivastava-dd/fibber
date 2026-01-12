@@ -10,6 +10,14 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        lyte: {
+          black: '#000000',
+          graphite: '#1a1a1a',
+          'titanium-grey': '#2d2d2d',
+          'soft-white': '#fafafa',
+          'electric-green': '#00ff88',
+          'titanium-blue': '#5ac8fa',
+        },
         fiberisefit: {
           primary: '#000000',
           secondary: '#ffffff',
@@ -61,6 +69,7 @@ module.exports = {
       },
       fontFamily: {
         sans: ['var(--font-montserrat)', 'Montserrat', 'system-ui', 'sans-serif'],
+        serif: ['var(--font-serif)', 'Georgia', 'serif'],
       },
       keyframes: {
         'accordion-down': {
