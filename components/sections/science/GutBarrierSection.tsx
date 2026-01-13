@@ -77,13 +77,13 @@ const GutBarrierSection = () => {
             <span className="inline-block text-sm font-medium text-blue-600 uppercase tracking-wider mb-4">
               Intestinal Health
             </span>
-            <h2 className="text-4xl lg:text-5xl font-light text-charcoal mb-6">
+            <h2 className="text-4xl lg:text-5xl font-light text-charcoal leading-[1.3] mb-8">
               {gutBarrierData.title}
             </h2>
-            <p className="text-lg text-charcoal/70 mb-4">
+            <p className="text-lg text-charcoal/70 leading-[1.8] mb-6">
               {gutBarrierData.subtitle}
             </p>
-            <p className="text-base text-charcoal/60 leading-relaxed mb-8">
+            <p className="text-base text-charcoal/60 leading-[1.9] mb-10">
               {gutBarrierData.description}
             </p>
 

@@ -16,10 +16,10 @@ const GlucoseSection = () => {
           <span className="inline-block text-sm font-medium text-amber-600 uppercase tracking-wider mb-4">
             Blood Sugar Control
           </span>
-          <h2 className="text-4xl lg:text-5xl font-light text-charcoal mb-6">
+          <h2 className="text-4xl lg:text-5xl font-light text-charcoal leading-[1.3] mb-8">
             {glucoseData.title}
           </h2>
-          <p className="text-lg text-charcoal/70">
+          <p className="text-lg text-charcoal/70 leading-[1.8]">
             {glucoseData.subtitle}
           </p>
         </div>
@@ -92,7 +92,7 @@ const GlucoseSection = () => {
 
           {/* Content & Benefits */}
           <div className={`transition-all duration-700 delay-300 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}>
-            <p className="text-base text-charcoal/60 leading-relaxed mb-10">
+            <p className="text-base text-charcoal/60 leading-[1.9] mb-10">
               {glucoseData.description}
             </p>
 

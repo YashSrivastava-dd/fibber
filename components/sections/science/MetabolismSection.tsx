@@ -19,17 +19,17 @@ const MetabolismSection = () => {
           <span className="inline-block text-sm font-medium text-green-600 uppercase tracking-wider mb-4">
             Metabolic Efficiency
           </span>
-          <h2 className="text-4xl lg:text-5xl font-light text-charcoal mb-6">
+          <h2 className="text-4xl lg:text-5xl font-light text-charcoal leading-[1.3] mb-8">
             {metabolismData.title}
           </h2>
-          <p className="text-lg text-charcoal/70">
+          <p className="text-lg text-charcoal/70 leading-[1.8]">
             {metabolismData.subtitle}
           </p>
         </div>
 
         {/* Description */}
         <div className={`text-center max-w-2xl mx-auto mb-16 transition-all duration-700 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <p className="text-base text-charcoal/60 leading-relaxed">
+          <p className="text-base text-charcoal/60 leading-[1.9]">
             {metabolismData.description}
           </p>
         </div>

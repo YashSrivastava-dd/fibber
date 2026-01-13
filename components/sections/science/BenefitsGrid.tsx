@@ -99,10 +99,10 @@ const BenefitsGrid = () => {
           <span className="inline-block text-sm font-medium text-amber-600 uppercase tracking-wider mb-4">
             Complete Benefits
           </span>
-          <h2 className="text-4xl lg:text-5xl font-light text-charcoal mb-6">
+          <h2 className="text-4xl lg:text-5xl font-light text-charcoal leading-[1.3] mb-8">
             One Supplement, Many Benefits
           </h2>
-          <p className="text-lg text-charcoal/70">
+          <p className="text-lg text-charcoal/70 leading-[1.8]">
             FYBER supports your body's natural processes for comprehensive metabolic wellness
           </p>
         </div>
@@ -120,9 +120,9 @@ const BenefitsGrid = () => {
                 <div className={`w-12 h-12 ${colorClasses.bg} rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
                   <benefit.icon className={`w-6 h-6 ${colorClasses.text}`} />
                 </div>
-                <h3 className="text-xl font-medium text-charcoal mb-2">{benefit.title}</h3>
-                <p className="text-sm font-medium text-charcoal/50 mb-4">{benefit.subtitle}</p>
-                <p className="text-sm text-charcoal/60 leading-relaxed">{benefit.description}</p>
+                <h3 className="text-xl font-medium text-charcoal leading-[1.4] mb-3">{benefit.title}</h3>
+                <p className="text-sm font-medium text-charcoal/50 leading-[1.6] mb-4">{benefit.subtitle}</p>
+                <p className="text-sm text-charcoal/60 leading-[1.8]">{benefit.description}</p>
               </div>
             );
           })}

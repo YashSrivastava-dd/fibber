@@ -16,10 +16,10 @@ const PrebioticProbioticSection = () => {
           <span className="inline-block text-sm font-medium text-blue-600 uppercase tracking-wider mb-4">
             Synbiotic Formula
           </span>
-          <h2 className="text-4xl lg:text-5xl font-light text-charcoal mb-6">
+          <h2 className="text-4xl lg:text-5xl font-light text-charcoal leading-[1.3] mb-8">
             Prebiotic + Probiotic Power
           </h2>
-          <p className="text-lg text-charcoal/70">
+          <p className="text-lg text-charcoal/70 leading-[1.8]">
             The perfect combination for complete gut health support
           </p>
         </div>
@@ -45,7 +45,7 @@ const PrebioticProbioticSection = () => {
               </p>
 
               {/* Description */}
-              <p className="text-base text-charcoal/60 leading-relaxed mb-8">
+              <p className="text-base text-charcoal/60 leading-[1.9] mb-8">
                 {prebioticProbioticData.prebiotic.description}
               </p>
 
@@ -98,7 +98,7 @@ const PrebioticProbioticSection = () => {
               </p>
 
               {/* Description */}
-              <p className="text-base text-charcoal/60 leading-relaxed mb-8">
+              <p className="text-base text-charcoal/60 leading-[1.9] mb-8">
                 {prebioticProbioticData.probiotic.description}
               </p>
 
