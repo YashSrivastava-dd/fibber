@@ -10,6 +10,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        charcoal: '#1a1a1a',
         lyte: {
           black: '#000000',
           graphite: '#1a1a1a',

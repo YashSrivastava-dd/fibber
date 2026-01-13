@@ -42,7 +42,7 @@ export default function Header() {
       {/* Announcement Bar Marquee */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-black py-2 overflow-hidden">
         <div className="flex animate-marquee-text whitespace-nowrap">
-          {[...Array(20)].map((_, i) => (
+          {[...Array(20)].map((_, i) => ( 
             <span 
               key={i} 
               className="text-xs md:text-sm text-white mx-8 tracking-wider flex-shrink-0"
