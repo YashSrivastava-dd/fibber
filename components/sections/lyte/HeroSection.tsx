@@ -8,36 +8,6 @@ import { ArrowRight } from 'lucide-react'
 export default function HeroSection() {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
-      {/* Hero Media Wrapper */}
-      <div className="absolute inset-0 z-0" style={{ '--hero-media-count': 1 } as React.CSSProperties}>
-        {/* Video Wrapper */}
-        <div className="absolute inset-0">
-          <div className="relative w-full h-full">
-            <video
-              playsInline
-              autoPlay
-              loop
-              muted
-              className="absolute inset-0 w-full h-full object-cover"
-              preload="metadata"
-              aria-label="LYTE Hero"
-            >
-              <source src="/videos/924a9f9d83f142f3a34266a681162657.HD-1080p-4.8Mbps-60445784.mp4" type="video/mp4" />
-            </video>
-          </div>
-        </div>
-
-        {/* Overlay */}
-        <div
-          className="absolute inset-0 bg-gradient-to-b from-[#12121266] to-transparent"
-          style={{
-            '--overlay-layer': 'var(--layer-flat)',
-            '--overlay-color': '#12121266',
-            '--overlay-color--end': 'rgba(18, 18, 18, 0)',
-            '--overlay-direction': 'to bottom',
-          } as React.CSSProperties}
-        />
-      </div>
 
       {/* Content */}
       <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 text-center">

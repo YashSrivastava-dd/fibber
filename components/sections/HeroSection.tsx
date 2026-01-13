@@ -16,7 +16,7 @@ export default function HeroSection() {
           playsInline
           className="absolute inset-0 w-full h-full object-cover"
         >
-          <source src="/videos/intro.webm" type="video/webm" />
+          <source src="/videos/promovideo (1).webm" type="video/webm" />
         </video>
         
         {/* Gradient Overlay for text readability */}
