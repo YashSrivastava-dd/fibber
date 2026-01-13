@@ -21,31 +21,35 @@ export const glucoseData = {
   subtitle: 'Prevent glucose spikes and crashes with our fiber matrix technology',
   description: 'Our unique fiber blend forms a protective gel matrix around carbohydrates, slowing their absorption and preventing rapid blood sugar spikes. This results in more stable glucose levels, sustained energy, and reduced cravings.',
   benefits: [
-    { value: '40%', label: 'Reduced Spikes' },
-    { value: '3hr', label: 'Sustained Energy' },
+    { value: '25%', label: 'Reduced Spikes' },
+    { value: '8hr', label: 'Sustained Energy' },
     { value: '85%', label: 'Better Control' },
   ],
-}
+} 
 
 export const metabolismData = {
   title: 'Optimize Your Metabolism',
-  subtitle: 'Support efficient fat burning and energy production',
-  description: 'When your body has stable energy from balanced blood sugar, it can operate in an optimal metabolic state. Instead of storing fat, your body efficiently burns it for fuel.',
+  // subtitle: 'Support efficient fat burning and energy production',
+  description: 'Unlike traditional diet where body slows metabolism to preserve energy leading to weight stagnation, FYBER modulates the brain by SCFA and Leptin signalling to think that it is well fed and ensuring your body runs at peak metabolic rate and burn fat at incredible rate.',
   comparison: [
     {
       mode: 'WITH FYBER',
       features: [
-        'Efficient fat oxidation',
-        'Sustained energy production',
-        'Optimal metabolic rate',
+        'Metabolic Rate Maintained',
+        'Sustained Energy Levels',
+        'Fat Oxidation Priority',
+        'Mental Focus maintained',
+        'Sustainable Fat Burn',
       ],
     },
     {
-      mode: 'WITHOUT FYBER',
+      mode: 'TRADITIONAL DIET',
       features: [
-        'Reduced metabolic rate',
-        'Fat storage priority',
-        'Energy conservation mode',
+        'Reduced Metabolic Rate',
+        'Every Level Dips',
+        'Fat Conservation Priority',
+        'Reduced Mental Clarity',
+        'Weight Plateau',
       ],
     },
   ],
@@ -53,7 +57,7 @@ export const metabolismData = {
 
 export const scfaData = {
   title: 'Short-Chain Fatty Acids',
-  subtitle: 'The powerful compounds your gut produces from fiber',
+  subtitle: 'Short-chain fatty acids are bioactive compounds created when your gut microbiome ferments FYBER',
   cards: [
     {
       name: 'Butyrate',

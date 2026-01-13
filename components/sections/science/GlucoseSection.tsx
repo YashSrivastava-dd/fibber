@@ -31,15 +31,15 @@ const GlucoseSection = () => {
               {/* Glucose Graph */}
               <div className="mb-8">
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-sm font-medium text-charcoal/50">Blood Glucose Level</span>
-                  <span className="text-xs text-charcoal/40">Over Time</span>
+                  <span className="text-sm font-medium text-black-400">Blood Glucose Level</span>
+                  <span className="text-xs text-black-400">Over Time</span>
                 </div>
                 
                 <div className="relative h-40 bg-gradient-to-t from-green-50/50 to-transparent rounded-xl overflow-hidden">
                   {/* Without Fiber - Spike */}
                   <svg className="absolute inset-0 w-full h-full" viewBox="0 0 200 80" preserveAspectRatio="none">
                     <path
-                      d="M0,60 Q30,60 50,20 Q70,60 100,55 Q130,50 150,45 Q180,40 200,50"
+                      d="M0,60 Q30,60 50,10 Q70,60 100,55 Q130,50 150,45 Q180,40 200,50"
                       fill="none"
                       stroke="rgba(239,68,68,0.3)"
                       strokeWidth="2"
@@ -62,11 +62,11 @@ const GlucoseSection = () => {
                   <div className="absolute bottom-2 left-4 flex items-center gap-4">
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-0.5 bg-red-300" style={{ borderStyle: 'dashed' }} />
-                      <span className="text-xs text-charcoal/50">Without Fiber</span>
+                      <span className="text-xs text-black-400">Without Fiber</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-0.5 bg-green-500" />
-                      <span className="text-xs text-charcoal/50">With FYBER</span>
+                      <span className="text-xs text-black-400">With FYBER</span>
                     </div>
                   </div>
                 </div>

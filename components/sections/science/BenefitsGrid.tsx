@@ -8,8 +8,7 @@ import {
   Brain, 
   Gem, 
   Dumbbell, 
-  Activity,
-  ArrowRight
+  Activity
 } from 'lucide-react';
 import { 
   lipidData, 
@@ -54,13 +53,7 @@ const BenefitsGrid = () => {
       description: fatOxidationData.description,
       color: 'amber'
     },
-    // { 
-    //   icon: Battery, 
-    //   title: energyData.title, 
-    //   subtitle: energyData.subtitle, 
-    //   description: energyData.description,
-    //   color: 'green'
-    // },
+          
     { 
       icon: Brain, 
       title: focusData.title, 
@@ -92,7 +85,7 @@ const BenefitsGrid = () => {
   ];
 
   return (
-    <section ref={ref} className="py-24 lg:py-32 bg-white" id="benefits">
+    <section ref={ref} className="py-16 lg:py-20 bg-white" id="benefits">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         {/* Section Header */}
         <div className={`text-center max-w-3xl mx-auto mb-16 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
@@ -126,14 +119,6 @@ const BenefitsGrid = () => {
               </div>
             );
           })}
-        </div>
-
-        {/* CTA */}
-        <div className={`mt-16 text-center transition-all duration-700 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <button className="group inline-flex items-center gap-2 px-8 py-4 bg-charcoal text-white text-sm font-medium rounded-none hover:bg-charcoal/90 transition-all duration-200">
-            Experience All Benefits
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </button>
         </div>
       </div>
     </section>

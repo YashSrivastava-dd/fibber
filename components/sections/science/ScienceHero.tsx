@@ -7,7 +7,7 @@ const Hero = () => {
   return (
     <section className="relative min-h-screen flex bg-white overflow-hidden pt-10">
       {/* Hero Image - Left Side (Full Width) */}
-      <div className="hidden lg:block absolute left-0 top-12 lg:top-16 bottom-0 w-1/2">
+      <div className="hidden lg:block absolute left-0 top-12 lg:top-16 bottom-0 w-1/2 animate-fade-in-up">
         <Image
           src="/hero-image.png"
           alt="Hero"
@@ -18,7 +18,7 @@ const Hero = () => {
       </div>
 
       {/* Mobile Image */}
-      <div className="lg:hidden relative w-full h-[400px] mb-8">
+      <div className="lg:hidden relative w-full h-[400px] mb-8 animate-fade-in-up">
         <Image
           src="/hero-image.png"
           alt="Hero"

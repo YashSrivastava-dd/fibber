@@ -7,24 +7,35 @@ import { ArrowRight } from 'lucide-react'
 
 export default function HeroSection() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-black via-[#0a0a0a] to-black">
-      {/* Ultra-minimal background with subtle texture */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gray-900/50 via-black to-black" />
-        <motion.div
-          className="absolute inset-0 opacity-30"
-          animate={{
-            background: [
-              'radial-gradient(circle at 20% 50%, rgba(0,255,136,0.05) 0%, transparent 50%)',
-              'radial-gradient(circle at 80% 50%, rgba(90,200,250,0.05) 0%, transparent 50%)',
-              'radial-gradient(circle at 20% 50%, rgba(0,255,136,0.05) 0%, transparent 50%)',
-            ],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
+      {/* Hero Media Wrapper */}
+      <div className="absolute inset-0 z-0" style={{ '--hero-media-count': 1 } as React.CSSProperties}>
+        {/* Video Wrapper */}
+        <div className="absolute inset-0">
+          <div className="relative w-full h-full">
+            <video
+              playsInline
+              autoPlay
+              loop
+              muted
+              className="absolute inset-0 w-full h-full object-cover"
+              preload="metadata"
+              aria-label="LYTE Hero"
+            >
+              <source src="/videos/924a9f9d83f142f3a34266a681162657.HD-1080p-4.8Mbps-60445784.mp4" type="video/mp4" />
+            </video>
+          </div>
+        </div>
+
+        {/* Overlay */}
+        <div
+          className="absolute inset-0 bg-gradient-to-b from-[#12121266] to-transparent"
+          style={{
+            '--overlay-layer': 'var(--layer-flat)',
+            '--overlay-color': '#12121266',
+            '--overlay-color--end': 'rgba(18, 18, 18, 0)',
+            '--overlay-direction': 'to bottom',
+          } as React.CSSProperties}
         />
       </div>
 
