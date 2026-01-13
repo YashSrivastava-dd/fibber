@@ -37,21 +37,21 @@ const MetabolismSection = () => {
         {/* Comparison Cards */}
         <div className={`grid md:grid-cols-2 gap-8 max-w-4xl mx-auto transition-all duration-700 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           {/* Fed & Active Mode */}
-          <div className="relative bg-gradient-to-br from-green-50 to-amber-50/30 rounded-3xl p-8 border border-green-100 overflow-hidden">
-            <div className="absolute top-4 right-4 w-20 h-20 bg-green-100/50 rounded-full blur-2xl" />
+          <div className="relative bg-gradient-to-br from-green-100 to-green-200/80 rounded-3xl p-8 border border-green-300 overflow-hidden">
+            <div className="absolute top-4 right-4 w-20 h-20 bg-green-300/70 rounded-full blur-2xl" />
             
             <div className="relative">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm">
-                  <Flame className="w-6 h-6 text-green-500" />
+                  <Flame className="w-6 h-6 text-green-600" />
                 </div>
                 <div>
                   <span className="block text-lg font-medium text-charcoal">
                     {metabolismData.comparison[0].mode}
                   </span>
-                  <span className="text-xs text-green-600 font-medium uppercase tracking-wider">
+                  {/* <span className="text-xs text-green-600 font-medium uppercase tracking-wider">
                     With FYBER
-                  </span>
+                  </span> */}
                 </div>
               </div>
 
@@ -61,7 +61,7 @@ const MetabolismSection = () => {
                   return (
                     <li key={index} className="flex items-center gap-3">
                       <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm">
-                        <Icon className="w-4 h-4 text-green-500" />
+                        <Icon className="w-4 h-4 text-green-600" />
                       </div>
                       <span className="text-sm text-charcoal/70">{feature}</span>
                     </li>
@@ -70,33 +70,33 @@ const MetabolismSection = () => {
               </ul>
 
               {/* Visual Indicator */}
-              <div className="mt-8 pt-6 border-t border-green-100">
+              <div className="mt-8 pt-6 border-t border-green-300">
                 <div className="flex items-center gap-3">
                   <div className="flex-1 h-2 bg-white rounded-full overflow-hidden">
-                    <div className="h-full w-4/5 bg-gradient-to-r from-green-400 to-amber-400 rounded-full animate-pulse" />
+                    <div className="h-full w-4/5 bg-gradient-to-r from-green-500 to-green-600 rounded-full animate-pulse" />
                   </div>
-                  <span className="text-xs font-medium text-green-600">Optimal</span>
+                  <span className="text-xs font-medium text-green-700">Optimal</span>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Starvation Mode */}
-          <div className="relative bg-gradient-to-br from-gray-50 to-gray-100/50 rounded-3xl p-8 border border-gray-200 overflow-hidden opacity-75">
-            <div className="absolute top-4 right-4 w-20 h-20 bg-gray-200/50 rounded-full blur-2xl" />
+          <div className="relative bg-gradient-to-br from-red-100 to-red-200/80 rounded-3xl p-8 border border-red-300 overflow-hidden">
+            <div className="absolute top-4 right-4 w-20 h-20 bg-red-300/70 rounded-full blur-2xl" />
             
             <div className="relative">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm">
-                  <AlertTriangle className="w-6 h-6 text-gray-400" />
+                  <AlertTriangle className="w-6 h-6 text-red-600" />
                 </div>
                 <div>
                   <span className="block text-lg font-medium text-charcoal/70">
                     {metabolismData.comparison[1].mode}
                   </span>
-                  <span className="text-xs text-gray-500 font-medium uppercase tracking-wider">
+                  {/* <span className="text-xs text-gray-500 font-medium uppercase tracking-wider">
                     Without Support
-                  </span>
+                  </span> */}
                 </div>
               </div>
 
@@ -106,7 +106,7 @@ const MetabolismSection = () => {
                   return (
                     <li key={index} className="flex items-center gap-3">
                       <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm">
-                        <Icon className="w-4 h-4 text-gray-400" />
+                        <Icon className="w-4 h-4 text-red-600" />
                       </div>
                       <span className="text-sm text-charcoal/50">{feature}</span>
                     </li>
@@ -115,12 +115,12 @@ const MetabolismSection = () => {
               </ul>
 
               {/* Visual Indicator */}
-              <div className="mt-8 pt-6 border-t border-gray-200">
+              <div className="mt-8 pt-6 border-t border-red-300">
                 <div className="flex items-center gap-3">
                   <div className="flex-1 h-2 bg-white rounded-full overflow-hidden">
-                    <div className="h-full w-2/5 bg-gray-300 rounded-full" />
+                    <div className="h-full w-2/5 bg-red-400 rounded-full" />
                   </div>
-                  <span className="text-xs font-medium text-gray-400">Reduced</span>
+                  <span className="text-xs font-medium text-red-600">Reduced</span>
                 </div>
               </div>
             </div>

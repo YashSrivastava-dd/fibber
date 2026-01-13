@@ -51,15 +51,15 @@ const Hero = () => {
             </div>
 
             {/* Headline */}
-            <h1 className="text-4xl lg:text-6xl font-light text-charcoal leading-[2.8] mb-12 animate-fade-in-up">
-              Unlock Your Body's{' '}
-              <span className="font-medium bg-gradient-to-r from-amber-600 via-green-600 to-blue-600 bg-clip-text text-transparent">
+            <h1 className="text-4xl lg:text-6xl font-light text-charcoal mb-12 animate-fade-in-up">
+              <span className="block text-2xl lg:text-4xl leading-tight">Unlock Your Body's</span>
+              <span className="block font-medium bg-gradient-to-r from-amber-600 via-green-600 to-blue-600 bg-clip-text text-transparent text-4xl lg:text-6xl mt-[12.8px] lg:mt-[19.2px] leading-tight">
                 True Potential
               </span>
             </h1>
 
             {/* Subheadline */}
-            <p className="text-lg lg:text-xl text-charcoal/60 leading-[1.8] max-w-2xl mx-auto lg:mx-0 animate-fade-in-up delay-100">
+            <p className="text-base lg:text-lg text-charcoal/60 leading-[1.8] max-w-2xl mx-auto lg:mx-0 text-left animate-fade-in-up delay-100">
               {heroData.subheadline}
             </p>
           </div>

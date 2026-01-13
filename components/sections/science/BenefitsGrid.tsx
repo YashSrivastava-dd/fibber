@@ -54,13 +54,13 @@ const BenefitsGrid = () => {
       description: fatOxidationData.description,
       color: 'amber'
     },
-    { 
-      icon: Battery, 
-      title: energyData.title, 
-      subtitle: energyData.subtitle, 
-      description: energyData.description,
-      color: 'green'
-    },
+    // { 
+    //   icon: Battery, 
+    //   title: energyData.title, 
+    //   subtitle: energyData.subtitle, 
+    //   description: energyData.description,
+    //   color: 'green'
+    // },
     { 
       icon: Brain, 
       title: focusData.title, 

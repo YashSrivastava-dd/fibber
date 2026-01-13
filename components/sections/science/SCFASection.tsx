@@ -18,8 +18,21 @@ const SCFASection = () => {
   return (
     <section ref={ref} className="py-24 lg:py-32 bg-gradient-to-b from-white to-green-50/30">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        {/* Connection Visual */}
+        <div className={`mb-12 pb-16 lg:pb-20 flex justify-center transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          <div className="inline-flex items-center gap-4 px-8 py-4 bg-white rounded-full shadow-sm border border-gray-100">
+            <span className="text-sm text-charcoal/60">Fiber</span>
+            <div className="w-8 h-px bg-gradient-to-r from-amber-300 to-green-300" />
+            <span className="text-sm text-charcoal/60">Fermentation</span>
+            <div className="w-8 h-px bg-gradient-to-r from-green-300 to-blue-300" />
+            <span className="text-sm font-medium text-charcoal">SCFAs</span>
+            <div className="w-8 h-px bg-gradient-to-r from-blue-300 to-amber-300" />
+            <span className="text-sm text-charcoal/60">Benefits</span>
+          </div>
+        </div>
+
         {/* Section Header */}
-        <div className={`text-center max-w-3xl mx-auto mb-16 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <div className={`text-center max-w-3xl mx-auto mb-16 transition-all duration-700 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <span className="inline-block text-sm font-medium text-green-600 uppercase tracking-wider mb-4">
             SCFA Production
           </span>
@@ -64,19 +77,6 @@ const SCFASection = () => {
               </div>
             );
           })}
-        </div>
-
-        {/* Connection Visual */}
-        <div className={`mt-16 flex justify-center transition-all duration-700 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <div className="inline-flex items-center gap-4 px-8 py-4 bg-white rounded-full shadow-sm border border-gray-100">
-            <span className="text-sm text-charcoal/60">Fiber</span>
-            <div className="w-8 h-px bg-gradient-to-r from-amber-300 to-green-300" />
-            <span className="text-sm text-charcoal/60">Fermentation</span>
-            <div className="w-8 h-px bg-gradient-to-r from-green-300 to-blue-300" />
-            <span className="text-sm font-medium text-charcoal">SCFAs</span>
-            <div className="w-8 h-px bg-gradient-to-r from-blue-300 to-amber-300" />
-            <span className="text-sm text-charcoal/60">Benefits</span>
-          </div>
         </div>
       </div>
     </section>

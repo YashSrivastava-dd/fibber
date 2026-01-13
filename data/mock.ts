@@ -33,7 +33,7 @@ export const metabolismData = {
   description: 'When your body has stable energy from balanced blood sugar, it can operate in an optimal metabolic state. Instead of storing fat, your body efficiently burns it for fuel.',
   comparison: [
     {
-      mode: 'Fed & Active Mode',
+      mode: 'WITH FYBER',
       features: [
         'Efficient fat oxidation',
         'Sustained energy production',
@@ -41,7 +41,7 @@ export const metabolismData = {
       ],
     },
     {
-      mode: 'Starvation Mode',
+      mode: 'WITHOUT FYBER',
       features: [
         'Reduced metabolic rate',
         'Fat storage priority',

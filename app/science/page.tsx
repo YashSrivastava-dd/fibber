@@ -10,7 +10,7 @@ import CTASection from '@/components/sections/science/CTASection'
 
 export default function SciencePage() {
   return (
-    <div className="bg-white min-h-screen">
+    <div className="bg-white min-h-screen overflow-x-hidden">
       <ScienceHero />
       <CravingsSection />
       <GlucoseSection />

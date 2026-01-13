@@ -1,7 +1,8 @@
 'use client'
 
 import React from 'react';
-import { Brain, Sparkles, Heart } from 'lucide-react';
+import Image from 'next/image';
+import { Sparkles } from 'lucide-react';
 import { cravingsData } from '../../../data/mock';
 import { useScrollAnimation } from '../../../hooks/useScrollAnimation';
 
@@ -39,47 +40,16 @@ const CravingsSection = () => {
             </ul>
           </div>
 
-          {/* Right Illustration */}
+          {/* Right Image */}
           <div className={`transition-all duration-700 delay-200 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}>
-            <div className="relative bg-gradient-to-br from-amber-50/50 to-green-50/50 rounded-3xl p-12 lg:p-16">
-              {/* Gut to Brain Pathway Illustration */}
-              <div className="flex flex-col items-center space-y-8">
-                {/* Brain */}
-                <div className="relative">
-                  <div className="w-24 h-24 bg-white rounded-full shadow-sm flex items-center justify-center">
-                    <Brain className="w-12 h-12 text-charcoal/70" />
-                  </div>
-                  <div className="absolute -right-2 top-1/2 -translate-y-1/2">
-                    <span className="text-xs font-medium text-charcoal/50 bg-white px-2 py-1 rounded-full shadow-sm">
-                      Satiety Signals
-                    </span>
-                  </div>
-                </div>
-
-                {/* Connection Line */}
-                <div className="flex flex-col items-center">
-                  <div className="w-px h-8 bg-gradient-to-b from-amber-200 to-green-200" />
-                  <div className="px-3 py-1.5 bg-white rounded-full shadow-sm border border-amber-100">
-                    <span className="text-xs font-medium text-amber-700">SCFAs</span>
-                  </div>
-                  <div className="w-px h-8 bg-gradient-to-b from-green-200 to-blue-200" />
-                </div>
-
-                {/* Microbiome */}
-                <div className="relative">
-                  <div className="w-32 h-32 bg-white rounded-full shadow-sm flex items-center justify-center">
-                    <div className="relative">
-                      <Heart className="w-14 h-14 text-green-500/70" />
-                      <div className="absolute -top-1 -right-1 w-4 h-4 bg-amber-400 rounded-full animate-pulse" />
-                      <div className="absolute -bottom-1 -left-1 w-3 h-3 bg-green-400 rounded-full animate-pulse delay-75" />
-                      <div className="absolute top-1/2 -right-3 w-2 h-2 bg-blue-400 rounded-full animate-pulse delay-150" />
-                    </div>
-                  </div>
-                  <span className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs font-medium text-charcoal/50 whitespace-nowrap">
-                    Gut Microbiome
-                  </span>
-                </div>
-              </div>
+            <div className="relative w-full h-[500px] lg:h-[700px] xl:h-[800px] rounded-3xl overflow-hidden">
+              <Image
+                src="/cravings-image.png"
+                alt="Cravings Control"
+                fill
+                className="object-cover"
+                priority
+              />
             </div>
           </div>
         </div>

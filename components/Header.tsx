@@ -93,60 +93,17 @@ export default function Header() {
             <NavigationMenu className="hidden lg:flex absolute left-1/2 transform -translate-x-1/2 z-10">
               <NavigationMenuList className="space-x-1">
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger
-                    className={cn(
-                      'text-xs font-semibold uppercase tracking-wider bg-transparent hover:bg-transparent hover:opacity-70 h-auto px-3 py-2',
-                      isScrolled ? 'text-black' : 'text-black'
-                    )}
-                  >
-                    SHOP
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <div className="w-[200px] p-2 bg-white rounded-lg shadow-lg">
-                      <NavigationMenuLink asChild>
-                        <Link
-                          href="/collections/all"
-                          className={cn(
-                            'block select-none rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
-                            'text-sm font-medium text-black'
-                          )}
-                        >
-                          <div className="font-semibold leading-none mb-1">All Products</div>
-                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                            Browse all our products
-                          </p>
-                        </Link>
-                      </NavigationMenuLink>
-                      <NavigationMenuLink asChild>
-                        <Link
-                          href="/collections/new"
-                          className={cn(
-                            'block select-none rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
-                            'text-sm font-medium text-black'
-                          )}
-                        >
-                          <div className="font-semibold leading-none mb-1">New Arrivals</div>
-                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                            Latest additions to our collection
-                          </p>
-                        </Link>
-                      </NavigationMenuLink>
-                      <NavigationMenuLink asChild>
-                        <Link
-                          href="/collections/bestsellers"
-                          className={cn(
-                            'block select-none rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
-                            'text-sm font-medium text-black'
-                          )}
-                        >
-                          <div className="font-semibold leading-none mb-1">Best Sellers</div>
-                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                            Our most popular products
-                          </p>
-                        </Link>
-                      </NavigationMenuLink>
-                    </div>
-                  </NavigationMenuContent>
+                  <Link href="/collections/all" legacyBehavior passHref>
+                    <NavigationMenuLink
+                      className={cn(
+                        navigationMenuTriggerStyle(),
+                        'text-xs font-semibold uppercase tracking-wider bg-transparent hover:bg-transparent hover:opacity-70 h-auto px-3 py-2',
+                        isScrolled ? 'text-black' : 'text-black'
+                      )}
+                    >
+                      SHOP
+                    </NavigationMenuLink>
+                  </Link>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
                   <Link href="/science" legacyBehavior passHref>
