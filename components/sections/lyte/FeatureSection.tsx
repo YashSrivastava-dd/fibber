@@ -1,35 +1,36 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Activity, Moon, TrendingUp, Heart } from 'lucide-react'
+import { Activity, Moon, TrendingUp, Heart, CalendarOff } from 'lucide-react'
 
 const features = [
   {
     icon: Heart,
-    title: 'Recovery',
+    title: 'Nutrition',
     description: 'Understand your body\'s readiness. Optimize training intensity based on real-time recovery metrics.',
-    metric: 'HRV Tracking',
+    metric: 'Nutrition Tracking',
     color: 'from-green-500/20 to-green-600/10',
   },
-  {
-    icon: Moon,
-    title: 'Sleep',
-    description: 'Deep insights into sleep quality, stages, and efficiency. Wake up optimized.',
-    metric: 'Sleep Stages',
-    color: 'from-blue-500/20 to-blue-600/10',
-  },
+  
   {
     icon: Activity,
-    title: 'Strain',
+    title: 'Calories',
     description: 'Measure workout intensity and cardiovascular load. Train smarter, not harder.',
-    metric: 'Real-time Strain',
+    metric: 'Calories Tracking',
     color: 'from-orange-500/20 to-orange-600/10',
   },
   {
     icon: TrendingUp,
-    title: 'Health Monitoring',
+    title: 'Sleep',
     description: 'Comprehensive health metrics. Track trends, identify patterns, optimize performance.',
-    metric: 'Health Trends',
+    metric: 'Sleep Tracking',
+    color: 'from-purple-500/20 to-purple-600/10',
+  },
+  {
+    icon: TrendingUp,
+    title: 'Blood Oxygen',
+    description: 'Comprehensive health metrics. Track trends, identify patterns, optimize performance.',
+    metric: 'Blood Oxygen Tracking',
     color: 'from-purple-500/20 to-purple-600/10',
   },
 ]

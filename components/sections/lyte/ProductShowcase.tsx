@@ -5,7 +5,7 @@ import Image from 'next/image'
 
 export default function ProductShowcase() {
   return (
-    <section className="py-32 bg-black text-white overflow-hidden">
+    <section className="pt-0 pb-32 bg-black text-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Cinematic spacing with large device render */}
         <motion.div
@@ -26,26 +26,29 @@ export default function ProductShowcase() {
           Smart insights that help maintain metabolic health and everyday wellbeing.
           </p>
         </motion.div>
+      </div>
 
-        {/* Large product image with Apple-style lighting */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true, margin: '-100px' }}
-          transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
-          className="relative h-[600px] md:h-[700px] lg:h-[800px] rounded-3xl overflow-hidden bg-gradient-to-br from-gray-900 to-black"
-        >
-          <Image
-            src="/ritual/image.jpeg"
-            alt="LYTE Device"
-            fill
-            className="object-cover"
-            priority
-          />
-          {/* Apple-style product lighting effect */}
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/60" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_0%,_black/40_100%)]" />
-        </motion.div>
+      {/* Large product image with Apple-style lighting - Full width */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true, margin: '-100px' }}
+        transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
+        className="relative h-[600px] md:h-[700px] lg:h-[800px] w-full overflow-hidden bg-gradient-to-br from-gray-900 to-black"
+      >
+        <Image
+          src="/lyte_images/More_portion_of_202601141813.jpeg"
+          alt="LYTE Device"
+          fill
+          className="object-cover"
+          priority
+        />
+        {/* Apple-style product lighting effect */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/60" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_0%,_black/40_100%)]" />
+      </motion.div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Stats grid - Apple style minimal */}
         <motion.div

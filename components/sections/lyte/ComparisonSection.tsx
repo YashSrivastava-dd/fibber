@@ -5,42 +5,28 @@ import { Check, X } from 'lucide-react'
 
 const comparisonData = [
   {
-    feature: '24/7 Health Monitoring',
+    feature: 'High Frequency Tracking',
+    lyte: true,
+    competitor: false,
+  },
+  {
+    feature: 'Nutrition Tracking',
+    lyte: true,
+    competitor: false,
+  },
+  {
+    feature: 'Battery Life',
+    lyte: '30 days',
+    competitor: 'Upto 42 hours',
+    isText: true,
+  },
+  {
+    feature: 'Weight',
     lyte: true,
     competitor: true,
   },
   {
-    feature: 'Recovery Tracking',
-    lyte: true,
-    competitor: true,
-  },
-  {
-    feature: 'Sleep Analysis',
-    lyte: true,
-    competitor: true,
-  },
-  {
-    feature: '14+ Day Battery',
-    lyte: true,
-    competitor: false,
-  },
-  {
-    feature: 'Medical-Grade ECG',
-    lyte: true,
-    competitor: false,
-  },
-  {
-    feature: 'Blood Pressure Monitoring',
-    lyte: true,
-    competitor: false,
-  },
-  {
-    feature: 'Advanced Analytics',
-    lyte: true,
-    competitor: false,
-  },
-  {
-    feature: 'Personalized Coaching',
+    feature: 'Stress',
     lyte: true,
     competitor: false,
   },
@@ -86,7 +72,7 @@ export default function ComparisonSection() {
               <div className="text-2xl font-light text-white mb-2">LYTE</div>
             </div>
             <div className="bg-white/5 p-6 text-center">
-              <div className="text-2xl font-light text-gray-400 mb-2">Others</div>
+              <div className="text-2xl font-light text-gray-400 mb-2">Apple Watch</div>
             </div>
 
             {/* Rows */}
@@ -103,14 +89,18 @@ export default function ComparisonSection() {
                   <span className="text-gray-300 font-light">{row.feature}</span>
                 </div>
                 <div className="bg-white/10 p-6 flex items-center justify-center">
-                  {row.lyte ? (
+                  {row.isText ? (
+                    <span className="text-white font-light">{row.lyte}</span>
+                  ) : row.lyte ? (
                     <Check className="w-6 h-6 text-white" />
                   ) : (
                     <X className="w-6 h-6 text-gray-600" />
                   )}
                 </div>
                 <div className="bg-white/5 p-6 flex items-center justify-center">
-                  {row.competitor ? (
+                  {row.isText ? (
+                    <span className="text-gray-400 font-light">{row.competitor}</span>
+                  ) : row.competitor ? (
                     <Check className="w-6 h-6 text-gray-600" />
                   ) : (
                     <X className="w-6 h-6 text-gray-800" />

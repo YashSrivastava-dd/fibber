@@ -4,9 +4,9 @@ import { useEffect, Suspense } from 'react'
 import HeroSection from '@/components/sections/lyte/HeroSection'
 import ProductShowcase from '@/components/sections/lyte/ProductShowcase'
 import FeatureSection from '@/components/sections/lyte/FeatureSection'
-import SubscriptionSection from '@/components/sections/lyte/SubscriptionSection'
-import TestimonialSection from '@/components/sections/lyte/TestimonialSection'
 import AppPreviewSection from '@/components/sections/lyte/AppPreviewSection'
+import NutritionTrackingSection from '@/components/sections/lyte/NutritionTrackingSection'
+import CalorieLeisureSection from '@/components/sections/lyte/CalorieLeisureSection'
 import ComparisonSection from '@/components/sections/lyte/ComparisonSection'
 
 function ErrorFallback({ error }: { error: Error }) {
@@ -48,9 +48,9 @@ export default function LytePage() {
       <HeroSection />
       <ProductShowcase />
       <FeatureSection />
-      <SubscriptionSection />
-      <TestimonialSection />
       <AppPreviewSection />
+      <NutritionTrackingSection />
+      <CalorieLeisureSection />
       <ComparisonSection />
     </div>
   )

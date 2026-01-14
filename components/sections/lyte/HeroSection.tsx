@@ -1,13 +1,24 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import Image from 'next/image'
-import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
 
 export default function HeroSection() {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
+      {/* Background Video */}
+      <div className="absolute inset-0 z-0">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-cover opacity-80"
+        >
+          <source src="/videos/lyte.webm" type="video/webm" />
+        </video>
+        {/* Dark overlay for better text readability */}
+        <div className="absolute inset-0 bg-black/30" />
+      </div>
 
       {/* Content */}
       <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 text-center">
@@ -24,9 +35,9 @@ export default function HeroSection() {
             transition={{ delay: 0.2, duration: 0.8 }}
             className="inline-block"
           >
-            <span className="px-6 py-2 bg-white/5 backdrop-blur-xl border border-white/10 rounded-full text-xs font-medium text-white/60 tracking-widest uppercase">
+            {/* <span className="px-6 py-2 bg-white/5 backdrop-blur-xl border border-white/10 rounded-full text-xs font-medium text-white/60 tracking-widest uppercase">
               LYTE
-            </span>
+            </span> */}
           </motion.div>
 
           {/* Editorial serif headline */}
@@ -34,7 +45,7 @@ export default function HeroSection() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 1, ease: [0.22, 1, 0.36, 1] }}
-            className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-serif leading-[0.95] tracking-tight"
+            className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-serif leading-[0.95] tracking-tight text-center"
             style={{ fontFamily: 'Georgia, serif' }}
           >
             <span className="block text-white">Engineered for</span>
@@ -46,38 +57,10 @@ export default function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 1, ease: [0.22, 1, 0.36, 1] }}
-            className="text-xl md:text-2xl text-gray-400 max-w-2xl mx-auto leading-relaxed font-light"
+            className="text-xl md:text-2xl text-gray-400 max-w-2xl mx-auto leading-relaxed font-light text-center"
           >
             Precision in every moment. Data that moves you.
           </motion.p>
-
-          {/* Apple-style minimal CTAs */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7, duration: 1, ease: [0.22, 1, 0.36, 1] }}
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8"
-          >
-            <Link
-              href="#devices"
-              className="group relative px-10 py-4 bg-white text-black font-medium rounded-full overflow-hidden transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-white/10"
-            >
-              <span className="relative z-10 flex items-center gap-2 text-sm tracking-wide">
-                Start with LYTE
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
-              </span>
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-gray-100 to-white opacity-0 group-hover:opacity-100"
-                transition={{ duration: 0.3 }}
-              />
-            </Link>
-            <Link
-              href="#features"
-              className="px-10 py-4 bg-transparent border border-white/20 text-white font-medium rounded-full backdrop-blur-sm transition-all duration-500 hover:border-white/40 hover:bg-white/5 hover:scale-[1.02] text-sm tracking-wide"
-            >
-              Unlock Your Performance
-            </Link>
-          </motion.div>
         </motion.div>
       </div>
 
