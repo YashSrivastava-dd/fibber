@@ -17,7 +17,7 @@ export default function HeroSection() {
           className="absolute inset-0 w-full h-full object-cover"
           style={{ objectPosition: 'center 10%' }}
         >
-          <source src="/videos/promovideo (1).webm" type="video/webm" />
+          <source src="/videos/prmv.webm" type="video/webm" />
         </video>
         
         {/* Gradient Overlay for text readability */}

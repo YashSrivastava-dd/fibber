@@ -19,11 +19,11 @@ export default function ProductShowcase() {
             className="text-5xl md:text-6xl lg:text-7xl font-serif leading-tight mb-8 tracking-tight"
             style={{ fontFamily: 'Georgia, serif' }}
           >
-            <span className="block text-white">Your body.</span>
-            <span className="block text-white mt-2">Optimized.</span>
+            <span className="block text-white">SCIENCE YOU</span>
+            <span className="block text-white">CAN WEAR</span>
           </h2>
           <p className="text-xl text-gray-400 max-w-2xl mx-auto font-light leading-relaxed">
-            The most advanced health monitoring device. Engineered for athletes, optimized for life.
+          Smart insights that help maintain metabolic health and everyday wellbeing.
           </p>
         </motion.div>
 
