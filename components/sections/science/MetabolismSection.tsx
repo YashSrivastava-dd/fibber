@@ -32,18 +32,18 @@ const MetabolismSection = () => {
         </div>  
 
         {/* Comparison Cards */}
-        <div className={`grid md:grid-cols-2 gap-8 max-w-4xl mx-auto transition-all duration-700 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <div className={`grid md:grid-cols-2 gap-6 max-w-3xl mx-auto transition-all duration-700 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           {/* Fed & Active Mode */}
-          <div className="relative bg-gradient-to-br from-green-50 to-green-100/56 rounded-3xl p-8 border border-green-200 overflow-hidden">
+          <div className="relative bg-gradient-to-br from-green-50 to-green-100/56 rounded-3xl p-6 border border-green-200 overflow-hidden">
             <div className="absolute top-4 right-4 w-20 h-20 bg-green-200/49 rounded-full blur-2xl" />
             
             <div className="relative">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm">
-                  <Flame className="w-6 h-6 text-green-500" />
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm">
+                  <Flame className="w-5 h-5 text-green-500" />
                 </div>
                 <div>
-                  <span className="block text-lg font-medium text-charcoal">
+                  <span className="block text-base font-medium text-charcoal">
                     {metabolismData.comparison[0].mode}
                   </span>
                   {/* <span className="text-xs text-green-600 font-medium uppercase tracking-wider">
@@ -52,7 +52,7 @@ const MetabolismSection = () => {
                 </div>
               </div>
 
-              <ul className="space-y-4">
+              <ul className="space-y-3">
                 {metabolismData.comparison[0].features.map((feature, index) => {
                   const Icon = activeIcons[index];
                   return (
@@ -67,7 +67,7 @@ const MetabolismSection = () => {
               </ul>
 
               {/* Visual Indicator */}
-              <div className="mt-8 pt-6 border-t border-green-200">
+              <div className="mt-6 pt-4 border-t border-green-200">
                 <div className="flex items-center gap-3">
                   <div className="flex-1 h-2 bg-white rounded-full overflow-hidden">
                     <div className="h-full w-4/5 bg-gradient-to-r from-green-400 to-green-500 rounded-full animate-pulse" />
@@ -79,16 +79,16 @@ const MetabolismSection = () => {
           </div>
 
           {/* Starvation Mode */}
-          <div className="relative bg-gradient-to-br from-red-50 to-red-100/56 rounded-3xl p-8 border border-red-200 overflow-hidden">
+          <div className="relative bg-gradient-to-br from-red-50 to-red-100/56 rounded-3xl p-6 border border-red-200 overflow-hidden">
             <div className="absolute top-4 right-4 w-20 h-20 bg-red-200/49 rounded-full blur-2xl" />
             
             <div className="relative">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm">
-                  <AlertTriangle className="w-6 h-6 text-red-500" />
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm">
+                  <AlertTriangle className="w-5 h-5 text-red-500" />
                 </div>
                 <div>
-                  <span className="block text-lg font-medium text-charcoal/70">
+                  <span className="block text-base font-medium text-charcoal/70">
                     {metabolismData.comparison[1].mode}
                   </span>
                   {/* <span className="text-xs text-gray-500 font-medium uppercase tracking-wider">
@@ -97,7 +97,7 @@ const MetabolismSection = () => {
                 </div>
               </div>
 
-              <ul className="space-y-4">
+              <ul className="space-y-3">
                 {metabolismData.comparison[1].features.map((feature, index) => {
                   const Icon = starvationIcons[index];
                   return (
@@ -112,7 +112,7 @@ const MetabolismSection = () => {
               </ul>
 
               {/* Visual Indicator */}
-              <div className="mt-8 pt-6 border-t border-red-200">
+              <div className="mt-6 pt-4 border-t border-red-200">
                 <div className="flex items-center gap-3">
                   <div className="flex-1 h-2 bg-white rounded-full overflow-hidden">
                     <div className="h-full w-2/5 bg-red-300 rounded-full" />

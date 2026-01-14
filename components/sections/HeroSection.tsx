@@ -15,6 +15,7 @@ export default function HeroSection() {
           muted
           playsInline
           className="absolute inset-0 w-full h-full object-cover"
+          style={{ objectPosition: 'center 10%' }}
         >
           <source src="/videos/promovideo (1).webm" type="video/webm" />
         </video>

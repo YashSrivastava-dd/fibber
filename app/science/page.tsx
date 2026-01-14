@@ -6,6 +6,7 @@ import SCFASection from '@/components/sections/science/SCFASection'
 import PrebioticProbioticSection from '@/components/sections/science/PrebioticProbioticSection'
 import GutBarrierSection from '@/components/sections/science/GutBarrierSection'
 import BenefitsGrid from '@/components/sections/science/BenefitsGrid'
+import FeaturedProductsSection from '@/components/sections/FeaturedProductsSection'
 import CTASection from '@/components/sections/science/CTASection'
 
 export default function SciencePage() {
@@ -19,6 +20,7 @@ export default function SciencePage() {
       <PrebioticProbioticSection />
       <GutBarrierSection />
       <BenefitsGrid />
+      <FeaturedProductsSection />
       <CTASection />
     </div>
   )

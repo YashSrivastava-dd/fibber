@@ -5,9 +5,9 @@ import { heroData } from '../../../data/mock';
 
 const Hero = () => {
   return (
-    <section className="relative min-h-screen flex flex-col lg:flex-row bg-white overflow-hidden pt-10">
+    <section className="relative min-h-screen flex flex-col lg:flex-row bg-white overflow-hidden pt-20">
       {/* Hero Image - Left Side (Desktop) */}
-      <div className="hidden lg:block absolute left-0 top-12 lg:top-16 bottom-0 w-1/2 animate-fade-in-up">
+      <div className="hidden lg:block absolute left-0 top-24 lg:top-28 bottom-0 w-1/2 animate-fade-in-up">
         <Image
           src="/hero-image.png"
           alt="Hero"
@@ -35,13 +35,13 @@ const Hero = () => {
         <div className="absolute top-1/2 right-1/3 w-72 h-72 bg-blue-50/30 rounded-full blur-3xl" />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-8 lg:pt-16 pb-16 lg:pb-24 w-full">
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-8 lg:pt-24 pb-16 lg:pb-24 w-full">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-24 items-center">
           {/* Spacer for left side on desktop */}
           <div className="hidden lg:block"></div>
 
           {/* Content - Right Side */}
-          <div className="text-center lg:text-left max-w-2xl mx-auto lg:mx-0 pt-4 lg:pt-20 px-4 lg:pl-16">
+          <div className="text-center lg:text-left max-w-2xl mx-auto lg:mx-0 pt-4 lg:pt-24 px-4 lg:pl-16">
             {/* Tagline */}
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-50 border border-amber-100 rounded-full mb-8 animate-fade-in">
               <Sparkles className="w-4 h-4 text-amber-600" />
@@ -59,7 +59,7 @@ const Hero = () => {
             </h1>
 
             {/* Subheadline */}
-            <p className="text-base lg:text-lg text-charcoal/60 leading-[1.8] max-w-2xl mx-auto lg:mx-0 text-left animate-fade-in-up delay-100">
+            <p className="text-base lg:text-lg text-charcoal/60 leading-[1.8] max-w-2xl mx-auto lg:mx-0 text-center lg:text-left animate-fade-in-up delay-100">
               {heroData.subheadline}
             </p>
           </div>

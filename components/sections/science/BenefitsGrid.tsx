@@ -85,7 +85,7 @@ const BenefitsGrid = () => {
   ];
 
   return (
-    <section ref={ref} className="py-16 lg:py-20 bg-white" id="benefits">
+    <section ref={ref} className="pt-16 pb-4 lg:py-20 bg-white" id="benefits">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         {/* Section Header */}
         <div className={`text-center max-w-3xl mx-auto mb-8 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
@@ -110,11 +110,17 @@ const BenefitsGrid = () => {
                 className={`group bg-white rounded-2xl p-8 border border-gray-100 hover:border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                 style={{ transitionDelay: `${index * 50}ms` }}
               >
-                <div className={`w-12 h-12 ${colorClasses.bg} rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                  <benefit.icon className={`w-6 h-6 ${colorClasses.text}`} />
+                {/* Title & Icon Row */}
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex-1">
+                    <h3 className="text-xl font-medium text-charcoal leading-[1.4] mb-2">{benefit.title}</h3>
+                    <p className="text-sm font-medium text-charcoal/50 leading-[1.6]">{benefit.subtitle}</p>
+                  </div>
+                  {/* Icon */}
+                  <div className={`w-12 h-12 ${colorClasses.bg} rounded-xl flex items-center justify-center ml-4 group-hover:scale-110 transition-transform duration-300 flex-shrink-0`}>
+                    <benefit.icon className={`w-6 h-6 ${colorClasses.text}`} />
+                  </div>
                 </div>
-                <h3 className="text-xl font-medium text-charcoal leading-[1.4] mb-3">{benefit.title}</h3>
-                <p className="text-sm font-medium text-charcoal/50 leading-[1.6] mb-4">{benefit.subtitle}</p>
                 <p className="text-sm text-charcoal/60 leading-[1.8]">{benefit.description}</p>
               </div>
             );
