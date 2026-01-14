@@ -9,10 +9,10 @@ const GlucoseSection = () => {
   const { ref, isVisible } = useScrollAnimation();
 
   return (
-    <section ref={ref} className="py-24 lg:py-32 bg-gradient-to-b from-white to-amber-50/30">
+    <section ref={ref} className="py-12 lg:py-16 bg-gradient-to-b from-white to-amber-50/30">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         {/* Section Header */}
-        <div className={`text-center max-w-3xl mx-auto mb-16 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <div className={`text-center max-w-3xl mx-auto mb-8 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <span className="inline-block text-sm font-medium text-amber-600 uppercase tracking-wider mb-4">
             Blood Sugar Control
           </span>

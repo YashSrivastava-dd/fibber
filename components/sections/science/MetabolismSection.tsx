@@ -12,7 +12,7 @@ const MetabolismSection = () => {
   const starvationIcons = [TrendingDown, AlertTriangle, Scale, Brain, Minus];
 
   return (
-    <section ref={ref} className="py-24 lg:py-32 bg-white">
+    <section ref={ref} className="py-12 lg:py-16 bg-white">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         {/* Section Header */}
         <div className={`text-center max-w-3xl mx-auto mb-6 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
@@ -25,7 +25,7 @@ const MetabolismSection = () => {
         </div>
 
         {/* Description */}
-        <div className={`text-center max-w-2xl mx-auto mb-16 transition-all duration-700 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <div className={`text-center max-w-2xl mx-auto mb-8 transition-all duration-700 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <p className="text-base text-charcoal/60 leading-[1.5]">
             {metabolismData.description}
           </p>

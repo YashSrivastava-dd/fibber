@@ -5,8 +5,8 @@ import { heroData } from '../../../data/mock';
 
 const Hero = () => {
   return (
-    <section className="relative min-h-screen flex bg-white overflow-hidden pt-10">
-      {/* Hero Image - Left Side (Full Width) */}
+    <section className="relative min-h-screen flex flex-col lg:flex-row bg-white overflow-hidden pt-10">
+      {/* Hero Image - Left Side (Desktop) */}
       <div className="hidden lg:block absolute left-0 top-12 lg:top-16 bottom-0 w-1/2 animate-fade-in-up">
         <Image
           src="/hero-image.png"
@@ -17,8 +17,8 @@ const Hero = () => {
         />
       </div>
 
-      {/* Mobile Image */}
-      <div className="lg:hidden relative w-full h-[400px] mb-8 animate-fade-in-up">
+      {/* Mobile Image - Above Content */}
+      <div className="lg:hidden relative w-full h-[300px] mt-28 animate-fade-in-up">
         <Image
           src="/hero-image.png"
           alt="Hero"
@@ -35,13 +35,13 @@ const Hero = () => {
         <div className="absolute top-1/2 right-1/3 w-72 h-72 bg-blue-50/30 rounded-full blur-3xl" />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-12 lg:pt-16 pb-24 lg:pb-32 w-full">
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-8 lg:pt-16 pb-16 lg:pb-24 w-full">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-24 items-center">
           {/* Spacer for left side on desktop */}
           <div className="hidden lg:block"></div>
 
           {/* Content - Right Side */}
-          <div className="text-center lg:text-left max-w-2xl mx-auto lg:mx-0 pt-12 lg:pt-20 pl-8 lg:pl-16">
+          <div className="text-center lg:text-left max-w-2xl mx-auto lg:mx-0 pt-4 lg:pt-20 px-4 lg:pl-16">
             {/* Tagline */}
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-50 border border-amber-100 rounded-full mb-8 animate-fade-in">
               <Sparkles className="w-4 h-4 text-amber-600" />
@@ -51,7 +51,7 @@ const Hero = () => {
             </div>
 
             {/* Headline */}
-            <h1 className="text-4xl lg:text-6xl font-light text-charcoal mb-12 animate-fade-in-up">
+            <h1 className="text-4xl lg:text-6xl font-light text-charcoal mb-6 animate-fade-in-up">
               <span className="block text-2xl lg:text-4xl leading-tight">Unlock Your Body's</span>
               <span className="block font-medium bg-gradient-to-r from-amber-600 via-green-600 to-blue-600 bg-clip-text text-transparent text-4xl lg:text-6xl mt-[12.8px] lg:mt-[19.2px] leading-tight">
                 True Potential

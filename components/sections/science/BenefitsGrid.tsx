@@ -88,7 +88,7 @@ const BenefitsGrid = () => {
     <section ref={ref} className="py-16 lg:py-20 bg-white" id="benefits">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         {/* Section Header */}
-        <div className={`text-center max-w-3xl mx-auto mb-16 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <div className={`text-center max-w-3xl mx-auto mb-8 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <span className="inline-block text-sm font-medium text-amber-600 uppercase tracking-wider mb-4">
             Complete Benefits
           </span>
