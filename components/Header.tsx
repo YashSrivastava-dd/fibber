@@ -55,7 +55,7 @@ export default function Header() {
 
       {/* Transparent Frosty Navbar */}
       <header
-        className={`fixed top-8 left-0 right-0 z-40 transition-all duration-500 ${
+        className={`fixed top-8 left-0 right-0 z-40 transition-all duration-500 pt-4 ${
           isScrolled
             ? 'bg-white/60 backdrop-blur-xl border-b border-white/20 shadow-lg'
             : 'bg-white/40 backdrop-blur-lg border-b border-white/10'

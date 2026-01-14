@@ -61,6 +61,19 @@ export default function Footer() {
 
           {/* Support Text Column */}
           <div>
+            <h3 className="text-sm font-semibold uppercase tracking-wider mb-6">
+              Legal
+            </h3>
+            <ul className="space-y-3 mb-6">
+              <li>
+                <Link
+                  href="/lyte/privacy-policy"
+                  className="text-sm text-gray-400 hover:text-white transition-colors"
+                >
+                  LYTE Privacy Policy
+                </Link>
+              </li>
+            </ul>
             <p className="text-sm text-gray-400 leading-relaxed mb-4">
               We&apos;re here to help and ensure your journey with Fiberise is seamless and enjoyable. Got ideas or questions about sections? Need a tweak to make it just perfect?
             </p>
