@@ -5,7 +5,7 @@ import { heroData } from '../../../data/mock';
 
 const Hero = () => {
   return (
-    <section className="relative min-h-screen flex flex-col lg:flex-row bg-white overflow-hidden pt-20">
+    <section className="relative min-h-screen flex flex-col lg:flex-row bg-white overflow-hidden pt-10 lg:pt-20">
       {/* Hero Image - Left Side (Desktop) */}
       <div className="hidden lg:block absolute left-0 top-24 lg:top-28 bottom-0 w-1/2 animate-fade-in-up">
         <Image
@@ -18,7 +18,7 @@ const Hero = () => {
       </div>
 
       {/* Mobile Image - Above Content */}
-      <div className="lg:hidden relative w-full h-[300px] mt-28 animate-fade-in-up">
+      <div className="lg:hidden relative w-full h-[300px] mt-20 animate-fade-in-up">
         <Image
           src="/hero-image.png"
           alt="Hero"
