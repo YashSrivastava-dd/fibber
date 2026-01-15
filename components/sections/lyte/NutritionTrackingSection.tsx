@@ -51,8 +51,8 @@ export default function NutritionTrackingSection() {
             className="text-5xl md:text-6xl lg:text-7xl font-serif leading-tight mb-6 tracking-tight"
             style={{ fontFamily: 'Georgia, serif' }}
           >
-            <span className="block text-white">Nutrition, Understood.</span>
-            <span className="block text-white mt-2">Instantly.</span>
+            <span className="block text-white">NUTRITION, UNDERSTOOD.</span>
+            <span className="block text-white mt-4 md:mt-6">INSTANTLY.</span>
           </h2>
           <p className="text-xl text-gray-400 max-w-2xl mx-auto font-light">
             Not counting meals. Understanding how food becomes energy, recovery, and change.

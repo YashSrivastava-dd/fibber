@@ -46,8 +46,8 @@ export default function CalorieLeisureSection() {
             className="text-5xl md:text-6xl lg:text-7xl font-serif leading-tight mb-6 tracking-tight"
             style={{ fontFamily: 'Georgia, serif' }}
           >
-            <span className="block text-white">Your Body's Energy,</span>
-            <span className="block text-white mt-2">Decoded.</span>
+            <span className="block text-white">YOUR BODY'S ENERGY,</span>
+            <span className="block text-white mt-4 md:mt-6">DECODED.</span>
           </h2>
           <p className="text-lg text-gray-400 max-w-3xl mx-auto font-light leading-relaxed">
             Most systems count calories. LYTE understands them. By tracking energy intake and expenditure, it reveals how your body converts effort into muscle, stores fat, releases water, or recovers silently. You don't chase numbers. You live.

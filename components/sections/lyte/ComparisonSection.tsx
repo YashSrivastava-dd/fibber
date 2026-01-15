@@ -47,8 +47,8 @@ export default function ComparisonSection() {
             className="text-5xl md:text-6xl lg:text-7xl font-serif leading-tight mb-8 tracking-tight"
             style={{ fontFamily: 'Georgia, serif' }}
           >
-            <span className="block text-white">Why LYTE</span>
-            <span className="block text-white mt-2">stands apart.</span>
+            <span className="block text-white">WHY LYTE</span>
+            <span className="block text-white mt-4 md:mt-6">STANDS APART.</span>
           </h2>
           <p className="text-xl text-gray-400 max-w-2xl mx-auto font-light">
             Compare features. See the difference.

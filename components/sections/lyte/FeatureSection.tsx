@@ -7,7 +7,7 @@ const features = [
   {
     icon: Heart,
     title: 'Nutrition',
-    description: 'Understand your body\'s readiness. Optimize training intensity based on real-time recovery metrics.',
+    description: 'Track your calorie intake and effortlessly tailor your food for enhanced vitality',
     metric: 'Nutrition Tracking',
     color: 'from-green-500/20 to-green-600/10',
   },
@@ -15,23 +15,23 @@ const features = [
   {
     icon: Activity,
     title: 'Calories',
-    description: 'Measure workout intensity and cardiovascular load. Train smarter, not harder.',
+    description: 'See how daily movement impacts calorie use, stamina, and overall body efficiency.',
     metric: 'Calories Tracking',
     color: 'from-orange-500/20 to-orange-600/10',
   },
   {
     icon: TrendingUp,
     title: 'Sleep',
-    description: 'Comprehensive health metrics. Track trends, identify patterns, optimize performance.',
+    description: 'Understand how your body is recovering to ensure you get the best version of yourself everyday.',
     metric: 'Sleep Tracking',
     color: 'from-purple-500/20 to-purple-600/10',
   },
   {
-    icon: TrendingUp,
+    icon: Heart,
     title: 'Blood Oxygen',
-    description: 'Comprehensive health metrics. Track trends, identify patterns, optimize performance.',
+    description: 'Helps you understand how efficiently your body uses oxygen.',
     metric: 'Blood Oxygen Tracking',
-    color: 'from-purple-500/20 to-purple-600/10',
+    color: 'from-red-500/20 to-red-600/10',
   },
 ]
 
@@ -50,8 +50,8 @@ export default function FeatureSection() {
             className="text-5xl md:text-6xl lg:text-7xl font-serif leading-tight mb-8 tracking-tight"
             style={{ fontFamily: 'Georgia, serif' }}
           >
-            <span className="block text-white">Four pillars.</span>
-            <span className="block text-white mt-2">One system.</span>
+            <span className="block text-white">FOUR PILLARS.</span>
+            <span className="block text-white mt-4 md:mt-6">ONE SYSTEM.</span>
           </h2>
           <p className="text-xl text-gray-400 max-w-2xl mx-auto font-light">
             Comprehensive health monitoring across every dimension of performance.

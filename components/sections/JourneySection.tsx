@@ -2,24 +2,31 @@ import Image from 'next/image'
 
 export default function JourneySection() {
   return (
-    <section className="w-full bg-white pt-8 md:pt-12 lg:pt-16 pb-16 md:pb-24 lg:pb-32 relative overflow-visible">
+    <section className="w-full bg-white pt-16 md:pt-24 lg:pt-32 pb-16 md:pb-24 lg:pb-32 relative overflow-visible">
       <div className="max-w-[96rem] mx-auto px-6 sm:px-8 lg:px-12 relative">
         {/* Main Heading - Left Aligned */}
         <div className="mb-0">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-serif font-medium text-[#868B7A] leading-relaxed max-w-5xl">
-            <span className="block">Noticeable results in 30 minutes</span>
-            <span className="block mt-4 md:mt-6">Refined body in 90 days</span>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-serif font-medium text-[#868B7A] leading-relaxed max-w-5xl">
+            {/* Mobile view - 4 lines */}
+            <span className="block lg:hidden">Noticeable Results In</span>
+            <span className="block mt-4 md:mt-6 lg:hidden">30 Minutes</span>
+            <span className="block mt-4 md:mt-6 lg:hidden">Refined Body In</span>
+            <span className="block mt-4 md:mt-6 lg:hidden">90 Days</span>
+            
+            {/* Desktop view - 2 lines */}
+            <span className="hidden lg:block">Noticeable results in 30 minutes</span>
+            <span className="hidden lg:block mt-4 md:mt-6">Refined body in 90 days</span>
           </h2>
         </div>
 
 
 
         {/* Content Container */}
-        <div className="relative mt-12 md:mt-16 lg:mt-20 xl:mt-24">
+        <div className="relative mt-2 md:mt-8 lg:mt-10 xl:mt-12">
           {/* 1st Section - Text Left, Image Right */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 lg:gap-20 mb-8 md:mb-12 lg:mb-16 xl:mb-20 items-center">
-            {/* Text Left */}
-            <div className="max-w-lg ml-4 md:ml-6 lg:ml-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-16 lg:gap-20 mb-8 md:mb-12 lg:mb-16 xl:mb-20 items-center">
+            {/* Text Left - Order 2 on mobile, 1 on desktop */}
+            <div className="max-w-lg ml-4 md:ml-6 lg:ml-8 order-2 lg:order-1 text-left">
               {/* Small Heading */}
               <div className="mb-4 md:mb-6">
                 <h3 className="text-2xl md:text-3xl lg:text-4xl font-montserrat font-medium text-[#868B7A]">
@@ -31,8 +38,8 @@ export default function JourneySection() {
               </p>
             </div>
 
-            {/* Images Right - Side by Side */}
-            <div className="flex flex-row w-full md:w-4/5 lg:w-full lg:ml-auto">
+            {/* Images Right - Side by Side - Order 1 on mobile, 2 on desktop */}
+            <div className="flex flex-row w-full md:w-4/5 lg:w-full lg:ml-auto order-1 lg:order-2">
               {/* Smaller image on left */}
               <div className="relative w-2/5 h-[240px] md:h-[300px] lg:h-[360px]">
                 <Image
@@ -59,9 +66,9 @@ export default function JourneySection() {
           </div>
 
           {/* 3rd Section - Images Left, Text Right */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 lg:gap-20 mb-0 mt-8 md:mt-12 lg:mt-16 items-center">
-            {/* Images Left - Side by Side */}
-            <div className="flex flex-row w-full -ml-8 sm:-ml-12 lg:-ml-16 pl-8 md:pl-12 lg:pl-16">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-16 lg:gap-20 mb-0 mt-8 md:mt-12 lg:mt-16 items-center">
+            {/* Images Left - Side by Side - Order 1 on mobile, 1 on desktop */}
+            <div className="flex flex-row w-full -ml-8 sm:-ml-12 lg:-ml-16 pl-8 md:pl-12 lg:pl-16 order-1">
               {/* Larger image on left */}
               <div className="relative flex-1 h-[240px] md:h-[300px] lg:h-[360px] rounded-2xl overflow-hidden">
                 <Image
@@ -84,8 +91,8 @@ export default function JourneySection() {
               </div>
             </div>
 
-            {/* Text Right */}
-            <div className="max-w-lg ml-4 md:ml-6 lg:ml-8">
+            {/* Text Right - Order 2 on mobile, 2 on desktop */}
+            <div className="max-w-lg ml-4 md:ml-6 lg:ml-8 order-2 text-left">
               {/* Small Heading */}
               <div className="mb-4 md:mb-6">
                 <h3 className="text-2xl md:text-3xl lg:text-4xl font-montserrat font-medium text-[#868B7A]">
@@ -99,9 +106,9 @@ export default function JourneySection() {
 
           <div className="relative mt-8 md:mt-12 lg:mt-16">
             {/* 1st Section - Text Left, Image Right */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 lg:gap-20 mb-0 items-center">
-              {/* Text Left */}
-              <div className="max-w-lg ml-4 md:ml-6 lg:ml-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-16 lg:gap-20 mb-0 items-center">
+              {/* Text Left - Order 2 on mobile, 1 on desktop */}
+              <div className="max-w-lg ml-4 md:ml-6 lg:ml-8 order-2 lg:order-1 text-left">
                 {/* Small Heading */}
                 <div className="mb-4 md:mb-6">
                   <h3 className="text-2xl md:text-3xl lg:text-4xl font-montserrat font-medium text-[#868B7A]">
@@ -112,8 +119,8 @@ export default function JourneySection() {
                   FYBER initiates steady, measurable weight loss as the body begins to release excess weight naturally. Hunger is better regulated, portions feel effortless, and visible changes start to appear in how your clothes fit and how you move. This is weight loss without struggle—consistent, controlled, and sustainable—driven by a daily ritual that reshapes your body with quiet precision and lasting elegance.              </p>
               </div>
 
-              {/* Images Right - Side by Side */}
-              <div className="flex flex-row w-full md:w-4/5 lg:w-full lg:ml-auto">
+              {/* Images Right - Side by Side - Order 1 on mobile, 2 on desktop */}
+              <div className="flex flex-row w-full md:w-4/5 lg:w-full lg:ml-auto order-1 lg:order-2">
                 {/* Smaller image on left */}
                 <div className="relative w-2/5 h-[240px] md:h-[300px] lg:h-[360px]">
                   <Image
@@ -140,9 +147,9 @@ export default function JourneySection() {
             </div>
           </div>
                   {/* 3rd Section - Images Left, Text Right */}
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 lg:gap-20 mb-0 mt-8 md:mt-12 lg:mt-16 items-center">
-            {/* Images Left - Side by Side */}
-            <div className="flex flex-row w-full -ml-8 sm:-ml-12 lg:-ml-16 pl-8 md:pl-12 lg:pl-16">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-16 lg:gap-20 mb-0 mt-8 md:mt-12 lg:mt-16 items-center">
+            {/* Images Left - Side by Side - Order 1 on mobile, 1 on desktop */}
+            <div className="flex flex-row w-full -ml-8 sm:-ml-12 lg:-ml-16 pl-8 md:pl-12 lg:pl-16 order-1">
               {/* Larger image on left */}
               <div className="relative flex-[3] h-[240px] md:h-[300px] lg:h-[360px] rounded-2xl overflow-hidden">
                 <Image
@@ -154,12 +161,12 @@ export default function JourneySection() {
                 />
               </div>
               {/* Smaller image on right */}
-              <div className="relative flex-1 h-[240px] md:h-[300px] lg:h-[360px]">
-                <Image src="/ritual/Group 64928.png" alt="Wellness product" fill className="object-contain object-center rounded-lg" sizes="(max-width: 768px) 40vw, (max-width: 1024px) 20vw, 16vw" />
+              <div className="relative flex-[2] h-[320px] md:h-[400px] lg:h-[480px]">
+                <Image src="/ritual/Group 64928.png" alt="Wellness product" fill className="object-contain object-top rounded-lg" sizes="(max-width: 768px) 40vw, (max-width: 1024px) 20vw, 16vw" />
               </div>
             </div>
-            {/* Text Right */}
-            <div className="max-w-lg ml-12 md:ml-16 lg:ml-20 xl:ml-24 2xl:ml-28">
+            {/* Text Right - Order 2 on mobile, 2 on desktop */}
+            <div className="max-w-lg ml-12 md:ml-16 lg:ml-20 xl:ml-24 2xl:ml-28 order-2 text-left">
               {/* Small Heading */}
               <div className="mb-4 md:mb-6">
                 <h3 className="text-2xl md:text-3xl lg:text-4xl font-montserrat font-medium text-[#868B7A]">

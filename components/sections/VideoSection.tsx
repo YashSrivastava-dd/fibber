@@ -30,7 +30,7 @@ const features = [
   {
     icon: '/icons/Group 640.svg',
     title: 'Pre-Biotic',
-    description: 'Encourages mindful eating through better fullness.',
+    description: 'Nourishes beneficial gut bacteria naturally.',
     position: 'right-middle',
   },
   {

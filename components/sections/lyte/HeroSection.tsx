@@ -45,11 +45,11 @@ export default function HeroSection() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 1, ease: [0.22, 1, 0.36, 1] }}
-            className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-serif leading-[0.95] tracking-tight text-center"
+            className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-serif leading-[0.95] tracking-tight text-center"
             style={{ fontFamily: 'Georgia, serif' }}
           >
-            <span className="block text-white">Engineered for</span>
-            <span className="block mt-2 text-white">Human Potential.</span>
+            <span className="block text-white">ENGINEERED FOR</span>
+            <span className="block mt-2 text-white">HUMAN POTENTIAL.</span>
           </motion.h1>
 
           {/* Clean subheadline */}

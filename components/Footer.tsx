@@ -73,6 +73,56 @@ export default function Footer() {
                   LYTE Privacy Policy
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="https://merchant.razorpay.com/policy/RZHNgccrVdS1Qa/shipping"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-gray-400 hover:text-white transition-colors"
+                >
+                  Shipping & Delivery Policy
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="https://merchant.razorpay.com/policy/RZHNgccrVdS1Qa/privacy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-gray-400 hover:text-white transition-colors"
+                >
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="https://merchant.razorpay.com/policy/RZHNgccrVdS1Qa/contact_us"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-gray-400 hover:text-white transition-colors"
+                >
+                  Contact Us
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="https://merchant.razorpay.com/policy/RZHNgccrVdS1Qa/refund"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-gray-400 hover:text-white transition-colors"
+                >
+                  Cancellation & Refund Policy
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="https://merchant.razorpay.com/policy/RZHNgccrVdS1Qa/terms"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-gray-400 hover:text-white transition-colors"
+                >
+                  Terms & Conditions
+                </Link>
+              </li>
             </ul>
             <p className="text-sm text-gray-400 leading-relaxed mb-4">
               We&apos;re here to help and ensure your journey with Fiberise is seamless and enjoyable. Got ideas or questions about sections? Need a tweak to make it just perfect?

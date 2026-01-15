@@ -7,41 +7,43 @@ const Hero = () => {
   return (
     <section className="relative min-h-screen flex flex-col lg:flex-row bg-white overflow-hidden pt-10 lg:pt-20">
       {/* Hero Image - Left Side (Desktop) */}
-      <div className="hidden lg:block absolute left-0 top-24 lg:top-28 bottom-0 w-1/2 animate-fade-in-up">
+      <div className="hidden lg:block absolute left-0 top-24 lg:top-28 bottom-0 w-1/2">
         <Image
           src="/hero-image.png"
           alt="Hero"
           fill
           className="object-cover"
           priority
+          style={{ opacity: 1 }}
         />
       </div>
 
-      {/* Mobile Image - Above Content */}
-      <div className="lg:hidden relative w-full h-[300px] mt-20 animate-fade-in-up">
-        <Image
-          src="/hero-image.png"
-          alt="Hero"
-          fill
-          className="object-cover"
-          priority
-        />
-      </div>
-
-      {/* Subtle Background Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Subtle Background Elements - Hidden on mobile to prevent image fading */}
+      <div className="hidden lg:block absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-amber-50/50 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-green-50/40 rounded-full blur-3xl" />
         <div className="absolute top-1/2 right-1/3 w-72 h-72 bg-blue-50/30 rounded-full blur-3xl" />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-8 lg:pt-24 pb-16 lg:pb-24 w-full">
+      {/* Mobile Image - First on mobile, before content */}
+      <div className="lg:hidden relative w-full h-[300px] mt-20 z-10 order-1">
+        <Image
+          src="/hero-image.png"
+          alt="Hero"
+          fill
+          className="object-cover"
+          priority
+          style={{ opacity: 1, zIndex: 10 }}
+        />
+      </div>
+
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-8 lg:pt-24 pb-16 lg:pb-24 w-full order-2 lg:order-none">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-24 items-center">
           {/* Spacer for left side on desktop */}
           <div className="hidden lg:block"></div>
 
           {/* Content - Right Side */}
-          <div className="text-center lg:text-left max-w-2xl mx-auto lg:mx-0 pt-4 lg:pt-24 px-4 lg:pl-16">
+          <div className="text-center lg:text-left max-w-2xl mx-auto lg:mx-0 pt-2 lg:pt-24 px-4 lg:pl-16">
             {/* Tagline */}
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-50 border border-amber-100 rounded-full mb-8 animate-fade-in">
               <Sparkles className="w-4 h-4 text-amber-600" />
@@ -53,7 +55,7 @@ const Hero = () => {
             {/* Headline */}
             <h1 className="text-4xl lg:text-6xl font-light text-charcoal mb-6 animate-fade-in-up">
               <span className="block text-2xl lg:text-4xl leading-tight">Unlock Your Body's</span>
-              <span className="block font-medium bg-gradient-to-r from-amber-600 via-green-600 to-blue-600 bg-clip-text text-transparent text-4xl lg:text-6xl mt-[12.8px] lg:mt-[19.2px] leading-tight">
+              <span className="block font-medium bg-gradient-to-r from-amber-600 via-green-600 to-blue-600 bg-clip-text text-transparent text-4xl lg:text-6xl mt-4 md:mt-6 leading-tight">
                 True Potential
               </span>
             </h1>

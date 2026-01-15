@@ -7,6 +7,17 @@ export default function EmpoweringSection() {
   const containerRef = useRef<HTMLDivElement>(null)
   const [scrollProgress, setScrollProgress] = useState(0)
   const [isInView, setIsInView] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    // Check if mobile on mount and resize
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768) // md breakpoint
+    }
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,18 +28,40 @@ export default function EmpoweringSection() {
       const containerHeight = rect.height
       const windowHeight = window.innerHeight
 
-      // Check if section is in view for sticky effect
+      // Mobile-specific: Start animation after arrow is scrolled past
+      // With reduced height, use minimal offset to trigger animation
+      const startOffset = isMobile ? 0 : 0
+
+      // Check if section is in view for sticky/fixed effect
       const inView = containerTop <= 0 && containerTop > -(containerHeight - windowHeight)
       setIsInView(inView)
 
       // Calculate progress based on how far we've scrolled through the container
-      if (containerTop <= 0) {
-        const scrolled = Math.abs(containerTop)
-        const scrollableDistance = containerHeight - windowHeight
-        const progress = Math.min(1, scrolled / scrollableDistance)
-        setScrollProgress(progress)
+      if (isMobile) {
+        // Mobile: Track scroll from when container enters viewport
+        // Animation starts immediately when container top reaches viewport top (containerTop <= 0)
+        if (containerTop <= 0) {
+          // Calculate scroll distance: when sticky, containerTop goes from 0 to -(containerHeight - windowHeight)
+          const scrolled = Math.abs(containerTop) // How far container has scrolled up
+          const maxScroll = containerHeight - windowHeight // 220vh - 100vh = 120vh
+          // Slow down animation significantly by using only a small part of the scroll distance
+          // Use 35% of max scroll to complete animation, making it much slower (takes ~3x scroll)
+          const animationScrollDistance = maxScroll * 0.35 // Use 35% of available scroll for very slow animation
+          const progress = animationScrollDistance > 0 ? Math.min(1, scrolled / animationScrollDistance) : 0
+          setScrollProgress(progress)
+        } else {
+          setScrollProgress(0)
+        }
       } else {
-        setScrollProgress(0)
+        // Desktop: original calculation
+        if (containerTop <= 0) {
+          const scrolled = Math.abs(containerTop)
+          const scrollableDistance = containerHeight - windowHeight
+          const progress = scrollableDistance > 0 ? Math.min(1, scrolled / scrollableDistance) : 0
+          setScrollProgress(progress)
+        } else {
+          setScrollProgress(0)
+        }
       }
     }
 
@@ -36,7 +69,7 @@ export default function EmpoweringSection() {
     handleScroll()
 
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  }, [isMobile])
 
   const scrollToNext = () => {
     window.scrollBy({ top: window.innerHeight, behavior: 'smooth' })
@@ -44,26 +77,54 @@ export default function EmpoweringSection() {
 
   // Yellow circle (LEFT) - appears first (0-50% scroll), moves from bottom to top and exits
   const yellowProgress = Math.min(1, scrollProgress * 2) // 0->1 during first 50%
+  // For desktop: percentage-based top positioning
   const yellowY = 110 - (yellowProgress * 130) // 110% -> -20% (exits at top)
+  // For mobile: use translateY in vh units with much reduced movement speed
+  // Reduced from 90vh to 60vh to make circles move much slower
+  const yellowTranslateY = isMobile ? (60 - (yellowProgress * 60)) : 0
   const yellowOpacity = yellowProgress < 0.9 ? (yellowProgress > 0.05 ? 1 : 0) : Math.max(0, 1 - (yellowProgress - 0.9) * 10)
 
   // Blue circle (RIGHT) - appears AFTER yellow exits (50-100% scroll)
   const blueProgress = Math.max(0, Math.min(1, (scrollProgress - 0.5) * 2)) // 0->1 during second 50%
   const blueY = 110 - (blueProgress * 130) // 110% -> -20% (exits at top)
+  // For mobile: use translateY in vh units with much reduced movement speed
+  // Reduced from 90vh to 60vh to make circles move much slower
+  const blueTranslateY = isMobile ? (60 - (blueProgress * 60)) : 0
   const blueOpacity = blueProgress < 0.9 ? (blueProgress > 0.05 ? 1 : 0) : Math.max(0, 1 - (blueProgress - 0.9) * 10)
 
+  // On mobile: only fixed during animation (when scrollProgress is between 0 and 1)
+  // After animation ends, keep it visible but allow scrolling
+  const isAnimationActive = isMobile && scrollProgress > 0 && scrollProgress < 1
+  const animationEnded = isMobile && scrollProgress >= 1
+
   return (
-    <div ref={containerRef} className="relative m-0 p-0" style={{ height: '400vh' }}>
-      {/* Fixed content when in view */}
+    <div ref={containerRef} className="relative m-0 p-0 h-[220vh] md:h-[400vh]">
+      {/* Mobile: Fixed during animation to stick background, then absolute to stay visible, Desktop: Fixed/absolute positioning */}
       <div 
-        className={`${isInView ? 'fixed' : 'absolute'} top-0 left-0 w-full h-screen bg-[#F5F3EF] flex flex-col items-center justify-start pt-0 md:pt-20 px-4 overflow-visible z-20`}
-        style={!isInView && scrollProgress >= 1 ? { top: 'auto', bottom: 0 } : {}}
+        className={`${isMobile && !isAnimationActive && !animationEnded ? 'static' : 'md:static'} top-0 left-0 w-full h-screen bg-[#F5F3EF] flex flex-col items-center justify-center md:justify-start pt-0 md:pt-20 px-4 pb-0 overflow-hidden md:overflow-visible z-20`}
+        style={isMobile ? {
+          position: isAnimationActive ? 'fixed' : animationEnded ? 'absolute' : 'static',
+          // After animation ends, position at bottom of container to keep it visible
+          ...(animationEnded ? { top: 'auto', bottom: 0 } : {}),
+          // Ensure it stays visible
+          visibility: 'visible',
+          opacity: 1,
+        } : {
+          position: isInView ? 'fixed' : 'absolute',
+          height: 'auto',
+          ...(!isInView && scrollProgress >= 1 ? { top: 'auto', bottom: 0 } : {})
+        }}
       >
         
           {/* Yellow Circle - LEFT SIDE */}
           <div 
             className="absolute left-4 md:left-12 lg:left-20 z-30"
-            style={{
+            style={isMobile ? {
+              top: '50%',
+              transform: `translateY(calc(-50% + ${yellowTranslateY}vh))`,
+              opacity: yellowOpacity,
+              transition: 'opacity 0.2s ease-out',
+            } : {
               top: `${yellowY}%`,
               transform: 'translateY(-50%)',
               opacity: yellowOpacity,
@@ -89,7 +150,12 @@ export default function EmpoweringSection() {
         {/* Blue Circle - RIGHT SIDE */}
         <div 
           className="absolute right-4 md:right-12 lg:right-20 z-30"
-          style={{
+          style={isMobile ? {
+            top: '50%',
+            transform: `translateY(calc(-50% + ${blueTranslateY}vh))`,
+            opacity: blueOpacity,
+            transition: 'opacity 0.2s ease-out',
+          } : {
             top: `${blueY}%`,
             transform: 'translateY(-50%)',
             opacity: blueOpacity,
@@ -112,15 +178,19 @@ export default function EmpoweringSection() {
           </div>
         </div>
 
-        {/* Text Content */}
-        <div className="max-w-5xl mx-auto text-center relative z-10 mt-20 md:mt-32 lg:mt-40">
+        {/* Text Content - Sticky/fixed on mobile, original positioning on desktop */}
+        <div className={`max-w-5xl mx-auto text-center relative z-10 px-4 mb-0 pb-0 ${
+          isMobile 
+            ? 'absolute inset-0 flex flex-col items-center justify-center' 
+            : 'mt-0 md:mt-32 lg:mt-40'
+        }`}>
           {/* Main Headline */}
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[0.95] mb-8 md:mb-12 lg:mb-16">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[0.95] mb-4 md:mb-12 lg:mb-16">
             MADE FOR THE<br /><span className="block mt-1.5 md:mt-3 lg:mt-5">INTELLIGENT</span>
           </h1>
 
           {/* Subtitle */}
-          <p className="text-sm md:text-base text-gray-700 max-w-xl mx-auto mb-4 md:mb-6 leading-relaxed tracking-wide">
+          <p className="text-sm md:text-base text-gray-700 max-w-xl mx-auto mb-0 md:mb-6 leading-relaxed tracking-wide text-center !text-center md:!text-left">
             At Fiberise, we create health solutions with purpose and precision. Every formulation is built using the highest quality, clinically researched ingredients—selected for real biological impact, not trends or marketing appeal. We believe in functional science that supports long-term wellness, metabolic health, and longevity. No fillers. No shortcuts. Just intelligent, evidence-driven nutrition designed to elevate health over time.
           </p>
 
@@ -133,7 +203,7 @@ export default function EmpoweringSection() {
           </a> */}
 
           {/* Scroll Down Arrow */}
-          <div className="mt-6">
+          <div className="mt-2 md:mt-6 mb-0 pb-0">
             <button
               onClick={scrollToNext}
               className="text-gray-600 hover:text-black transition-colors"

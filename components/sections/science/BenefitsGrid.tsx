@@ -93,7 +93,8 @@ const BenefitsGrid = () => {
             Complete Benefits
           </span>
           <h2 className="text-4xl lg:text-5xl font-light text-charcoal leading-[1.3] mb-8">
-            One Supplement, Many Benefits
+            <span className="block">One Supplement</span>
+            <span className="block mt-4 md:mt-6">Many Benefits</span>
           </h2>
           <p className="text-lg text-charcoal/70 leading-[1.8]">
             FYBER supports your body's natural processes for comprehensive metabolic wellness

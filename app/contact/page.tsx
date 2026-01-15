@@ -48,7 +48,6 @@ export default function ContactPage() {
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
-                  placeholder="John Doe"
                   required
                 />
               </div>
@@ -63,7 +62,6 @@ export default function ContactPage() {
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
-                  placeholder="john@example.com"
                   required
                 />
               </div>
@@ -78,7 +76,6 @@ export default function ContactPage() {
                   value={formData.subject}
                   onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
-                  placeholder="How can we help?"
                   required
                 />
               </div>
@@ -93,7 +90,6 @@ export default function ContactPage() {
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                   rows={5}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent resize-none"
-                  placeholder="Tell us more about your inquiry..."
                   required
                 />
               </div>
@@ -112,22 +108,52 @@ export default function ContactPage() {
             <div>
               <h2 className="text-2xl font-bold mb-6">Contact Information</h2>
               <p className="text-gray-600 mb-8">
-                Reach out to us through any of the following channels. Our customer support team is available Monday through Friday, 9am to 6pm EST.
+                You may contact us using the information below:
               </p>
             </div>
 
             <div className="space-y-6">
-              {/* Email */}
+              {/* Legal Entity Name */}
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center flex-shrink-0">
                   <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                   </svg>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-lg">Email</h3>
-                  <p className="text-gray-600">support@fiberise.com</p>
-                  <p className="text-gray-600">info@fiberise.com</p>
+                  <h3 className="font-semibold text-lg">Merchant Legal Entity Name</h3>
+                  <p className="text-gray-600">FIBERISE FIT PRIVATE LIMITED</p>
+                </div>
+              </div>
+
+              {/* Registered Address */}
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center flex-shrink-0">
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-lg">Registered Address</h3>
+                  <p className="text-gray-600">731/508 S/F, PLOT NO.7 BLOCK 56 DB GUPTA ROAD</p>
+                  <p className="text-gray-600">Karol Bagh Central Delhi New Delhi Delhi India 110005</p>
+                  <p className="text-gray-600">Sat Nagar SO DELHI 110005</p>
+                </div>
+              </div>
+
+              {/* Operational Address */}
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center flex-shrink-0">
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-lg">Operational Address</h3>
+                  <p className="text-gray-600">731/508 S/F, PLOT NO.7 BLOCK 56 DB GUPTA ROAD</p>
+                  <p className="text-gray-600">Karol Bagh Central Delhi New Delhi Delhi India 110005</p>
+                  <p className="text-gray-600">Sat Nagar SO DELHI 110005</p>
                 </div>
               </div>
 
@@ -139,42 +165,21 @@ export default function ContactPage() {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-lg">Phone</h3>
-                  <p className="text-gray-600">+1 (555) 123-4567</p>
-                  <p className="text-sm text-gray-500">Mon-Fri, 9am-6pm EST</p>
+                  <h3 className="font-semibold text-lg">Telephone No</h3>
+                  <p className="text-gray-600">7011803119</p>
                 </div>
               </div>
 
-              {/* Address */}
+              {/* Email */}
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center flex-shrink-0">
                   <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-lg">Office</h3>
-                  <p className="text-gray-600">123 Wellness Avenue</p>
-                  <p className="text-gray-600">New York, NY 10001</p>
-                  <p className="text-gray-600">United States</p>
-                </div>
-              </div>
-
-              {/* Social Media */}
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center flex-shrink-0">
-                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-lg">Follow Us</h3>
-                  <div className="flex gap-4 mt-2">
-                    <a href="#" className="text-gray-600 hover:text-black transition-colors">Instagram</a>
-                    <a href="#" className="text-gray-600 hover:text-black transition-colors">Twitter</a>
-                    <a href="#" className="text-gray-600 hover:text-black transition-colors">Facebook</a>
-                  </div>
+                  <h3 className="font-semibold text-lg">E-Mail ID</h3>
+                  <p className="text-gray-600">support@fiberisefit.com</p>
                 </div>
               </div>
             </div>

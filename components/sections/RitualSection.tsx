@@ -55,26 +55,130 @@ export default function RitualSection() {
         .ritual-line-4 {
           animation: fadeInUp 0.8s ease-out 3s both;
         }
+        .editorial-text {
+          position: absolute;
+          right: 3%;
+          top: 25%;
+          transform: translateY(-50%);
+          text-align: left;
+          color: #6b4a3b;
+          font-family: "Georgia", serif;
+          width: 50%;
+          max-width: 700px;
+          padding-left: 40px;
+        }
+        .editorial-steps {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          font-size: 20px;
+          letter-spacing: 2px;
+          text-transform: uppercase;
+          margin-bottom: 32px;
+          opacity: 0.7;
+        }
+        .editorial-steps .dot {
+          width: 6px;
+          height: 6px;
+          background: #6b4a3b;
+          border-radius: 50%;
+        }
+        .editorial-main-line {
+          font-size: 96px;
+          line-height: 1.05;
+          letter-spacing: 4px;
+          margin: 0;
+          text-transform: uppercase;
+        }
+        .editorial-sub-text {
+          margin-top: 32px;
+          font-size: 18px;
+          line-height: 1.8;
+          max-width: 100%;
+          opacity: 0.75;
+        }
+        /* MOBILE ONLY */
+        @media (max-width: 768px) {
+          .editorial-text {
+            position: absolute;
+            left: 3%;
+            top: 75%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            width: 100%;
+            padding: 0 10px;
+            color: #6b4a3b;
+          }
+
+          /* One sachet -- Glass of water -- Once a day */
+          .editorial-text .steps {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            opacity: 0.7;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+          }
+
+          .editorial-text .steps span {
+            white-space: nowrap;
+          }
+
+          .editorial-text .steps .dot {
+            width: 4px;
+            height: 4px;
+            background: #6b4a3b;
+            border-radius: 50%;
+          }
+
+          /* A NEW YOU */
+          .editorial-text .main-line {
+            font-size: 36px;
+            line-height: 1.05;
+            letter-spacing: 2px;
+            font-weight: 500;
+            margin: 0;
+            text-transform: uppercase;
+          }
+
+          /* Simple ritual text */
+          .editorial-text .sub-text {
+            margin-top: 12px;
+            font-size: 12px;
+            line-height: 1.6;
+            opacity: 0.75;
+            max-width: 260px;
+            margin-left: auto;
+            margin-right: auto;
+          }
+        }
       `}} />
       <section 
         ref={sectionRef}
-        className="w-full m-0 p-0 bg-white min-h-screen flex items-end md:items-start justify-center relative pb-8 md:pb-0 md:pt-12 lg:pt-16 xl:pt-20"
+        className="w-full m-0 p-0 bg-[#f6f2ec] min-h-screen flex items-end md:items-start justify-center relative pb-8 md:pb-0 overflow-hidden"
+        style={{ height: '100vh' }}
       >
         {/* Background Image - Mobile */}
-        <div className="absolute inset-0 w-full h-full md:hidden">
+        <div className="absolute inset-0 w-full h-full md:hidden overflow-hidden">
           <Image
-            src="/Generate_image_in_2k_202601121203 (1).jpg"
+            src="/8d9ad01c-a2c2-4bfd-85c8-1c879725eef7.png"
             alt="Ritual"
             fill
             className="object-cover"
             sizes="100vw"
+            priority
+            style={{ objectPosition: 'center' }}
           />
         </div>
         
         {/* Background Image - Desktop */}
         <div className="absolute inset-0 w-full h-full hidden md:block">
           <Image
-            src="/ritual/Generate_image_in_2k_202601121203 (2).jpg"
+            src="/615cfbc1-5053-406e-9ca0-051cfb78e2a6.png"
             alt="Ritual"
             fill
             className="object-cover"
@@ -82,24 +186,44 @@ export default function RitualSection() {
           />
         </div>
         
-        {/* Text Content - Right Side */}
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 md:px-8 lg:px-12 pb-4 md:pb-0">
-          <div className="flex justify-center md:justify-end w-full h-full">
-            <div className="flex flex-col items-center md:items-start space-y-[2.7rem] md:space-y-[3.6rem] lg:space-y-[4.5rem] xl:space-y-[5.4rem] px-4 md:px-0 md:ml-auto md:pl-12 lg:pl-16 xl:pl-20 md:pr-12 lg:pr-16 xl:pr-20 w-full md:w-auto md:max-w-4xl lg:max-w-5xl xl:max-w-6xl">
-              <h1 className={`text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-light tracking-tight text-center md:text-left text-white ${isVisible ? 'ritual-line-1' : 'opacity-0'}`}>
-                One Sachet 
-              </h1>
-              <h2 className={`text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-light tracking-tight text-center md:text-left text-white ${isVisible ? 'ritual-line-2' : 'opacity-0'}`}>
-                Glass of Water
-              </h2>
-              <h3 className={`text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-light tracking-tight text-center md:text-left text-white ${isVisible ? 'ritual-line-3' : 'opacity-0'}`}>
-                Once a Day
-              </h3>
-              <h4 className={`text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-medium tracking-tight text-center md:text-left text-white ${isVisible ? 'ritual-line-4' : 'opacity-0'}`}>
-                A New You
-              </h4>
-            </div>
+        {/* Mobile Editorial Text - Same format as desktop */}
+        <div className={`editorial-text md:hidden z-10 ${isVisible ? 'ritual-line-1' : 'opacity-0'}`}>
+          <div className="steps">
+            <span>One Sachet</span>
+            <span className="dot"></span>
+            <span>Glass of Water</span>
+            <span className="dot"></span>
+            <span>Once a Day</span>
           </div>
+
+          <h1 className="main-line">
+            A<br/>NEW<br/>YOU
+          </h1>
+
+          <p className="sub-text">
+            Simple ritual. Powerful change.<br/>
+            Let your body reset, naturally.
+          </p>
+        </div>
+
+        {/* Desktop Editorial Text - Right Side */}
+        <div className={`editorial-text hidden md:block z-10 ${isVisible ? 'ritual-line-1' : 'opacity-0'}`}>
+          <div className="editorial-steps">
+            <span>One Sachet</span>
+            <span className="dot"></span>
+            <span>Glass of Water</span>
+            <span className="dot"></span>
+            <span>Once a Day</span>
+          </div>
+
+          <h1 className="editorial-main-line">
+            A<br/>NEW<br/>YOU
+          </h1>
+
+          <p className="editorial-sub-text">
+            Simple ritual. Powerful change.<br/>
+            Let your body reset, naturally.
+          </p>
         </div>
       </section>
     </>
