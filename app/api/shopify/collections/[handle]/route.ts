@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { shopifyFetch, formatProduct } from '@/lib/shopify/client'
 import { COLLECTION_QUERY } from '@/lib/shopify/queries'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET(
   request: NextRequest,
   { params }: { params: { handle: string } }

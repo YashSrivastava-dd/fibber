@@ -3,6 +3,8 @@ import { adminAuth, adminDb, isAdminInitialized, getInitError } from '@/lib/fire
 import { shopifyAdminFetch } from '@/lib/shopify/admin-client'
 import { ORDERS_BY_EMAIL_QUERY } from '@/lib/shopify/queries'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: NextRequest) {
   // Check if Firebase Admin is initialized
   if (!isAdminInitialized() || !adminAuth || !adminDb) {

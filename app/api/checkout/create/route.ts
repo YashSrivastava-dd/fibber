@@ -3,6 +3,8 @@ import { adminAuth, adminDb, isAdminInitialized, getInitError } from '@/lib/fire
 import { shopifyFetch } from '@/lib/shopify/client'
 import { CART_CREATE_MUTATION, CART_UPDATE_MUTATION, PRODUCT_BY_HANDLE_QUERY } from '@/lib/shopify/queries'
 
+export const dynamic = 'force-dynamic'
+
 interface CartItem {
   id: string
   quantity: number
