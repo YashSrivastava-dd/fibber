@@ -97,9 +97,7 @@ export async function POST(request: NextRequest) {
     // Prepare cart lines with proper GID format
     const cartLines = items.map((item) => {
       const merchandiseId = toShopifyGID(item.id)
-      console.log(`📦 Cart item: ${item.title}`)
-      console.log(`   ID: ${item.id} -> GID: ${merchandiseId}`)
-      console.log(`   Quantity: ${item.quantity}`)
+      console.log(`📦 Cart item ID: ${item.id} -> GID: ${merchandiseId}, Quantity: ${item.quantity}`)
       return {
         merchandiseId,
         quantity: item.quantity,
