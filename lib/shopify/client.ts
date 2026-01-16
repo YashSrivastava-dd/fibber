@@ -57,8 +57,12 @@ export function formatProduct(product: any) {
   const variant = product.variants?.edges?.[0]?.node
   const price = parseFloat(product.priceRange?.minVariantPrice?.amount || variant?.price?.amount || '0')
 
+  // Get the first available variant GID (for cart/checkout)
+  const variantGID = variant?.id || product.variants?.edges?.[0]?.node?.id || ''
+
   return {
-    id: product.id?.split('/').pop() || '',
+    id: variantGID, // Use variant GID for cart (full GID format: gid://shopify/ProductVariant/123)
+    productId: product.id || '', // Keep product ID for reference
     title: product.title || '',
     handle: product.handle || '',
     description: product.description || '',
@@ -68,7 +72,8 @@ export function formatProduct(product: any) {
     images: product.images?.edges?.map((edge: any) => edge.node.url) || [],
     available: variant?.availableForSale ?? true,
     variants: product.variants?.edges?.map((edge: any) => ({
-      id: edge.node.id?.split('/').pop() || '',
+      id: edge.node.id || '', // Full GID for variants
+      gid: edge.node.id || '', // Alias for clarity
       name: edge.node.title || '',
       price: parseFloat(edge.node.price?.amount || '0'),
       available: edge.node.availableForSale ?? true,

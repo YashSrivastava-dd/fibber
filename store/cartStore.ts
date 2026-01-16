@@ -1,12 +1,13 @@
 import { create } from 'zustand'
 
 export interface CartItem {
-  id: string
+  id: string // Should be Shopify variant GID (gid://shopify/ProductVariant/123)
   title: string
   price: number
   quantity: number
   image: string
   variant?: string
+  variantId?: string // Optional: for backward compatibility
 }
 
 interface CartStore {
@@ -18,6 +19,7 @@ interface CartStore {
   toggleCart: () => void
   openCart: () => void
   closeCart: () => void
+  clearCart: () => void
   getTotal: () => number
   getItemCount: () => number
 }
@@ -59,6 +61,7 @@ export const useCartStore = create<CartStore>((set, get) => ({
   toggleCart: () => set({ isOpen: !get().isOpen }),
   openCart: () => set({ isOpen: true }),
   closeCart: () => set({ isOpen: false }),
+  clearCart: () => set({ items: [], isOpen: false }),
   getTotal: () => {
     return get().items.reduce(
       (total, item) => total + item.price * item.quantity,

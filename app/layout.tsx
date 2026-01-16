@@ -4,6 +4,7 @@ import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import CartDrawer from '@/components/CartDrawer'
+import { AuthProvider } from '@/contexts/AuthContext'
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -35,10 +36,12 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${montserrat.variable} ${playfair.variable}`}>
       <body className={montserrat.className}>
-        <Header />
-        <main className="min-h-screen">{children}</main>
-        <Footer />
-        <CartDrawer />
+        <AuthProvider>
+          <Header />
+          <main className="min-h-screen">{children}</main>
+          <Footer />
+          <CartDrawer />
+        </AuthProvider>
       </body>
     </html>
   )

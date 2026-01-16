@@ -236,6 +236,25 @@ export const CART_CREATE_MUTATION = `
   }
 `
 
+export const CART_UPDATE_MUTATION = `
+  mutation cartUpdate($cartId: ID!, $attributes: [AttributeInput!]) {
+    cartAttributesUpdate(cartId: $cartId, attributes: $attributes) {
+      cart {
+        id
+        checkoutUrl
+        attributes {
+          key
+          value
+        }
+      }
+      userErrors {
+        field
+        message
+      }
+    }
+  }
+`
+
 export const CART_LINES_ADD_MUTATION = `
   mutation cartLinesAdd($cartId: ID!, $lines: [CartLineInput!]!) {
     cartLinesAdd(cartId: $cartId, lines: $lines) {
@@ -404,3 +423,59 @@ export const CART_LINES_REMOVE_MUTATION = `
   }
 `
 
+// Admin API Queries for Orders
+export const ORDERS_BY_EMAIL_QUERY = `
+  query getOrdersByEmail($query: String!, $first: Int!) {
+    orders(first: $first, query: $query) {
+      edges {
+        node {
+          id
+          name
+          email
+          createdAt
+          displayFulfillmentStatus
+          displayFinancialStatus
+          totalPriceSet {
+            shopMoney {
+              amount
+              currencyCode
+            }
+          }
+          note
+          noteAttributes {
+            name
+            value
+          }
+          customAttributes {
+            key
+            value
+          }
+          customer {
+            id
+            email
+            firstName
+            lastName
+          }
+          lineItems(first: 10) {
+            edges {
+              node {
+                title
+                quantity
+                originalUnitPriceSet {
+                  shopMoney {
+                    amount
+                    currencyCode
+                  }
+                }
+                image {
+                  url
+                  altText
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`

@@ -1,13 +1,82 @@
 'use client'
 
+import { useState } from 'react'
 import { X, Plus, Minus, ShoppingBag } from 'lucide-react'
 import { useCartStore } from '@/store/cartStore'
+import { useAuth } from '@/contexts/AuthContext'
+import OTPModal from '@/components/OTPModal'
 import Image from 'next/image'
 import Link from 'next/link'
 
 export default function CartDrawer() {
   const { isOpen, items, closeCart, updateQuantity, removeItem, getTotal } =
     useCartStore()
+  const { isAuthenticated, getIdToken, loading: authLoading } = useAuth()
+  const [isOTPModalOpen, setIsOTPModalOpen] = useState(false)
+  const [isProcessingCheckout, setIsProcessingCheckout] = useState(false)
+
+  const handleCheckout = async () => {
+    if (!isAuthenticated) {
+      setIsOTPModalOpen(true)
+      return
+    }
+
+    if (items.length === 0) {
+      return
+    }
+
+    setIsProcessingCheckout(true)
+
+    try {
+      const token = await getIdToken()
+      if (!token) {
+        throw new Error('Failed to get authentication token')
+      }
+
+      // Prepare cart items for checkout
+      const cartItems = items.map((item) => ({
+        id: item.id, // This should be the Shopify variant ID (GID format)
+        quantity: item.quantity,
+      }))
+
+      const response = await fetch('/api/checkout/create', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ items: cartItems }),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        const errorMessage = errorData.error || 'Failed to create checkout'
+        
+        // If variant doesn't exist, suggest clearing cart
+        if (errorMessage.includes('does not exist') || errorMessage.includes('no longer available')) {
+          throw new Error(
+            `${errorMessage}\n\nPlease clear your cart and add products fresh from the Shop page.`
+          )
+        }
+        
+        throw new Error(errorMessage)
+      }
+
+      const { checkoutUrl } = await response.json()
+
+      if (checkoutUrl) {
+        closeCart()
+        window.location.href = checkoutUrl
+      } else {
+        throw new Error('No checkout URL returned')
+      }
+    } catch (error: any) {
+      console.error('Checkout error:', error)
+      alert(error.message || 'Failed to proceed to checkout. Please try again.')
+    } finally {
+      setIsProcessingCheckout(false)
+    }
+  }
 
   if (!isOpen) return null
 
@@ -116,15 +185,19 @@ export default function CartDrawer() {
                 <span>₹{getTotal().toFixed(2)}</span>
               </div>
               <p className="text-xs text-gray-500">
-                Shipping, taxes, and discounts calculated at checkout.
+                Shipping and discounts calculated at checkout.
               </p>
-              <Link
-                href="/checkout"
-                onClick={closeCart}
-                className="block w-full bg-black text-white text-center py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors"
+              <button
+                onClick={handleCheckout}
+                disabled={isProcessingCheckout || authLoading}
+                className="block w-full bg-black text-white text-center py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Checkout
-              </Link>
+                {isProcessingCheckout
+                  ? 'Processing...'
+                  : authLoading
+                  ? 'Loading...'
+                  : 'Checkout'}
+              </button>
               <Link
                 href="/collections/all"
                 onClick={closeCart}
@@ -136,6 +209,14 @@ export default function CartDrawer() {
           )}
         </div>
       </div>
+
+      {/* OTP Modal */}
+      <OTPModal
+        isOpen={isOTPModalOpen}
+        onClose={() => {
+          setIsOTPModalOpen(false)
+        }}
+      />
     </>
   )
 }

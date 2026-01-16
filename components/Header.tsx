@@ -3,8 +3,11 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { ShoppingBag, Menu, X, User } from 'lucide-react'
 import { useCartStore } from '@/store/cartStore'
+import { useAuth } from '@/contexts/AuthContext'
+import OTPModal from '@/components/OTPModal'
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -19,7 +22,10 @@ import { cn } from '@/lib/utils'
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isOTPModalOpen, setIsOTPModalOpen] = useState(false)
   const { openCart, getItemCount } = useCartStore()
+  const { isAuthenticated, loading: authLoading } = useAuth()
+  const router = useRouter()
   const itemCount = getItemCount()
 
   useEffect(() => {
@@ -31,7 +37,6 @@ export default function Header() {
   }, [])
 
   const navLinks = [
-    { name: 'SHOP', href: '/collections/all', hasDropdown: true },
     { name: 'SCIENCE', href: '/science' },
     { name: 'CONTACT', href: '/contact' },
     { name: 'LYTE', href: '/lyte' },
@@ -93,19 +98,6 @@ export default function Header() {
             <NavigationMenu className="hidden lg:flex absolute left-1/2 transform -translate-x-1/2 z-10">
               <NavigationMenuList className="space-x-1">
                 <NavigationMenuItem>
-                  <Link href="/collections/all" legacyBehavior passHref>
-                    <NavigationMenuLink
-                      className={cn(
-                        navigationMenuTriggerStyle(),
-                        'text-xs font-semibold uppercase tracking-wider bg-transparent hover:bg-transparent hover:opacity-70 h-auto px-3 py-2',
-                        isScrolled ? 'text-black' : 'text-black'
-                      )}
-                    >
-                      SHOP
-                    </NavigationMenuLink>
-                  </Link>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
                   <Link href="/science" legacyBehavior passHref>
                     <NavigationMenuLink
                       className={cn(
@@ -149,15 +141,44 @@ export default function Header() {
 
             {/* Right Side Actions */}
             <div className="flex items-center space-x-4">
-              {/* User Profile */}
-              <button
-                className={`hidden lg:block p-2 transition-colors ${
-                  isScrolled ? 'text-black' : 'text-black'
-                } hover:opacity-70`}
-                aria-label="User account"
-              >
-                <User className="w-5 h-5" />
-              </button>
+              {/* User Profile / Login */}
+              {!authLoading && (
+                <button
+                  onClick={() => {
+                    if (isAuthenticated) {
+                      router.push('/account')
+                    } else {
+                      setIsOTPModalOpen(true)
+                    }
+                  }}
+                  className={`hidden lg:flex items-center gap-2 px-4 py-2 transition-colors ${
+                    isScrolled ? 'text-black' : 'text-black'
+                  } hover:opacity-70 font-semibold text-sm uppercase tracking-wider`}
+                  aria-label={isAuthenticated ? 'My Account' : 'Login'}
+                >
+                  <User className="w-5 h-5" />
+                  <span>{isAuthenticated ? 'My Account' : 'Login'}</span>
+                </button>
+              )}
+
+              {/* Mobile Login Button */}
+              {!authLoading && (
+                <button
+                  onClick={() => {
+                    if (isAuthenticated) {
+                      router.push('/account')
+                      setIsMobileMenuOpen(false)
+                    } else {
+                      setIsOTPModalOpen(true)
+                      setIsMobileMenuOpen(false)
+                    }
+                  }}
+                  className="lg:hidden p-2 transition-colors text-black hover:opacity-70"
+                  aria-label={isAuthenticated ? 'My Account' : 'Login'}
+                >
+                  <User className="w-5 h-5" />
+                </button>
+              )}
 
               {/* Cart */}
               <button
@@ -187,15 +208,35 @@ export default function Header() {
                   key={link.name}
                   href={link.href}
                   className="block text-sm font-semibold uppercase tracking-wide py-2 text-black"
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  onClick={() => {
+                    setIsMobileMenuOpen(false)
+                  }}
                 >
                   {link.name}
                 </Link>
               ))}
+              {!authLoading && (
+                <button
+                  onClick={() => {
+                    if (isAuthenticated) {
+                      router.push('/account')
+                    } else {
+                      setIsOTPModalOpen(true)
+                    }
+                    setIsMobileMenuOpen(false)
+                  }}
+                  className="block w-full text-left text-sm font-semibold uppercase tracking-wide py-2 text-black"
+                >
+                  {isAuthenticated ? 'My Account' : 'Login'}
+                </button>
+              )}
             </nav>
           </div>
         )}
       </header>
+
+      {/* OTP Modal */}
+      <OTPModal isOpen={isOTPModalOpen} onClose={() => setIsOTPModalOpen(false)} />
     </>
   )
 }
