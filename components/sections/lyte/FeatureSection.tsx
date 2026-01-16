@@ -1,11 +1,11 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Activity, Moon, TrendingUp, Heart, CalendarOff } from 'lucide-react'
+import { Zap, Moon, Bed, Apple, Heart } from 'lucide-react'
 
 const features = [
   {
-    icon: Heart,
+    icon: Apple,
     title: 'Nutrition',
     description: 'Track your calorie intake and effortlessly tailor your food for enhanced vitality',
     metric: 'Nutrition Tracking',
@@ -13,14 +13,14 @@ const features = [
   },
   
   {
-    icon: Activity,
+    icon: Zap,
     title: 'Calories',
     description: 'See how daily movement impacts calorie use, stamina, and overall body efficiency.',
     metric: 'Calories Tracking',
     color: 'from-orange-500/20 to-orange-600/10',
   },
   {
-    icon: TrendingUp,
+    icon: Bed,
     title: 'Sleep',
     description: 'Understand how your body is recovering to ensure you get the best version of yourself everyday.',
     metric: 'Sleep Tracking',
@@ -28,7 +28,7 @@ const features = [
   },
   {
     icon: Heart,
-    title: 'Blood Oxygen',
+    title: 'SpO2',
     description: 'Helps you understand how efficiently your body uses oxygen.',
     metric: 'Blood Oxygen Tracking',
     color: 'from-red-500/20 to-red-600/10',
@@ -73,15 +73,26 @@ export default function FeatureSection() {
                 <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-100 rounded-3xl transition-opacity duration-500`} />
                 
                 <div className="relative z-10">
-                  <div className="mb-6">
-                    <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors duration-500">
+                  <div className="mb-6 md:mb-6">
+                    <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors duration-500 md:mb-0 mb-0 md:block hidden">
                       <Icon className="w-8 h-8 text-white" />
                     </div>
                   </div>
                   
                   <div className="mb-4">
                     <div className="text-xs text-gray-400 uppercase tracking-widest mb-2">{feature.metric}</div>
-                    <h3 className="text-3xl font-light text-white mb-4">{feature.title}</h3>
+                    <div className="flex items-center justify-between gap-4">
+                      <h3 className="text-3xl font-light text-white flex-1">
+                        {feature.title === 'SpO2' ? (
+                          <>SpO<sub>2</sub></>
+                        ) : (
+                          feature.title
+                        )}
+                      </h3>
+                      <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors duration-500 md:hidden flex-shrink-0">
+                        <Icon className="w-6 h-6 text-white" />
+                      </div>
+                    </div>
                   </div>
                   
                   <p className="text-gray-400 leading-relaxed font-light">{feature.description}</p>

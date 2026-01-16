@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react';
-import { TrendingUp, Clock, Sparkles } from 'lucide-react';
+import { TrendingDown, Clock, Apple } from 'lucide-react';
 import { glucoseData } from '../../../data/mock';
 import { useScrollAnimation } from '../../../hooks/useScrollAnimation';
 
@@ -16,8 +16,9 @@ const GlucoseSection = () => {
           <span className="inline-block text-sm font-medium text-amber-600 uppercase tracking-wider mb-4">
             Blood Sugar Control
           </span>
-          <h2 className="text-4xl lg:text-5xl font-light text-charcoal leading-[1.3] mb-8">
-            {glucoseData.title}
+          <h2 className="text-4xl lg:text-5xl font-light text-charcoal leading-[2] mb-8">
+            <span className="block">Stable Blood Sugar,</span>
+            <span className="block">Sustained Energy</span>
           </h2>
           <p className="text-lg text-charcoal/70 leading-[1.8]">
             {glucoseData.subtitle}
@@ -103,9 +104,9 @@ const GlucoseSection = () => {
                   className="group bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-amber-100 transition-all duration-300"
                 >
                   <div className="flex items-center justify-center w-10 h-10 bg-amber-50 rounded-full mb-4 group-hover:bg-amber-100 transition-colors">
-                    {index === 0 && <TrendingUp className="w-5 h-5 text-amber-600" />}
+                    {index === 0 && <TrendingDown className="w-5 h-5 text-amber-600" />}
                     {index === 1 && <Clock className="w-5 h-5 text-amber-600" />}
-                    {index === 2 && <Sparkles className="w-5 h-5 text-amber-600" />}
+                    {index === 2 && <Apple className="w-5 h-5 text-amber-600" />}
                   </div>
                   <span className="block text-3xl font-medium text-charcoal mb-2">
                     {benefit.value}

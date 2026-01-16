@@ -14,8 +14,8 @@ export default function JourneySection() {
             <span className="block mt-4 md:mt-6 lg:hidden">90 Days</span>
             
             {/* Desktop view - 2 lines */}
-            <span className="hidden lg:block">Noticeable results in 30 minutes</span>
-            <span className="hidden lg:block mt-4 md:mt-6">Refined body in 90 days</span>
+            <span className="hidden lg:block whitespace-nowrap">Noticeable results in 30 minutes</span>
+            <span className="hidden lg:block mt-6 md:mt-8 lg:mt-10">Refined body in 90 days</span>
           </h2>
         </div>
 
@@ -29,11 +29,11 @@ export default function JourneySection() {
             <div className="max-w-lg ml-4 md:ml-6 lg:ml-8 order-2 lg:order-1 text-left">
               {/* Small Heading */}
               <div className="mb-4 md:mb-6">
-                <h3 className="text-2xl md:text-3xl lg:text-4xl font-montserrat font-medium text-[#868B7A]">
+                <h3 className="text-2xl md:text-3xl lg:text-4xl font-serif font-medium text-[#868B7A]">
                   Controls Cravings
                 </h3>
               </div>
-              <p className="text-sm md:text-base text-gray-700 opacity-70 leading-relaxed">
+              <p className="text-sm md:text-base text-gray-700 opacity-70" style={{ lineHeight: '1.75' }}>
                 FYBER activates the body’s natural GLP-1 pathways, promoting satiety within just 30 minutes of intake. As fullness sets in, hunger signals quieten, emotional eating fades, and cravings lose their intensity. Rather than forcing control, FYBER restores balance—allowing appetite regulation to feel calm, intuitive, and effortless, supporting mindful choices and sustainable weight management as part of a refined daily wellness ritual.
               </p>
             </div>
@@ -95,11 +95,11 @@ export default function JourneySection() {
             <div className="max-w-lg ml-4 md:ml-6 lg:ml-8 order-2 text-left">
               {/* Small Heading */}
               <div className="mb-4 md:mb-6">
-                <h3 className="text-2xl md:text-3xl lg:text-4xl font-montserrat font-medium text-[#868B7A]">
+                <h3 className="text-2xl md:text-3xl lg:text-4xl font-serif font-medium text-[#868B7A]">
                   BYE - BYE BLOATING
                 </h3>
               </div>
-              <p className="text-sm md:text-base text-gray-700 opacity-70 leading-relaxed">
+              <p className="text-sm md:text-base text-gray-700 opacity-70" style={{ lineHeight: '1.75' }}>
                 FYBER helps recalibrate your gut, restoring digestive harmony from within. Bloating and inflammation gradually subside, allowing your body to feel lighter and more at ease. Mornings begin with a sense of clarity and lightness, while steady energy carries you through the day. The result is a refined digestive balance that enhances comfort, vitality, and everyday well-being—without disruption or strain.              </p>
             </div>
           </div>
@@ -111,11 +111,11 @@ export default function JourneySection() {
               <div className="max-w-lg ml-4 md:ml-6 lg:ml-8 order-2 lg:order-1 text-left">
                 {/* Small Heading */}
                 <div className="mb-4 md:mb-6">
-                  <h3 className="text-2xl md:text-3xl lg:text-4xl font-montserrat font-medium text-[#868B7A]">
-                    Weight Releases
+                  <h3 className="text-2xl md:text-3xl lg:text-4xl font-serif font-medium text-[#868B7A]">
+                    WEIGHT RELEASES
                   </h3>
                 </div>
-                <p className="text-sm md:text-base text-gray-700 opacity-70 leading-relaxed">
+                <p className="text-sm md:text-base text-gray-700 opacity-70" style={{ lineHeight: '1.75' }}>
                   FYBER initiates steady, measurable weight loss as the body begins to release excess weight naturally. Hunger is better regulated, portions feel effortless, and visible changes start to appear in how your clothes fit and how you move. This is weight loss without struggle—consistent, controlled, and sustainable—driven by a daily ritual that reshapes your body with quiet precision and lasting elegance.              </p>
               </div>
 
@@ -169,11 +169,11 @@ export default function JourneySection() {
             <div className="max-w-lg ml-12 md:ml-16 lg:ml-20 xl:ml-24 2xl:ml-28 order-2 text-left">
               {/* Small Heading */}
               <div className="mb-4 md:mb-6">
-                <h3 className="text-2xl md:text-3xl lg:text-4xl font-montserrat font-medium text-[#868B7A]">
-                Body, Reimagined
+                <h3 className="text-2xl md:text-3xl lg:text-4xl font-serif font-medium text-[#868B7A]">
+                BODY , REIMAGINED
                 </h3>
               </div>
-              <p className="text-sm md:text-base text-gray-700 opacity-70 leading-relaxed">
+              <p className="text-sm md:text-base text-gray-700 opacity-70" style={{ lineHeight: '1.75' }}>
               This is the moment you realise you’ve truly arrived. Your body reflects a major milestone—leaner, defined, and unmistakably transformed. What once felt distant is now achieved, visible, and deeply satisfying. The effort fades into pride as you recognise the discipline, consistency, and commitment that brought you here. This is not just transformation; it is completion—a refined sense of accomplishment where you know you’ve made it, and the world can see it too.              </p>
             </div>
           </div>

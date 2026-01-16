@@ -33,7 +33,7 @@ export default function CalorieLeisureSection() {
 
   return (
     <section ref={sectionRef} className="py-32 bg-black text-white overflow-hidden">
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[1200px] mx-auto pl-8 pr-8 sm:pl-8 sm:pr-10 lg:pl-12 lg:pr-16">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -43,21 +43,21 @@ export default function CalorieLeisureSection() {
           className="text-center mb-20"
         >
           <h2
-            className="text-5xl md:text-6xl lg:text-7xl font-serif leading-tight mb-6 tracking-tight"
+            className="text-4xl md:text-6xl lg:text-7xl font-serif leading-tight mb-6 tracking-tight"
             style={{ fontFamily: 'Georgia, serif' }}
           >
             <span className="block text-white">YOUR BODY'S ENERGY,</span>
             <span className="block text-white mt-4 md:mt-6">DECODED.</span>
           </h2>
-          <p className="text-lg text-gray-400 max-w-3xl mx-auto font-light leading-relaxed">
+          <p className="text-l text-gray-400 max-w-3xl mx-auto font-light leading-relaxed">
             Most systems count calories. LYTE understands them. By tracking energy intake and expenditure, it reveals how your body converts effort into muscle, stores fat, releases water, or recovers silently. You don't chase numbers. You live.
           </p>
         </motion.div>
 
         {/* Inverted two-column layout */}
         <div className="grid lg:grid-cols-2 gap-16 items-center">
-          {/* Left: Text content + 4 feature pointers - appears first on mobile, left on desktop */}
-          <div className="space-y-6 order-1 lg:order-1">
+          {/* Left: Text content + 4 feature pointers - appears second on mobile, right on desktop */}
+          <div className="space-y-6 order-2 lg:order-2">
             {/* Feature pointers - minimal bullet design */}
             {features.map((feature, index) => (
               <motion.div
@@ -117,10 +117,10 @@ export default function CalorieLeisureSection() {
             ))}
           </div>
 
-          {/* Right: Calm energy flow visualization - appears second on mobile, right on desktop */}
+          {/* Right: Calm energy flow visualization - appears first on mobile, left on desktop */}
           <motion.div
             style={{ scale }}
-            className="relative h-[400px] md:h-[500px] lg:h-[600px] rounded-3xl overflow-hidden order-2 lg:order-2"
+            className="relative h-[400px] md:h-[500px] lg:h-[600px] rounded-3xl overflow-hidden order-1 lg:order-1"
           >
             {/* Base gradient background */}
             <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-black to-indigo-900/20" />

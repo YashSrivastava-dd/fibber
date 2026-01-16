@@ -31,7 +31,7 @@ const blogPosts = [
 
 export default function BlogSection() {
   return (
-    <section className="w-full bg-white pt-0 pb-16 md:pb-20 lg:pb-24">
+    <section className="w-full bg-white pt-0 pb-16 md:pb-20 lg:pb-24" style={{ willChange: 'auto', backfaceVisibility: 'hidden' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Blog Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

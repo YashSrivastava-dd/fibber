@@ -38,7 +38,7 @@ export default function NutritionTrackingSection() {
 
   return (
     <section ref={sectionRef} className="py-32 bg-black text-white overflow-hidden">
-      <div className="max-w-[1200px] mx-auto pr-4 sm:pr-6 lg:pr-8">
+      <div className="max-w-[1200px] mx-auto pl-8 pr-8 sm:pl-8 sm:pr-10 lg:pl-12 lg:pr-16">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -48,13 +48,13 @@ export default function NutritionTrackingSection() {
           className="text-center mb-20"
         >
           <h2
-            className="text-5xl md:text-6xl lg:text-7xl font-serif leading-tight mb-6 tracking-tight"
+            className="text-4xl md:text-6xl lg:text-7xl font-serif leading-tight mb-6 tracking-tight"
             style={{ fontFamily: 'Georgia, serif' }}
           >
             <span className="block text-white">NUTRITION, UNDERSTOOD.</span>
-            <span className="block text-white mt-4 md:mt-6">INSTANTLY.</span>
+            
           </h2>
-          <p className="text-xl text-gray-400 max-w-2xl mx-auto font-light">
+          <p className="text-l text-gray-400 max-w-2xl mx-auto font-light">
             Not counting meals. Understanding how food becomes energy, recovery, and change.
           </p>
         </motion.div>
@@ -64,7 +64,7 @@ export default function NutritionTrackingSection() {
           {/* Left: Nutrition image */}
           <motion.div
             style={{ y: parallaxY }}
-            className="relative h-[400px] md:h-[500px] lg:h-[600px] rounded-3xl overflow-hidden -ml-4 sm:-ml-6 lg:-ml-8"
+            className="relative h-[400px] md:h-[500px] lg:h-[600px] rounded-3xl overflow-hidden pl-8 sm:pl-0 sm:-ml-6 lg:-ml-8"
           >
             <Image
               src="/lyte_images/5fbc73b5-697b-4f21-8d48-da8a747a1a97.png"

@@ -92,23 +92,36 @@ export default function EmpoweringSection() {
   const blueTranslateY = isMobile ? (60 - (blueProgress * 60)) : 0
   const blueOpacity = blueProgress < 0.9 ? (blueProgress > 0.05 ? 1 : 0) : Math.max(0, 1 - (blueProgress - 0.9) * 10)
 
-  // On mobile: only fixed during animation (when scrollProgress is between 0 and 1)
-  // After animation ends, keep it visible but allow scrolling
+  // On mobile: keep fixed only during animation to stick text in background
+  // After animation, allow normal scrolling so sections below are visible
   const isAnimationActive = isMobile && scrollProgress > 0 && scrollProgress < 1
   const animationEnded = isMobile && scrollProgress >= 1
+  // Only stay fixed during active animation
+  const shouldStayFixed = isMobile && isAnimationActive
+
+  // Reduce container height after animation to eliminate extra space
+  const getContainerHeight = () => {
+    if (isMobile && animationEnded) return '100vh' // Minimal height after animation
+    if (isMobile) return '220vh' // Full height during animation
+    return '400vh' // Desktop height
+  }
 
   return (
-    <div ref={containerRef} className="relative m-0 p-0 h-[220vh] md:h-[400vh]">
-      {/* Mobile: Fixed during animation to stick background, then absolute to stay visible, Desktop: Fixed/absolute positioning */}
+    <div 
+      ref={containerRef} 
+      className="relative m-0 p-0 md:h-[400vh]"
+      style={{ height: getContainerHeight() }}
+    >
+      {/* Mobile: Fixed during and after animation to keep text stuck, Desktop: Fixed/absolute positioning */}
       <div 
-        className={`${isMobile && !isAnimationActive && !animationEnded ? 'static' : 'md:static'} top-0 left-0 w-full h-screen bg-[#F5F3EF] flex flex-col items-center justify-center md:justify-start pt-0 md:pt-20 px-4 pb-0 overflow-hidden md:overflow-visible z-20`}
+        className={`${isMobile && !shouldStayFixed ? 'static' : 'md:static'} top-0 left-0 w-full h-screen bg-[#F5F3EF] flex flex-col items-center justify-center md:justify-start pt-0 md:pt-20 px-4 pb-0 overflow-hidden md:overflow-visible z-20`}
         style={isMobile ? {
-          position: isAnimationActive ? 'fixed' : animationEnded ? 'absolute' : 'static',
-          // After animation ends, position at bottom of container to keep it visible
-          ...(animationEnded ? { top: 'auto', bottom: 0 } : {}),
-          // Ensure it stays visible
-          visibility: 'visible',
-          opacity: 1,
+          position: shouldStayFixed ? 'fixed' : 'static',
+          // Prevent layout shifts and flickering
+          transform: shouldStayFixed ? 'translateZ(0)' : 'none',
+          backfaceVisibility: 'hidden',
+          // Prevent repaints that cause flickering
+          willChange: shouldStayFixed ? 'transform' : 'auto',
         } : {
           position: isInView ? 'fixed' : 'absolute',
           height: 'auto',

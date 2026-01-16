@@ -5,15 +5,15 @@ import Image from 'next/image'
 
 const appImages = [
   {
-    src: '/lyte_images/Sleep 2.png',
+    src: '/lyte_images/sleep 3.png',
     alt: 'Sleep',
   },
   {
-    src: '/lyte_images/Dashboard 2.png',
+    src: '/lyte_images/dashboard 3.png',
     alt: 'Dashboard',
   },
   {
-    src: '/lyte_images/Nutrition.png',
+    src: '/lyte_images/Nutrition 2.png',
     alt: 'Steps',
   },
 ]
@@ -31,7 +31,7 @@ export default function AppPreviewSection() {
           className="text-center mb-20"
         >
           <h2
-            className="text-5xl md:text-6xl lg:text-7xl font-serif leading-tight mb-8 tracking-tight"
+            className="text-4xl md:text-6xl lg:text-7xl font-serif leading-tight mb-8 tracking-tight"
             style={{ fontFamily: 'Georgia, serif' }}
           >
             <span className="block text-white">YOUR DATA.</span>
