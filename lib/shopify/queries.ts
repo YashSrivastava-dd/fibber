@@ -23,7 +23,7 @@ export const PRODUCTS_QUERY = `
               }
             }
           }
-          variants(first: 1) {
+          variants(first: 10) {
             edges {
               node {
                 id

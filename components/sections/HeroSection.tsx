@@ -1,7 +1,6 @@
 'use client'
 
 import Image from 'next/image'
-import Link from 'next/link'
 
 export default function HeroSection() {
   return (
@@ -29,15 +28,9 @@ export default function HeroSection() {
             SCIENCE BACKED | NATURAL WEIGHT-MANAGEMENT SOLUTION
         </p>
           <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-6 leading-[0.95] tracking-tight">
-          <span className="block whitespace-nowrap mb-2">CONTROL CRAVINGS</span>
-          <span className="block whitespace-nowrap">MANAGE WEIGHT</span>
-        </h1>
-        <Link
-          href="/collections/all"
-            className="inline-block w-fit bg-white text-black px-6 py-3 md:px-8 md:py-4 rounded-full font-medium uppercase tracking-wide text-sm hover:bg-gray-100 transition-colors"
-        >
-            Order Now
-        </Link>
+            <span className="block whitespace-nowrap mb-2">CONTROL CRAVINGS</span>
+            <span className="block whitespace-nowrap">MANAGE WEIGHT</span>
+          </h1>
         </div>
       </div>
 

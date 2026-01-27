@@ -60,6 +60,11 @@ export function formatProduct(product: any) {
   // Get the first available variant GID (for cart/checkout)
   const variantGID = variant?.id || product.variants?.edges?.[0]?.node?.id || ''
 
+  // Check availability - only mark as available if explicitly true
+  // Check if at least one variant is available
+  const hasAvailableVariant = product.variants?.edges?.some((edge: any) => edge.node.availableForSale === true)
+  const isAvailable = variant?.availableForSale === true || hasAvailableVariant === true
+
   return {
     id: variantGID, // Use variant GID for cart (full GID format: gid://shopify/ProductVariant/123)
     productId: product.id || '', // Keep product ID for reference
@@ -70,13 +75,13 @@ export function formatProduct(product: any) {
     comparePrice: null, // Can be added if needed
     image: image?.url || '',
     images: product.images?.edges?.map((edge: any) => edge.node.url) || [],
-    available: variant?.availableForSale ?? true,
+    available: isAvailable, // Only true if explicitly available
     variants: product.variants?.edges?.map((edge: any) => ({
       id: edge.node.id || '', // Full GID for variants
       gid: edge.node.id || '', // Alias for clarity
       name: edge.node.title || '',
       price: parseFloat(edge.node.price?.amount || '0'),
-      available: edge.node.availableForSale ?? true,
+      available: edge.node.availableForSale === true, // Only true if explicitly true
     })) || [],
     slug: product.handle || '',
   }

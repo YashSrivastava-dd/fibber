@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 
 export default function ImageTextSection() {
   return (
@@ -33,12 +34,12 @@ export default function ImageTextSection() {
               Built on years of clinical research and advanced formulation science, LEAN-X<sup className="text-sm">®️</sup> represents a category-defining evolution in weight and energy management—one that has never existed before.
             </p>
             <div className="pt-2 md:pt-4">
-              <a
+              <Link
                 href="/science"
                 className="inline-block border-2 border-black px-6 py-3 rounded-lg font-semibold hover:bg-black hover:text-white transition-colors"
               >
                 Learn the Science
-              </a>
+              </Link>
             </div>
           </div>
         </div>

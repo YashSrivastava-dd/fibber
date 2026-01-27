@@ -27,7 +27,13 @@ export default function FeaturedProductsSection() {
         const response = await fetch('/api/shopify/products?first=10')
         const data = await response.json()
         if (data.products) {
-          setProducts(data.products)
+          // Filter to only show available products
+          const availableProducts = data.products.filter((product: Product) => {
+            // Explicitly check for true, exclude undefined, null, or false
+            return product.available === true
+          })
+          console.log('Total products:', data.products.length, 'Available products:', availableProducts.length)
+          setProducts(availableProducts)
         }
       } catch (error) {
         console.error('Error fetching products:', error)
