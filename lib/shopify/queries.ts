@@ -9,17 +9,24 @@ export const PRODUCTS_QUERY = `
           title
           handle
           description
+          descriptionHtml
           priceRange {
             minVariantPrice {
               amount
               currencyCode
             }
+            maxVariantPrice {
+              amount
+              currencyCode
+            }
           }
-          images(first: 1) {
+          images(first: 10) {
             edges {
               node {
                 url
                 altText
+                width
+                height
               }
             }
           }
@@ -27,13 +34,29 @@ export const PRODUCTS_QUERY = `
             edges {
               node {
                 id
+                title
                 price {
                   amount
                   currencyCode
                 }
                 availableForSale
+                selectedOptions {
+                  name
+                  value
+                }
               }
             }
+          }
+          metafields(identifiers: [
+            {namespace: "custom", key: "servings"},
+            {namespace: "custom", key: "ingredients"},
+            {namespace: "custom", key: "shipping_info"},
+            {namespace: "custom", key: "returns_info"}
+          ]) {
+            id
+            namespace
+            key
+            value
           }
         }
         cursor

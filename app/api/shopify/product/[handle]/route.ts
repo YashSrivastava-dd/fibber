@@ -10,6 +10,8 @@ export async function GET(
 ) {
   try {
     const { handle } = params
+    
+    console.log('Fetching product with handle:', handle)
 
     if (!handle) {
       return NextResponse.json(
@@ -25,7 +27,10 @@ export async function GET(
       variables: { handle },
     })
 
+    console.log('Shopify response received:', data ? 'Success' : 'No data')
+
     if (!data.product) {
+      console.log('Product not found for handle:', handle)
       return NextResponse.json(
         { error: 'Product not found' },
         { status: 404 }
@@ -33,10 +38,16 @@ export async function GET(
     }
 
     const product = formatProduct(data.product)
+    console.log('Product formatted successfully:', product.title)
 
     return NextResponse.json({ product })
   } catch (error: any) {
     console.error('Error fetching product:', error)
+    console.error('Error details:', {
+      message: error.message,
+      stack: error.stack,
+      handle: params.handle,
+    })
     return NextResponse.json(
       { error: error.message || 'Failed to fetch product' },
       { status: 500 }

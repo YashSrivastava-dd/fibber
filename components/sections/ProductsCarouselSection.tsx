@@ -10,9 +10,18 @@ interface Product {
   id: string
   title: string
   price: number
+  maxPrice?: number | null
   image: string
   slug: string
   available: boolean
+  servings?: string
+  description?: string
+  variants?: Array<{
+    id: string
+    name: string
+    price: number
+    available: boolean
+  }>
 }
 
 export default function ProductsCarouselSection() {
@@ -24,19 +33,35 @@ export default function ProductsCarouselSection() {
   useEffect(() => {
     async function fetchProducts() {
       try {
+        console.log('ProductsCarouselSection: Fetching products...')
         const response = await fetch('/api/shopify/products?first=10')
+        
+        if (!response.ok) {
+          console.error('ProductsCarouselSection: API response not OK:', response.status)
+          throw new Error(`Failed to fetch products: ${response.status}`)
+        }
+        
         const data = await response.json()
+        console.log('ProductsCarouselSection: Raw API data:', data)
+        
         if (data.products) {
-          // Filter to only show available products
-          const availableProducts = data.products.filter((product: Product) => {
-            // Explicitly check for true, exclude undefined, null, or false
-            return product.available === true
-          })
-          console.log('Total products:', data.products.length, 'Available products:', availableProducts.length)
-          setProducts(availableProducts)
+          console.log('ProductsCarouselSection: Total products received:', data.products.length)
+          console.log('ProductsCarouselSection: All products:', data.products.map((p: Product) => ({
+            title: p.title,
+            price: p.price,
+            available: p.available,
+            servings: p.servings,
+            id: p.id
+          })))
+          
+          // Show all products (remove availability filter to show all products)
+          setProducts(data.products)
+          console.log('ProductsCarouselSection: Displaying all products:', data.products.length)
+        } else {
+          console.error('ProductsCarouselSection: No products in response:', data)
         }
       } catch (error) {
-        console.error('Error fetching products:', error)
+        console.error('ProductsCarouselSection: Error fetching products:', error)
       } finally {
         setLoading(false)
       }

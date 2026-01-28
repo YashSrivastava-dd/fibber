@@ -10,9 +10,18 @@ interface Product {
   id: string
   title: string
   price: number
+  maxPrice?: number | null
   image: string
   slug: string
   available: boolean
+  servings?: string
+  description?: string
+  variants?: Array<{
+    id: string
+    name: string
+    price: number
+    available: boolean
+  }>
 }
 
 export default function FeaturedProductsSection() {
@@ -24,19 +33,35 @@ export default function FeaturedProductsSection() {
   useEffect(() => {
     async function fetchProducts() {
       try {
+        console.log('FeaturedProductsSection: Fetching products...')
         const response = await fetch('/api/shopify/products?first=10')
+        
+        if (!response.ok) {
+          console.error('FeaturedProductsSection: API response not OK:', response.status)
+          throw new Error(`Failed to fetch products: ${response.status}`)
+        }
+        
         const data = await response.json()
+        console.log('FeaturedProductsSection: Raw API data:', data)
+        
         if (data.products) {
-          // Filter to only show available products
-          const availableProducts = data.products.filter((product: Product) => {
-            // Explicitly check for true, exclude undefined, null, or false
-            return product.available === true
-          })
-          console.log('Total products:', data.products.length, 'Available products:', availableProducts.length)
-          setProducts(availableProducts)
+          console.log('FeaturedProductsSection: Total products received:', data.products.length)
+          console.log('FeaturedProductsSection: All products:', data.products.map((p: Product) => ({
+            title: p.title,
+            price: p.price,
+            available: p.available,
+            servings: p.servings,
+            id: p.id
+          })))
+          
+          // Show all products (remove availability filter to show all products)
+          setProducts(data.products)
+          console.log('FeaturedProductsSection: Displaying all products:', data.products.length)
+        } else {
+          console.error('FeaturedProductsSection: No products in response:', data)
         }
       } catch (error) {
-        console.error('Error fetching products:', error)
+        console.error('FeaturedProductsSection: Error fetching products:', error)
       } finally {
         setLoading(false)
       }
@@ -123,8 +148,20 @@ Control Appetite. Refine Weight          </p>
                         {product.title}
                       </h3>
                     </Link>
+                    {product.servings && (
+                      <p className="text-sm text-gray-600 mb-1">
+                        {product.servings}
+                      </p>
+                    )}
                     <p className="text-xl font-normal mb-4">
-                      ₹{product.price.toFixed(2)}
+                      {product.maxPrice && product.maxPrice > product.price ? (
+                        <>
+                          <span className="line-through text-gray-400 mr-2">₹{product.maxPrice.toFixed(2)}</span>
+                          <span>₹{product.price.toFixed(2)}</span>
+                        </>
+                      ) : (
+                        `₹${product.price.toFixed(2)}`
+                      )}
                     </p>
                     {/* Button - Hidden by default, appears on product hover */}
                     <button
