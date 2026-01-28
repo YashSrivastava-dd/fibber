@@ -51,11 +51,15 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Generate system email
+    // Generate system email (stable per user doc)
     const systemEmail = `${firebaseUid}@fiberisefit.com`
 
+    // Use phone number as the primary document ID when available so that
+    // the same phone maps to the same user document across platforms.
+    const userDocId = phone || firebaseUid
+
     // Get or create user in Firestore
-    const userRef = adminDb.collection('users').doc(firebaseUid)
+    const userRef = adminDb.collection('users').doc(userDocId)
     const userDoc = await userRef.get()
 
     const now = new Date()

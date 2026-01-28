@@ -49,6 +49,7 @@ export async function POST(request: NextRequest) {
     }
 
     const firebaseUid = decodedToken.uid
+    const phone = decodedToken.phone_number
 
     if (!firebaseUid) {
       return NextResponse.json(
@@ -57,8 +58,12 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Use phone number as primary user document key when available so that
+    // the same phone maps to the same user document across platforms.
+    const userDocId = phone || firebaseUid
+
     // Get user from Firestore to get systemEmail
-    const userDoc = await adminDb.collection('users').doc(firebaseUid).get()
+    const userDoc = await adminDb.collection('users').doc(userDocId).get()
     if (!userDoc.exists) {
       return NextResponse.json(
         { error: 'User not found. Please login again.' },

@@ -260,7 +260,7 @@ export const CART_CREATE_MUTATION = `
 `
 
 export const CART_UPDATE_MUTATION = `
-  mutation cartUpdate($cartId: ID!, $attributes: [AttributeInput!]) {
+  mutation cartUpdate($cartId: ID!, $attributes: [AttributeInput!]!) {
     cartAttributesUpdate(cartId: $cartId, attributes: $attributes) {
       cart {
         id
@@ -446,15 +446,113 @@ export const CART_LINES_REMOVE_MUTATION = `
   }
 `
 
-// Admin API Queries for Orders
+// Storefront API: Customer accounts & orders
+
+export const CUSTOMER_CREATE_MUTATION = `
+  mutation customerCreate($input: CustomerCreateInput!) {
+    customerCreate(input: $input) {
+      customer {
+        id
+        email
+        firstName
+        lastName
+      }
+      customerUserErrors {
+        field
+        message
+      }
+    }
+  }
+`
+
+export const CUSTOMER_ACCESS_TOKEN_CREATE_MUTATION = `
+  mutation customerAccessTokenCreate($input: CustomerAccessTokenCreateInput!) {
+    customerAccessTokenCreate(input: $input) {
+      customerAccessToken {
+        accessToken
+        expiresAt
+      }
+      customerUserErrors {
+        field
+        message
+      }
+    }
+  }
+`
+
+export const CUSTOMER_ACCESS_TOKEN_DELETE_MUTATION = `
+  mutation customerAccessTokenDelete($customerAccessToken: String!) {
+    customerAccessTokenDelete(customerAccessToken: $customerAccessToken) {
+      deletedAccessToken
+      deletedCustomerAccessTokenId
+      userErrors {
+        field
+        message
+      }
+    }
+  }
+`
+
+export const CUSTOMER_ORDERS_QUERY = `
+  query customerOrders($customerAccessToken: String!, $cursor: String) {
+    customer(customerAccessToken: $customerAccessToken) {
+      id
+      firstName
+      lastName
+      email
+      orders(first: 10, after: $cursor, sortKey: PROCESSED_AT, reverse: true) {
+        edges {
+          cursor
+          node {
+            id
+            name
+            orderNumber
+            processedAt
+            financialStatus
+            fulfillmentStatus
+            totalPriceSet {
+              shopMoney {
+                amount
+                currencyCode
+              }
+            }
+            lineItems(first: 50) {
+              edges {
+                node {
+                  title
+                  quantity
+                  discountedTotalSet {
+                    shopMoney {
+                      amount
+                      currencyCode
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+      }
+    }
+  }
+`
+
+// Admin API: Orders lookup by generic search query
+// Note: Despite the name, this query can be used with any supported
+// Shopify order search string (email, status, etc.).
 export const ORDERS_BY_EMAIL_QUERY = `
-  query getOrdersByEmail($query: String!, $first: Int!) {
-    orders(first: $first, query: $query) {
+  query OrdersByQuery($query: String!, $first: Int!) {
+    orders(first: $first, query: $query, sortKey: CREATED_AT, reverse: true) {
       edges {
         node {
           id
           name
           email
+          phone
           createdAt
           displayFulfillmentStatus
           displayFinancialStatus
@@ -464,22 +562,24 @@ export const ORDERS_BY_EMAIL_QUERY = `
               currencyCode
             }
           }
-          note
-          noteAttributes {
-            name
-            value
-          }
-          customAttributes {
-            key
-            value
-          }
           customer {
             id
             email
             firstName
             lastName
+            phone
           }
-          lineItems(first: 10) {
+          shippingAddress {
+            name
+            address1
+            address2
+            city
+            province
+            zip
+            country
+            phone
+          }
+          lineItems(first: 50) {
             edges {
               node {
                 title
