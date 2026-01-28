@@ -23,8 +23,11 @@ export interface ApplyBrandingResult {
 /**
  * Fetches the published checkout profile ID for the store.
  * Uses Admin GraphQL checkoutProfiles(query: "is_published:true").
+ *
+ * Returns `string | undefined` instead of `null` so it can be
+ * safely assigned to optional `checkoutProfileId?: string`.
  */
-export async function getPublishedCheckoutProfileId(): Promise<string | null> {
+export async function getPublishedCheckoutProfileId(): Promise<string | undefined> {
   const data = await shopifyAdminFetch<{
     checkoutProfiles: {
       edges: Array<{
@@ -37,7 +40,7 @@ export async function getPublishedCheckoutProfileId(): Promise<string | null> {
   })
 
   const profile = data?.checkoutProfiles?.edges?.[0]?.node
-  return profile?.isPublished ? profile.id : null
+  return profile?.isPublished ? profile.id : undefined
 }
 
 /**

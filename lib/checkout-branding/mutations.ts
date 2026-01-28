@@ -3,6 +3,8 @@
  * Requires Shopify Plus or development store; read_checkout_branding_settings + write_checkout_branding_settings (or preferences).
  */
 
+import type { CheckoutBrandingInput } from './map-design-to-shopify'
+
 /** Fetch published checkout profile ID (required for checkoutBrandingUpsert). */
 export const CHECKOUT_PROFILES_QUERY = `
   query CheckoutProfiles($query: String, $first: Int!) {
@@ -64,5 +66,5 @@ export type CheckoutProfilesQueryVariables = {
 
 export type CheckoutBrandingUpsertVariables = {
   checkoutProfileId: string
-  input: Record<string, unknown>
+  input: CheckoutBrandingInput
 }

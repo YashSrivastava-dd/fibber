@@ -312,7 +312,7 @@ export default function AccountPage() {
               <h2 className="text-xl font-bold mb-4">Quick Actions</h2>
               <div className="space-y-3">
                 <a
-                  href="/collections/all"
+                  href="/#products"
                   className="block w-full text-center bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-800 transition-colors"
                 >
                   Continue Shopping
