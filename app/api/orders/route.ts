@@ -25,6 +25,88 @@ function phonesMatch(userDigits: string, orderDigits: string): boolean {
   return false
 }
 
+type OrderNode = {
+  id: string
+  name: string
+  email: string | null
+  phone: string | null
+  createdAt: string
+  displayFulfillmentStatus: string | null
+  displayFinancialStatus: string | null
+  totalPriceSet: { shopMoney: { amount: string; currencyCode: string } }
+  customer: {
+    id: string
+    email: string | null
+    firstName: string | null
+    lastName: string | null
+    phone: string | null
+    defaultPhoneNumber?: { phoneNumber: string } | null
+  } | null
+  shippingAddress: {
+    name: string | null
+    address1: string | null
+    address2: string | null
+    city: string | null
+    province: string | null
+    zip: string | null
+    country: string | null
+    phone: string | null
+  } | null
+  lineItems: {
+    edges: Array<{
+      node: {
+        title: string
+        quantity: number
+        originalUnitPriceSet: { shopMoney: { amount: string; currencyCode: string } }
+        image: { url: string; altText: string | null } | null
+      }
+    }>
+  }
+}
+
+interface OrdersQueryResponse {
+  orders: {
+    edges: Array<{ node: OrderNode }>
+  }
+}
+
+function orderToResult(order: OrderNode) {
+  return {
+    id: order.id,
+    orderNumber: order.name,
+    email: order.email || order.customer?.email || null,
+    createdAt: order.createdAt,
+    status: order.displayFulfillmentStatus || 'pending',
+    financialStatus: order.displayFinancialStatus || 'pending',
+    totalAmount: parseFloat(order.totalPriceSet.shopMoney.amount),
+    currencyCode: order.totalPriceSet.shopMoney.currencyCode,
+    contactPhone:
+      order.phone ||
+      order.shippingAddress?.phone ||
+      order.customer?.phone ||
+      order.customer?.defaultPhoneNumber?.phoneNumber ||
+      null,
+    shippingAddress: order.shippingAddress
+      ? {
+          name: order.shippingAddress.name,
+          address1: order.shippingAddress.address1,
+          address2: order.shippingAddress.address2,
+          city: order.shippingAddress.city,
+          province: order.shippingAddress.province,
+          zip: order.shippingAddress.zip,
+          country: order.shippingAddress.country,
+          phone: order.shippingAddress.phone,
+        }
+      : null,
+    items: order.lineItems.edges.map((itemEdge) => ({
+      title: itemEdge.node.title,
+      quantity: itemEdge.node.quantity,
+      price: parseFloat(itemEdge.node.originalUnitPriceSet.shopMoney.amount),
+      image: itemEdge.node.image?.url || '',
+    })),
+  }
+}
+
 export async function GET(request: NextRequest) {
   // Check if Firebase Admin is initialized
   if (!isAdminInitialized() || !adminAuth) {
@@ -90,95 +172,13 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    type OrderNode = {
-      id: string
-      name: string
-      email: string | null
-      phone: string | null
-      createdAt: string
-      displayFulfillmentStatus: string | null
-      displayFinancialStatus: string | null
-      totalPriceSet: { shopMoney: { amount: string; currencyCode: string } }
-      customer: {
-        id: string
-        email: string | null
-        firstName: string | null
-        lastName: string | null
-        phone: string | null
-        defaultPhoneNumber?: { phoneNumber: string } | null
-      } | null
-      shippingAddress: {
-        name: string | null
-        address1: string | null
-        address2: string | null
-        city: string | null
-        province: string | null
-        zip: string | null
-        country: string | null
-        phone: string | null
-      } | null
-      lineItems: {
-        edges: Array<{
-          node: {
-            title: string
-            quantity: number
-            originalUnitPriceSet: { shopMoney: { amount: string; currencyCode: string } }
-            image: { url: string; altText: string | null } | null
-          }
-        }>
-      }
-    }
-
-    function orderToResult(order: OrderNode) {
-      return {
-        id: order.id,
-        orderNumber: order.name,
-        email: order.email || order.customer?.email || null,
-        createdAt: order.createdAt,
-        status: order.displayFulfillmentStatus || 'pending',
-        financialStatus: order.displayFinancialStatus || 'pending',
-        totalAmount: parseFloat(order.totalPriceSet.shopMoney.amount),
-        currencyCode: order.totalPriceSet.shopMoney.currencyCode,
-        contactPhone:
-          order.phone ||
-          order.shippingAddress?.phone ||
-          order.customer?.phone ||
-          order.customer?.defaultPhoneNumber?.phoneNumber ||
-          null,
-        shippingAddress: order.shippingAddress
-          ? {
-              name: order.shippingAddress.name,
-              address1: order.shippingAddress.address1,
-              address2: order.shippingAddress.address2,
-              city: order.shippingAddress.city,
-              province: order.shippingAddress.province,
-              zip: order.shippingAddress.zip,
-              country: order.shippingAddress.country,
-              phone: order.shippingAddress.phone,
-            }
-          : null,
-        items: order.lineItems.edges.map((itemEdge) => ({
-          title: itemEdge.node.title,
-          quantity: itemEdge.node.quantity,
-          price: parseFloat(itemEdge.node.originalUnitPriceSet.shopMoney.amount),
-          image: itemEdge.node.image?.url || '',
-        })),
-      }
-    }
-
     try {
       console.log(`🔍 Fetching orders for uid: ${firebaseUid}, phone: ${phone ?? 'none'}, systemEmail: ${systemEmail}`)
-
-      const orderResponseType = {
-        orders: {
-          edges: Array<{ node: OrderNode }>,
-        },
-      }
 
       // 1) Fetch orders that have our synthetic email (Shopify search: email:uid@fiberisefit.com)
       let byEmail: OrderNode[] = []
       try {
-        const emailData = await shopifyAdminFetch<typeof orderResponseType>({
+        const emailData = await shopifyAdminFetch<OrdersQueryResponse>({
           query: ORDERS_BY_EMAIL_QUERY,
           variables: {
             query: `email:${systemEmail}`,
@@ -194,7 +194,7 @@ export async function GET(request: NextRequest) {
       }
 
       // 2) Fetch recent orders and filter by phone
-      const recentData = await shopifyAdminFetch<typeof orderResponseType>({
+      const recentData = await shopifyAdminFetch<OrdersQueryResponse>({
         query: ORDERS_BY_EMAIL_QUERY,
         variables: { query: 'status:any', first: 100 },
       })
