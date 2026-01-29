@@ -90,149 +90,163 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Fetch recent orders from Shopify Admin API; match by phone and/or checkout email (phone-only users)
+    type OrderNode = {
+      id: string
+      name: string
+      email: string | null
+      phone: string | null
+      createdAt: string
+      displayFulfillmentStatus: string | null
+      displayFinancialStatus: string | null
+      totalPriceSet: { shopMoney: { amount: string; currencyCode: string } }
+      customer: {
+        id: string
+        email: string | null
+        firstName: string | null
+        lastName: string | null
+        phone: string | null
+        defaultPhoneNumber?: { phoneNumber: string } | null
+      } | null
+      shippingAddress: {
+        name: string | null
+        address1: string | null
+        address2: string | null
+        city: string | null
+        province: string | null
+        zip: string | null
+        country: string | null
+        phone: string | null
+      } | null
+      lineItems: {
+        edges: Array<{
+          node: {
+            title: string
+            quantity: number
+            originalUnitPriceSet: { shopMoney: { amount: string; currencyCode: string } }
+            image: { url: string; altText: string | null } | null
+          }
+        }>
+      }
+    }
+
+    function orderToResult(order: OrderNode) {
+      return {
+        id: order.id,
+        orderNumber: order.name,
+        email: order.email || order.customer?.email || null,
+        createdAt: order.createdAt,
+        status: order.displayFulfillmentStatus || 'pending',
+        financialStatus: order.displayFinancialStatus || 'pending',
+        totalAmount: parseFloat(order.totalPriceSet.shopMoney.amount),
+        currencyCode: order.totalPriceSet.shopMoney.currencyCode,
+        contactPhone:
+          order.phone ||
+          order.shippingAddress?.phone ||
+          order.customer?.phone ||
+          order.customer?.defaultPhoneNumber?.phoneNumber ||
+          null,
+        shippingAddress: order.shippingAddress
+          ? {
+              name: order.shippingAddress.name,
+              address1: order.shippingAddress.address1,
+              address2: order.shippingAddress.address2,
+              city: order.shippingAddress.city,
+              province: order.shippingAddress.province,
+              zip: order.shippingAddress.zip,
+              country: order.shippingAddress.country,
+              phone: order.shippingAddress.phone,
+            }
+          : null,
+        items: order.lineItems.edges.map((itemEdge) => ({
+          title: itemEdge.node.title,
+          quantity: itemEdge.node.quantity,
+          price: parseFloat(itemEdge.node.originalUnitPriceSet.shopMoney.amount),
+          image: itemEdge.node.image?.url || '',
+        })),
+      }
+    }
+
     try {
       console.log(`🔍 Fetching orders for uid: ${firebaseUid}, phone: ${phone ?? 'none'}, systemEmail: ${systemEmail}`)
 
-      const data = await shopifyAdminFetch<{
+      const orderResponseType = {
         orders: {
-          edges: Array<{
-            node: {
-              id: string
-              name: string
-              email: string | null
-              phone: string | null
-              createdAt: string
-              displayFulfillmentStatus: string | null
-              displayFinancialStatus: string | null
-              totalPriceSet: {
-                shopMoney: {
-                  amount: string
-                  currencyCode: string
-                }
-              }
-              customer: {
-                id: string
-                email: string | null
-                firstName: string | null
-                lastName: string | null
-                phone: string | null
-              } | null
-              shippingAddress: {
-                name: string | null
-                address1: string | null
-                address2: string | null
-                city: string | null
-                province: string | null
-                zip: string | null
-                country: string | null
-                phone: string | null
-              } | null
-              lineItems: {
-                edges: Array<{
-                  node: {
-                    title: string
-                    quantity: number
-                    originalUnitPriceSet: {
-                      shopMoney: {
-                        amount: string
-                        currencyCode: string
-                      }
-                    }
-                    image: {
-                      url: string
-                      altText: string | null
-                    } | null
-                  }
-                }>
-              }
-            }
-          }>
-        }
-      }>({
-        query: ORDERS_BY_EMAIL_QUERY,
-        variables: {
-          // We can't filter by phone in Shopify's search syntax,
-          // so fetch the most recent orders and filter by phone in code.
-          query: 'status:any',
-          first: 100,
+          edges: Array<{ node: OrderNode }>,
         },
-      })
-
-      console.log(`📦 Retrieved ${data.orders.edges.length} recent orders from Shopify`)
-
-      // Debug: log first 3 orders' email/phone when matching (helps if 0 orders returned)
-      if (data.orders.edges.length > 0) {
-        data.orders.edges.slice(0, 3).forEach((edge, i) => {
-          const o = edge.node
-          console.log(
-            `  Order ${i + 1} ${o.name}: email=${o.email ?? o.customer?.email ?? 'null'}, phone=${o.phone ?? o.shippingAddress?.phone ?? o.customer?.phone ?? 'null'}`
-          )
-        })
       }
 
-      const filteredOrders = data.orders.edges
-        .map((edge) => {
-          const order = edge.node
+      // 1) Fetch orders that have our synthetic email (Shopify search: email:uid@fiberisefit.com)
+      let byEmail: OrderNode[] = []
+      try {
+        const emailData = await shopifyAdminFetch<typeof orderResponseType>({
+          query: ORDERS_BY_EMAIL_QUERY,
+          variables: {
+            query: `email:${systemEmail}`,
+            first: 50,
+          },
+        })
+        byEmail = emailData.orders.edges.map((e) => e.node)
+        if (byEmail.length > 0) {
+          console.log(`📧 Found ${byEmail.length} order(s) by systemEmail`)
+        }
+      } catch (emailErr: any) {
+        console.warn('Orders by email query failed (non-fatal):', emailErr?.message)
+      }
 
-          // Match by phone (flexible: last-10 digits, with/without country code)
+      // 2) Fetch recent orders and filter by phone
+      const recentData = await shopifyAdminFetch<typeof orderResponseType>({
+        query: ORDERS_BY_EMAIL_QUERY,
+        variables: { query: 'status:any', first: 100 },
+      })
+
+      const byPhone = recentData.orders.edges
+        .map((edge) => edge.node)
+        .filter((order) => {
           const orderPhones = [
             order.phone,
             order.shippingAddress?.phone ?? null,
             order.customer?.phone ?? null,
+            order.customer?.defaultPhoneNumber?.phoneNumber ?? null,
           ]
-          const hasMatchingPhone =
+          return (
             normalizedUserPhone &&
             orderPhones.some((p) => {
               const normalized = normalizePhone(p)
               return phonesMatch(normalizedUserPhone, normalized)
             })
-
-          // Match by synthetic checkout email (orders placed via our flow have email=uid@fiberisefit.com)
-          const orderEmail = (order.email || order.customer?.email || '').trim().toLowerCase()
-          const hasMatchingEmail = orderEmail === systemEmail.toLowerCase()
-
-          if (!hasMatchingPhone && !hasMatchingEmail) {
-            return null
-          }
-
-          return {
-            id: order.id,
-            orderNumber: order.name,
-            email: order.email || order.customer?.email || null,
-            createdAt: order.createdAt,
-            status: order.displayFulfillmentStatus || 'pending',
-            financialStatus: order.displayFinancialStatus || 'pending',
-            totalAmount: parseFloat(order.totalPriceSet.shopMoney.amount),
-            currencyCode: order.totalPriceSet.shopMoney.currencyCode,
-            contactPhone:
-              order.phone ||
-              order.shippingAddress?.phone ||
-              order.customer?.phone ||
-              null,
-            shippingAddress: order.shippingAddress
-              ? {
-                  name: order.shippingAddress.name,
-                  address1: order.shippingAddress.address1,
-                  address2: order.shippingAddress.address2,
-                  city: order.shippingAddress.city,
-                  province: order.shippingAddress.province,
-                  zip: order.shippingAddress.zip,
-                  country: order.shippingAddress.country,
-                  phone: order.shippingAddress.phone,
-                }
-              : null,
-            items: order.lineItems.edges.map((itemEdge) => ({
-              title: itemEdge.node.title,
-              quantity: itemEdge.node.quantity,
-              price: parseFloat(itemEdge.node.originalUnitPriceSet.shopMoney.amount),
-              image: itemEdge.node.image?.url || '',
-            })),
-          }
+          )
         })
-        .filter((order) => order !== null)
 
-      console.log(`✅ Returning ${filteredOrders.length} orders after phone/email filter`)
+      if (byPhone.length > 0) {
+        console.log(`📱 Found ${byPhone.length} order(s) by phone`)
+      }
+
+      // Merge and dedupe by order id, sort by createdAt desc
+      const seen = new Set<string>()
+      const merged = [...byEmail, ...byPhone]
+        .filter((order) => {
+          if (seen.has(order.id)) return false
+          seen.add(order.id)
+          return true
+        })
+        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+
+      const filteredOrders = merged.map(orderToResult)
+
+      if (filteredOrders.length === 0 && recentData.orders.edges.length > 0) {
+        recentData.orders.edges.slice(0, 5).forEach((edge, i) => {
+          const o = edge.node
+          const phones = [
+            o.phone,
+            o.shippingAddress?.phone ?? null,
+            o.customer?.phone ?? null,
+            o.customer?.defaultPhoneNumber?.phoneNumber ?? null,
+          ].filter(Boolean)
+          console.log(`  [debug] ${o.name}: email=${o.email ?? o.customer?.email ?? 'null'}, phones=${JSON.stringify(phones)}`)
+        })
+      }
+
+      console.log(`✅ Returning ${filteredOrders.length} orders (email: ${byEmail.length}, phone: ${byPhone.length})`)
       return NextResponse.json({ orders: filteredOrders })
     } catch (shopifyError: any) {
       console.error('❌ Error fetching orders from Shopify:', shopifyError)

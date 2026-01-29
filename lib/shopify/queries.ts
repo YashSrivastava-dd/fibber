@@ -568,6 +568,9 @@ export const ORDERS_BY_EMAIL_QUERY = `
             firstName
             lastName
             phone
+            defaultPhoneNumber {
+              phoneNumber
+            }
           }
           shippingAddress {
             name
