@@ -189,15 +189,15 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section with Midnight Obsidian Background */}
-      <div className="bg-[#102333]">
+      {/* Hero Section - White Background */}
+      <div className="bg-white">
         {/* Breadcrumb Navigation */}
         <div className="pt-24 pb-4">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <nav className="text-sm text-white">
-              <Link href="/" className="hover:underline">Home</Link>
+            <nav className="text-sm text-gray-600">
+              <Link href="/" className="hover:underline text-gray-700">Home</Link>
               <span className="mx-2">/</span>
-              <span className="text-white">{product.title}</span>
+              <span className="text-gray-900">{product.title}</span>
             </nav>
           </div>
         </div>
@@ -301,12 +301,12 @@ export default function ProductPage({ slug }: ProductPageProps) {
           <div className="w-full lg:w-1/2 lg:pl-6 pt-8 lg:pt-0 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto lg:pr-2 scrollbar-hide">
             <div className="space-y-6 pb-8">
               {/* Product Type/Category */}
-              <div className="text-xs uppercase tracking-wider text-white font-medium mb-2">
+              <div className="text-xs uppercase tracking-wider text-gray-500 font-medium mb-2">
                 {productType}
               </div>
 
               {/* Product Title */}
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white uppercase leading-[1.1] mb-4">
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-black uppercase leading-[1.1] mb-4">
                 {product.title}
               </h1>
 
@@ -315,7 +315,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
                 {ingredients.map((ingredient, index) => (
                   <span
                     key={index}
-                    className="px-4 py-2 rounded-full border border-white text-sm font-medium text-white bg-transparent"
+                    className="px-4 py-2 rounded-full border border-gray-300 text-sm font-medium text-gray-800 bg-transparent"
                   >
                     {ingredient}
                   </span>
@@ -324,9 +324,9 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
               {/* Product Description */}
               {product.description && (
-                <div className="text-base text-white leading-relaxed">
+                <div className="text-base text-gray-700 leading-relaxed">
                   <div
-                    className="prose prose-sm max-w-none prose-invert"
+                    className="prose prose-sm max-w-none prose-gray"
                     dangerouslySetInnerHTML={{ __html: product.description }}
                   />
                 </div>
@@ -335,7 +335,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
               {/* Variant Selection */}
               {product.variants && product.variants.length > 1 && (
                 <div className="space-y-3">
-                  <label className="block text-sm font-medium text-white">
+                  <label className="block text-sm font-medium text-gray-800">
                     Choose Supplement:
                   </label>
                   <div className="flex flex-wrap gap-3">
@@ -348,13 +348,13 @@ export default function ProductPage({ slug }: ProductPageProps) {
                           selectedVariant?.id === variant.id
                             ? 'border-[#FFB6C1] bg-[#FFE4E9] scale-110 shadow-md'
                             : variant.available
-                            ? 'border-white bg-transparent hover:border-gray-300'
+                            ? 'border-gray-300 bg-transparent hover:border-gray-400'
                             : 'border-gray-400 bg-transparent cursor-not-allowed opacity-50'
                         }`}
                         title={variant.name}
                       >
                         <span className={`text-sm font-semibold ${
-                          selectedVariant?.id === variant.id ? 'text-black' : 'text-white'
+                          selectedVariant?.id === variant.id ? 'text-black' : 'text-gray-800'
                         }`}>
                           {variant.name.charAt(0).toUpperCase()}
                         </span>
@@ -366,29 +366,29 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
               {/* Price */}
               <div className="space-y-1 mt-6">
-                <p className="text-4xl md:text-5xl font-bold text-white">
+                <p className="text-4xl md:text-5xl font-bold text-black">
                   ₹{displayPrice.toFixed(2)}
                 </p>
-                <p className="text-sm text-white font-normal">Tax included.</p>
+                <p className="text-sm text-gray-600 font-normal">Tax included.</p>
               </div>
 
               {/* Quantity Selector and Add to Cart */}
               <div className="flex gap-3 mt-6">
                 {/* Quantity Selector */}
-                <div className="flex items-center border border-white rounded-lg">
+                <div className="flex items-center border border-gray-300 rounded-lg">
                   <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="px-4 py-3 hover:bg-white/20 transition-colors text-white"
+                    className="px-4 py-3 hover:bg-gray-100 transition-colors text-gray-800"
                     aria-label="Decrease quantity"
                   >
                     <Minus className="w-4 h-4" />
                   </button>
-                  <span className="px-6 py-3 font-medium text-white min-w-[3rem] text-center">
+                  <span className="px-6 py-3 font-medium text-gray-900 min-w-[3rem] text-center">
                     {quantity}
                   </span>
                   <button
                     onClick={() => setQuantity(quantity + 1)}
-                    className="px-4 py-3 hover:bg-white/20 transition-colors text-white"
+                    className="px-4 py-3 hover:bg-gray-100 transition-colors text-gray-800"
                     aria-label="Increase quantity"
                   >
                     <Plus className="w-4 h-4" />
@@ -410,25 +410,25 @@ export default function ProductPage({ slug }: ProductPageProps) {
               </div>
 
               {/* Customer and Shipping Info */}
-              <div className="text-sm text-white mt-4">
+              <div className="text-sm text-gray-600 mt-4">
                 <p>+10000 Happy Customers | Free shipping on US</p>
               </div>
 
               {/* Payment Icons */}
               <div className="flex items-center gap-3 mt-4">
-                <span className="text-xs text-white font-medium">We accept:</span>
+                <span className="text-xs text-gray-600 font-medium">We accept:</span>
                 <div className="flex items-center gap-2">
-                  <div className="w-10 h-6 bg-white/20 rounded flex items-center justify-center">
-                    <span className="text-xs font-bold text-white">VISA</span>
+                  <div className="w-10 h-6 bg-gray-100 rounded flex items-center justify-center">
+                    <span className="text-xs font-bold text-gray-800">VISA</span>
                   </div>
-                  <div className="w-10 h-6 bg-white/20 rounded flex items-center justify-center">
-                    <span className="text-xs font-bold text-white">MC</span>
+                  <div className="w-10 h-6 bg-gray-100 rounded flex items-center justify-center">
+                    <span className="text-xs font-bold text-gray-800">MC</span>
                   </div>
-                  <div className="w-10 h-6 bg-white/20 rounded flex items-center justify-center">
-                    <span className="text-xs font-bold text-white">AMEX</span>
+                  <div className="w-10 h-6 bg-gray-100 rounded flex items-center justify-center">
+                    <span className="text-xs font-bold text-gray-800">AMEX</span>
                   </div>
-                  <div className="w-10 h-6 bg-white/20 rounded flex items-center justify-center">
-                    <span className="text-xs font-bold text-white">PP</span>
+                  <div className="w-10 h-6 bg-gray-100 rounded flex items-center justify-center">
+                    <span className="text-xs font-bold text-gray-800">PP</span>
                   </div>
                 </div>
               </div>
@@ -436,22 +436,22 @@ export default function ProductPage({ slug }: ProductPageProps) {
               {/* Accordion Sections */}
               <div className="mt-6 space-y-2">
                 {/* BENEFITS Accordion */}
-                <div className="border-b border-white/30">
+                <div className="border-b border-gray-200">
                   <button
                     onClick={() => toggleAccordion('benefits')}
                     className="w-full flex items-center justify-between py-4 text-left"
                   >
-                    <span className="text-sm font-semibold uppercase tracking-wider text-white">
+                    <span className="text-sm font-semibold uppercase tracking-wider text-gray-900">
                       BENEFITS
                     </span>
                     <Plus
-                      className={`w-5 h-5 text-white transition-transform ${
+                      className={`w-5 h-5 text-gray-700 transition-transform ${
                         expandedAccordion === 'benefits' ? 'rotate-45' : ''
                       }`}
                     />
                   </button>
                   {expandedAccordion === 'benefits' && (
-                    <div className="pb-4 text-sm text-white leading-relaxed">
+                    <div className="pb-4 text-sm text-gray-700 leading-relaxed">
                       <p>
                         Fill nutritional gaps and feel your best with this comprehensive multivitamin. 
                         Supports immunity, energy, mood, sleep, hormones, periods, muscle recovery, and skin health.
@@ -461,22 +461,22 @@ export default function ProductPage({ slug }: ProductPageProps) {
                 </div>
 
                 {/* HOW TO TAKE SUPPLEMENT Accordion */}
-                <div className="border-b border-white/30">
+                <div className="border-b border-gray-200">
                   <button
                     onClick={() => toggleAccordion('how-to-take')}
                     className="w-full flex items-center justify-between py-4 text-left"
                   >
-                    <span className="text-sm font-semibold uppercase tracking-wider text-white">
+                    <span className="text-sm font-semibold uppercase tracking-wider text-gray-900">
                       HOW TO TAKE SUPPLEMENT?
                     </span>
                     <Plus
-                      className={`w-5 h-5 text-white transition-transform ${
+                      className={`w-5 h-5 text-gray-700 transition-transform ${
                         expandedAccordion === 'how-to-take' ? 'rotate-45' : ''
                       }`}
                     />
                   </button>
                   {expandedAccordion === 'how-to-take' && (
-                    <div className="pb-4 text-sm text-white leading-relaxed">
+                    <div className="pb-4 text-sm text-gray-700 leading-relaxed">
                       <p>
                         Take one capsule daily with a meal or as directed by your healthcare provider. 
                         For best results, take at the same time each day with a full glass of water.
@@ -486,22 +486,22 @@ export default function ProductPage({ slug }: ProductPageProps) {
                 </div>
 
                 {/* INGREDIENTS Accordion */}
-                <div className="border-b border-white/30">
+                <div className="border-b border-gray-200">
                   <button
                     onClick={() => toggleAccordion('ingredients')}
                     className="w-full flex items-center justify-between py-4 text-left"
                   >
-                    <span className="text-sm font-semibold uppercase tracking-wider text-white">
+                    <span className="text-sm font-semibold uppercase tracking-wider text-gray-900">
                       INGREDIENTS
                     </span>
                     <Plus
-                      className={`w-5 h-5 text-white transition-transform ${
+                      className={`w-5 h-5 text-gray-700 transition-transform ${
                         expandedAccordion === 'ingredients' ? 'rotate-45' : ''
                       }`}
                     />
                   </button>
                   {expandedAccordion === 'ingredients' && (
-                    <div className="pb-4 text-sm text-white leading-relaxed">
+                    <div className="pb-4 text-sm text-gray-700 leading-relaxed">
                       <p>
                         Vitamins A-E, Iron, Zinc, Folate, Cranberry, Thiamin, and other essential nutrients. 
                         100% Plant-Based. 60 Capsules per bottle.
@@ -513,7 +513,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
               {/* Enhance Your Daily Routine Section */}
               <div className="mt-8">
-                <h2 className="text-lg font-bold uppercase tracking-wider text-white mb-4">
+                <h2 className="text-lg font-bold uppercase tracking-wider text-gray-900 mb-4">
                   ENHANCE YOUR DAILY ROUTINE
                 </h2>
                 <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-2 -mx-2 px-2">

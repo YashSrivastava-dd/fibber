@@ -9,6 +9,22 @@ function normalizePhone(phone?: string | null): string {
   return phone ? phone.replace(/\D/g, '') : ''
 }
 
+/** Returns true if two digit-only strings represent the same phone (exact or last-10 match for country code). */
+function phonesMatch(userDigits: string, orderDigits: string): boolean {
+  if (!orderDigits) return false
+  if (userDigits === orderDigits) return true
+  // Indian (and others): user +919548891893 (12) vs order 9548891893 (10)
+  if (userDigits.length >= 10 && orderDigits.length >= 10) {
+    const userLast10 = userDigits.slice(-10)
+    const orderLast10 = orderDigits.slice(-10)
+    if (userLast10 === orderLast10) return true
+  }
+  // One contains the other (e.g. 919548891893 ends with 9548891893)
+  if (userDigits.length >= orderDigits.length && userDigits.endsWith(orderDigits)) return true
+  if (orderDigits.length >= userDigits.length && orderDigits.endsWith(userDigits)) return true
+  return false
+}
+
 export async function GET(request: NextRequest) {
   // Check if Firebase Admin is initialized
   if (!isAdminInitialized() || !adminAuth) {
@@ -159,9 +175,10 @@ export async function GET(request: NextRequest) {
             order.customer?.phone ?? null,
           ]
 
-          const hasMatchingPhone = orderPhones.some(
-            (p) => normalizePhone(p) === normalizedUserPhone
-          )
+          const hasMatchingPhone = orderPhones.some((p) => {
+            const normalized = normalizePhone(p)
+            return phonesMatch(normalizedUserPhone, normalized)
+          })
 
           if (!hasMatchingPhone) {
             return null
