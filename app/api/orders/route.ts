@@ -74,12 +74,9 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    if (!phone) {
-      return NextResponse.json(
-        { error: 'No phone number associated with this account', orders: [] },
-        { status: 200 }
-      )
-    }
+    // Synthetic email we set on checkout (uid@fiberisefit.com) – orders placed via our flow may have this
+    const systemEmail = `${firebaseUid}@fiberisefit.com`
+    const normalizedUserPhone = phone ? normalizePhone(phone) : ''
 
     // Check if we have Shopify Admin API token
     if (!process.env.SHOPIFY_ADMIN_ACCESS_TOKEN) {
@@ -93,10 +90,9 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Fetch recent orders from Shopify Admin API and filter by phone number
+    // Fetch recent orders from Shopify Admin API; match by phone and/or checkout email (phone-only users)
     try {
-      const normalizedUserPhone = normalizePhone(phone)
-      console.log(`🔍 Fetching orders for phone: ${phone} (normalized: ${normalizedUserPhone})`)
+      console.log(`🔍 Fetching orders for uid: ${firebaseUid}, phone: ${phone ?? 'none'}, systemEmail: ${systemEmail}`)
 
       const data = await shopifyAdminFetch<{
         orders: {
@@ -165,22 +161,38 @@ export async function GET(request: NextRequest) {
 
       console.log(`📦 Retrieved ${data.orders.edges.length} recent orders from Shopify`)
 
+      // Debug: log first 3 orders' email/phone when matching (helps if 0 orders returned)
+      if (data.orders.edges.length > 0) {
+        data.orders.edges.slice(0, 3).forEach((edge, i) => {
+          const o = edge.node
+          console.log(
+            `  Order ${i + 1} ${o.name}: email=${o.email ?? o.customer?.email ?? 'null'}, phone=${o.phone ?? o.shippingAddress?.phone ?? o.customer?.phone ?? 'null'}`
+          )
+        })
+      }
+
       const filteredOrders = data.orders.edges
         .map((edge) => {
           const order = edge.node
 
+          // Match by phone (flexible: last-10 digits, with/without country code)
           const orderPhones = [
             order.phone,
             order.shippingAddress?.phone ?? null,
             order.customer?.phone ?? null,
           ]
+          const hasMatchingPhone =
+            normalizedUserPhone &&
+            orderPhones.some((p) => {
+              const normalized = normalizePhone(p)
+              return phonesMatch(normalizedUserPhone, normalized)
+            })
 
-          const hasMatchingPhone = orderPhones.some((p) => {
-            const normalized = normalizePhone(p)
-            return phonesMatch(normalizedUserPhone, normalized)
-          })
+          // Match by synthetic checkout email (orders placed via our flow have email=uid@fiberisefit.com)
+          const orderEmail = (order.email || order.customer?.email || '').trim().toLowerCase()
+          const hasMatchingEmail = orderEmail === systemEmail.toLowerCase()
 
-          if (!hasMatchingPhone) {
+          if (!hasMatchingPhone && !hasMatchingEmail) {
             return null
           }
 
@@ -220,7 +232,7 @@ export async function GET(request: NextRequest) {
         })
         .filter((order) => order !== null)
 
-      console.log(`✅ Returning ${filteredOrders.length} orders after phone filter`)
+      console.log(`✅ Returning ${filteredOrders.length} orders after phone/email filter`)
       return NextResponse.json({ orders: filteredOrders })
     } catch (shopifyError: any) {
       console.error('❌ Error fetching orders from Shopify:', shopifyError)
