@@ -1,23 +1,49 @@
 'use client'
 
 import Image from 'next/image'
+import { useEffect, useRef, useState } from 'react'
+
+const HERO_VIDEO_SRC = '/videos/prmv.webm'
 
 export default function HeroSection() {
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const sectionRef = useRef<HTMLElement>(null)
+  const [videoLoaded, setVideoLoaded] = useState(false)
+
+  useEffect(() => {
+    const section = sectionRef.current
+    const video = videoRef.current
+    if (!section || !video) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries
+        if (!entry?.isIntersecting || videoLoaded) return
+        setVideoLoaded(true)
+        video.src = HERO_VIDEO_SRC
+        video.load()
+        video.play().catch(() => {})
+      },
+      { rootMargin: '50px', threshold: 0.1 }
+    )
+    observer.observe(section)
+    return () => observer.disconnect()
+  }, [videoLoaded])
+
   return (
-    <section className="relative w-full min-h-screen flex flex-col md:flex-row">
+    <section ref={sectionRef} className="relative w-full min-h-screen flex flex-col md:flex-row">
       {/* Left Side - Video with Text Overlay */}
       <div className="relative w-full md:w-1/2 h-screen md:h-screen">
-        {/* Video Background */}
+        {/* Video Background - loads only when section is in view */}
         <video
-          autoPlay
+          ref={videoRef}
+          preload="none"
           loop
           muted
           playsInline
           className="absolute inset-0 w-full h-full object-cover"
           style={{ objectPosition: 'center 10%' }}
-        >
-          <source src="/videos/prmv.webm" type="video/webm" />
-        </video>
+        />
         
         {/* Gradient Overlay for text readability */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
