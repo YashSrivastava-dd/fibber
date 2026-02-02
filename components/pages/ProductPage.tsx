@@ -1,10 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useCartStore } from '@/store/cartStore'
 import { ChevronRight, ChevronLeft, Plus, Minus } from 'lucide-react'
+import VideoSection from '@/components/sections/VideoSection'
 
 interface ProductVariant {
   id: string
@@ -39,7 +40,23 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const [error, setError] = useState<string | null>(null)
   const [quantity, setQuantity] = useState(1)
   const [expandedAccordion, setExpandedAccordion] = useState<string | null>(null)
+  const [expandedFaqId, setExpandedFaqId] = useState<string | null>(null)
+  const [joinEmail, setJoinEmail] = useState('')
+  const [joinSubmitted, setJoinSubmitted] = useState(false)
+  const [showStickyAddToCart, setShowStickyAddToCart] = useState(false)
+  const heroRef = useRef<HTMLDivElement>(null)
   const addItem = useCartStore((state) => state.addItem)
+
+  useEffect(() => {
+    const el = heroRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => setShowStickyAddToCart(!entry.isIntersecting),
+      { threshold: 0, rootMargin: '-1px 0px 0px 0px' }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
 
   useEffect(() => {
     async function fetchProduct() {
@@ -188,9 +205,9 @@ export default function ProductPage({ slug }: ProductPageProps) {
     : 'SUPPLEMENT'
 
   return (
-    <div className="min-h-screen">
+    <div className={`min-h-screen ${showStickyAddToCart ? 'pb-20' : ''}`}>
       {/* Hero Section - White Background */}
-      <div className="bg-white">
+      <div ref={heroRef} className="bg-white">
         {/* Breadcrumb Navigation */}
         <div className="pt-24 pb-4">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -544,88 +561,28 @@ export default function ProductPage({ slug }: ProductPageProps) {
       </div>
       </div>
 
-      {/* Key Ingredients Section */}
-      <div className="w-full bg-[#FAF8F2] py-10 md:py-14 lg:py-16">
-        {/* Section Title */}
-        <h2 className="text-center text-3xl md:text-4xl lg:text-5xl font-semibold tracking-wider uppercase mb-8 md:mb-12 px-4">
-          KEY INGREDIENTS
-        </h2>
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-6 items-center">
-            {/* Left Ingredients */}
-            <div className="flex flex-col gap-6 md:gap-8">
-              <div className="text-center">
-                <h3 className="text-sm md:text-base lg:text-lg font-semibold tracking-wider uppercase mb-2 text-center">
-                  ZINC
-                </h3>
-                <p className="text-sm md:text-base text-black w-full leading-relaxed pr-4 md:pr-8 lg:pr-12 text-center">
-                  Supports a strong immune system, promotes wound healing, and helps maintain healthy skin.
-                </p>
-              </div>
-              <div className="text-center">
-                <h3 className="text-sm md:text-base lg:text-lg font-semibold tracking-wider uppercase mb-2 text-center">
-                  IRON
-                </h3>
-                <p className="text-sm md:text-base text-black w-full leading-relaxed pr-4 md:pr-8 lg:pr-12 text-center">
-                  Vital for energy production and oxygen transport in the body, it prevents fatigue and supports overall vitality.
-                </p>
-              </div>
-              <div className="text-center">
-                <h3 className="text-sm md:text-base lg:text-lg font-semibold tracking-wider uppercase mb-2 text-center">
-                  VITAMINS C
-                </h3>
-                <p className="text-sm md:text-base text-black w-full leading-relaxed pr-4 md:pr-8 lg:pr-12 text-center">
-                  A powerful antioxidant that boosts the immune system, enhances iron absorption, and promotes collagen production for healthy skin.
-                </p>
-              </div>
-            </div>
-
-            {/* Center Video */}
-            <div className="relative flex items-center justify-center order-first lg:order-none">
-              <div className="relative w-full max-w-sm aspect-[3/4] rounded-2xl overflow-hidden">
-                <video
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  className="w-full h-full object-cover"
-                >
-                  <source src="/videos/f087c0f71002463594892e68000dfe75.HD-720p-4.5Mbps-40573155.mp4" type="video/mp4" />
-                </video>
-              </div>
-            </div>
-
-            {/* Right Ingredients */}
-            <div className="flex flex-col gap-6 md:gap-8">
-              <div className="text-center">
-                <h3 className="text-sm md:text-base lg:text-lg font-semibold tracking-wider uppercase mb-2 text-center">
-                  VITAMINS B
-                </h3>
-                <p className="text-sm md:text-base text-black w-full leading-relaxed pl-4 md:pl-8 lg:pl-12 pr-4 md:pr-8 lg:pr-12 text-center">
-                  Boost energy, improve brain function, and support cell metabolism while helping maintain a healthy nervous system and red blood cell production.
-                </p>
-              </div>
-              <div className="text-center">
-                <h3 className="text-sm md:text-base lg:text-lg font-semibold tracking-wider uppercase mb-2 text-center">
-                  VITAMIN A
-                </h3>
-                <p className="text-sm md:text-base text-black w-full leading-relaxed pl-4 md:pl-8 lg:pl-12 pr-4 md:pr-8 lg:pr-12 text-center">
-                  Essential for good vision, healthy skin, and a robust immune system, it also supports cell growth and reproduction.
-                </p>
-              </div>
-              <div className="text-center">
-                <h3 className="text-sm md:text-base lg:text-lg font-semibold tracking-wider uppercase mb-2 text-center">
-                  NIACIN
-                </h3>
-                <p className="text-sm md:text-base text-black w-full leading-relaxed pl-4 md:pl-8 lg:pl-12 pr-4 md:pr-8 lg:pr-12 text-center">
-                  Helps maintain healthy skin, supports the nervous system, and aids in converting food into energy
-                </p>
-              </div>
-            </div>
+      {/* Full-width image below hero with marquee */}
+      <div className="w-full relative">
+        <Image
+          src="/BlueSet.png"
+          alt="Wellness"
+          width={1920}
+          height={1080}
+          className="w-full h-auto object-cover"
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 flex items-center pointer-events-none overflow-hidden">
+          <div
+            className="flex whitespace-nowrap text-white uppercase tracking-[0.3em] text-2xl md:text-4xl lg:text-5xl font-normal animate-marquee"
+            style={{ fontFamily: 'QuadratGrotesk, sans-serif' }}
+          >
+            <span className="inline-block px-8">Real Stories , Real Result</span>
+            <span className="inline-block px-8">Real Stories , Real Result</span>
           </div>
         </div>
       </div>
+
+      <VideoSection />
 
       {/* Why Women's Multi Capsules Section */}
       <div className="w-full bg-[#FFE4E9] py-12 md:py-16 lg:py-20">
@@ -655,6 +612,270 @@ export default function ProductPage({ slug }: ProductPageProps) {
           </div>
         </div>
       </div>
+
+      {/* Reels Section */}
+      <section className="w-full bg-[#F5F3EF] py-12 md:py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8 md:mb-10">
+            <p className="text-sm md:text-base text-gray-600 font-medium mb-1">
+              Your Health in Trusted Hands!
+            </p>
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-black uppercase tracking-wide">
+              Real Stories, Real Results
+            </h2>
+          </div>
+          <div className="flex gap-4 md:gap-6 overflow-x-auto scrollbar-hide pb-2 -mx-2 px-2 justify-center md:justify-start">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <div
+                key={i}
+                className="flex-shrink-0 w-[200px] sm:w-[220px] md:w-[240px] aspect-[9/16] rounded-2xl overflow-hidden bg-black/5 shadow-sm"
+              >
+                <video
+                  src={`/videos/${i}.webm`}
+                  className="w-full h-full object-cover"
+                  playsInline
+                  muted
+                  loop
+                  autoPlay
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="w-full bg-white py-12 md:py-16" style={{ fontFamily: 'QuadratGrotesk, sans-serif' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12 md:mb-16">
+            <p className="text-base md:text-lg text-gray-500 font-medium mb-2">
+              Everything You Need to Know!
+            </p>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-black uppercase tracking-wide">
+              Frequently Asked Questions
+            </h2>
+          </div>
+          <div className="border-t border-gray-200">
+            {[
+              {
+                id: 'faq-1',
+                question: 'Are wellness supplements safe to use?',
+                answer: 'Yes. Our supplements are formulated with quality ingredients and manufactured under strict standards. We recommend consulting your healthcare provider before starting any new supplement, especially if you have existing conditions or take other medications.',
+              },
+              {
+                id: 'faq-2',
+                question: 'How should I store my supplements?',
+                answer: 'Store in a cool, dry place away from direct sunlight. Keep the bottle tightly closed and out of reach of children. Avoid storing in humid areas like the bathroom.',
+              },
+              {
+                id: 'faq-3',
+                question: 'Do you offer international shipping?',
+                answer: 'Yes. We ship to multiple countries. Shipping costs and delivery times vary by location. You can see options at checkout.',
+              },
+              {
+                id: 'faq-4',
+                question: 'What is your return policy?',
+                answer: 'We offer a satisfaction guarantee. If you are not satisfied with your purchase, contact us within the specified return window for a refund or exchange. See our full policy in the footer or contact page.',
+              },
+            ].map((faq) => (
+              <div key={faq.id} className="border-b border-gray-200 py-6 md:py-8 first:pt-0">
+                <button
+                  onClick={() => setExpandedFaqId(expandedFaqId === faq.id ? null : faq.id)}
+                  className="w-full flex items-center justify-between py-2 text-left"
+                >
+                  <span className="text-base md:text-lg font-semibold uppercase tracking-wider text-black pr-4">
+                    {faq.question}
+                  </span>
+                  <Plus
+                    className={`flex-shrink-0 w-6 h-6 text-black transition-transform ${
+                      expandedFaqId === faq.id ? 'rotate-45' : ''
+                    }`}
+                  />
+                </button>
+                {expandedFaqId === faq.id && (
+                  <div className="pt-2 pb-2 text-base md:text-lg text-gray-600 leading-relaxed">
+                    {faq.answer}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Two-image promo section */}
+      <section className="w-full bg-white">
+        <div className="grid grid-cols-1 md:grid-cols-2">
+          <div className="relative w-full aspect-[4/5] md:aspect-auto md:min-h-[400px]">
+            <Image
+              src="/cravings-image.png"
+              alt="Promo 1"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+          </div>
+          <div className="relative w-full aspect-[4/5] md:aspect-auto md:min-h-[400px]">
+            <Image
+              src="/hero-image.png"
+              alt="Promo 2"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* 1. Customer testimonial section */}
+      <section className="w-full bg-[#FFE4E9] py-10 md:py-14">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8 md:mb-10">
+            <p className="text-sm md:text-base text-gray-600 font-medium mb-1">
+              What Our Customers Say
+            </p>
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-black uppercase tracking-wide">
+              +10000 Happy Customers
+            </h2>
+          </div>
+          <div className="bg-white rounded-2xl overflow-hidden shadow-sm max-w-5xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[320px] md:min-h-[380px]">
+              <div className="relative aspect-[4/3] lg:aspect-auto lg:min-h-[380px]">
+                <Image
+                  src="/ritual/154359.jpg"
+                  alt="Customer"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
+                <div className="absolute bottom-4 left-4 right-4 lg:right-auto lg:w-56 bg-white rounded-xl p-4 shadow-md">
+                  <div className="relative w-16 h-16 mb-2">
+                    <Image
+                      src={product.image || '/placeholder-product.png'}
+                      alt={product.title}
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                  <p className="text-sm font-semibold text-black">{product.title}</p>
+                </div>
+                <button className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 flex items-center justify-center shadow" aria-label="Previous">
+                  <ChevronLeft className="w-5 h-5 text-black" />
+                </button>
+                <button className="absolute right-2 lg:right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 flex items-center justify-center shadow" aria-label="Next">
+                  <ChevronRight className="w-5 h-5 text-black" />
+                </button>
+              </div>
+              <div className="flex flex-col justify-center p-8 md:p-10">
+                <div className="flex gap-0.5 mb-4">
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <span key={i} className="text-2xl text-amber-400">★</span>
+                  ))}
+                </div>
+                <blockquote className="text-base md:text-lg text-black leading-relaxed mb-4">
+                  &ldquo;This supplement gave me more energy, faster recovery, and healthier skin and hair. I highly recommend it!&rdquo;
+                </blockquote>
+                <p className="text-sm font-semibold uppercase tracking-wider text-gray-700">- Anna M.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 2. Four feature pillars */}
+      <section className="w-full bg-white py-12 md:py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6 text-center">
+            <div>
+              <div className="flex justify-center mb-4">
+                <Image src="/icons/lab.png" alt="" width={48} height={48} className="object-contain" />
+              </div>
+              <h3 className="text-sm font-bold uppercase tracking-wider text-black mb-2">Third-Party Tested</h3>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                We hold ourselves and our ingredients to the highest standards.
+              </p>
+            </div>
+            <div>
+              <div className="flex justify-center mb-4">
+                <Image src="/icons/quality.png" alt="" width={48} height={48} className="object-contain" />
+              </div>
+              <h3 className="text-sm font-bold uppercase tracking-wider text-black mb-2">Quality Ingredients</h3>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                We&apos;re dedicated to using scientifically backed, high-quality natural ingredients.
+              </p>
+            </div>
+            <div>
+              <div className="flex justify-center mb-4">
+                <Image src="/icons/nogmo-2.png" alt="" width={48} height={48} className="object-contain" />
+              </div>
+              <h3 className="text-sm font-bold uppercase tracking-wider text-black mb-2">Non-GMO</h3>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                We carefully evaluate every ingredient, ensuring they are non-GMO.
+              </p>
+            </div>
+            <div>
+              <div className="flex justify-center mb-4">
+                <Image src="/icons/vegan-2.png" alt="" width={48} height={48} className="object-contain" />
+              </div>
+              <h3 className="text-sm font-bold uppercase tracking-wider text-black mb-2">Vegan</h3>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                We ensure the highest standards with 100% vegan, cruelty-free formulations.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. Join Our Circle & Save */}
+      <section className="w-full bg-[#FFE4E9] py-12 md:py-16">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-2xl md:text-3xl font-bold text-black uppercase tracking-wide mb-3">
+            Join Our Circle & Save!
+          </h2>
+          <p className="text-base text-black mb-8">
+            Sign up now for 10% off your first order — because you deserve it!
+          </p>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault()
+              setJoinSubmitted(true)
+              setJoinEmail('')
+              setTimeout(() => setJoinSubmitted(false), 3000)
+            }}
+            className="flex flex-col sm:flex-row gap-3 justify-center items-stretch sm:items-center"
+          >
+            <input
+              type="email"
+              value={joinEmail}
+              onChange={(e) => setJoinEmail(e.target.value)}
+              placeholder="Email"
+              required
+              className="flex-1 min-w-0 px-5 py-3 bg-white border border-black rounded-lg text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black/20"
+            />
+            <button
+              type="submit"
+              className="px-8 py-3 rounded-lg font-semibold text-sm uppercase tracking-wider bg-black text-white hover:bg-gray-800 transition-colors whitespace-nowrap"
+            >
+              {joinSubmitted ? 'Subscribed!' : 'Subscribe'}
+            </button>
+          </form>
+        </div>
+      </section>
+
+      {/* Sticky Add to Cart - appears when hero scrolls out of view */}
+      {showStickyAddToCart && (
+        <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-black py-4">
+          <div className="flex justify-center">
+            <button
+              onClick={handleAddToCart}
+              disabled={!isAvailable}
+              className="py-3 px-10 rounded-lg font-semibold text-sm uppercase tracking-wider border-2 border-black text-black bg-white hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Add to Cart
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

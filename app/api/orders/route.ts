@@ -175,13 +175,14 @@ export async function GET(request: NextRequest) {
     try {
       console.log(`🔍 Fetching orders for uid: ${firebaseUid}, phone: ${phone ?? 'none'}, systemEmail: ${systemEmail}`)
 
-      // 1) Fetch orders that have our synthetic email (Shopify search: email:uid@fiberisefit.com)
+      // 1) Fetch orders that have our synthetic email (Shopify search; quote email so @ is valid)
       let byEmail: OrderNode[] = []
       try {
+        const emailQuery = `email:"${systemEmail.replace(/"/g, '\\"')}"`
         const emailData = await shopifyAdminFetch<OrdersQueryResponse>({
           query: ORDERS_BY_EMAIL_QUERY,
           variables: {
-            query: `email:${systemEmail}`,
+            query: emailQuery,
             first: 50,
           },
         })

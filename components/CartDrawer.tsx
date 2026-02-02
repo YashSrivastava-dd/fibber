@@ -187,6 +187,9 @@ export default function CartDrawer() {
               <p className="text-xs text-gray-500">
                 Shipping and discounts calculated at checkout.
               </p>
+              <p className="text-xs text-gray-600">
+                Keep the pre-filled email at checkout so your order appears in Order History.
+              </p>
               <button
                 onClick={handleCheckout}
                 disabled={isProcessingCheckout || authLoading}

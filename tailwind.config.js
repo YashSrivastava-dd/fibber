@@ -89,6 +89,10 @@ module.exports = {
           '0%': { transform: 'translateX(0%)' },
           '100%': { transform: 'translateX(-50%)' },
         },
+        'marquee-text-reverse': {
+          '0%': { transform: 'translateX(-50%)' },
+          '100%': { transform: 'translateX(0%)' },
+        },
         'marquee-brands': {
           '0%': { transform: 'translateX(0%)' },
           '100%': { transform: 'translateX(-50%)' },
@@ -99,6 +103,7 @@ module.exports = {
         'accordion-up': 'accordion-up 0.2s ease-out',
         marquee: 'marquee 30s linear infinite',
         'marquee-text': 'marquee-text 20s linear infinite',
+        'marquee-text-reverse': 'marquee-text-reverse 20s linear infinite',
         'marquee-brands': 'marquee-brands 25s linear infinite',
       },
     },

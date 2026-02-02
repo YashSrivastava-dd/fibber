@@ -44,15 +44,12 @@ export default function Header() {
 
   return (
     <>
-      {/* Announcement Bar Marquee */}
+      {/* Announcement Bar - Single Marquee */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-black py-2 overflow-hidden">
         <div className="flex animate-marquee-text whitespace-nowrap">
-          {[...Array(20)].map((_, i) => ( 
-            <span 
-              key={i} 
-              className="text-xs md:text-sm text-white mx-8 tracking-wider flex-shrink-0"
-            >
-              Free shipping on US orders over $100
+          {[...Array(20)].map((_, i) => (
+            <span key={i} className="text-xs md:text-sm text-white mx-8 tracking-wider flex-shrink-0">
+              Same Day Delivery Across Major Metros &nbsp;&nbsp;•&nbsp;&nbsp; Free Shipping Pan India
             </span>
           ))}
         </div>
