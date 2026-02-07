@@ -67,6 +67,7 @@ type OrderNode = {
 interface OrdersQueryResponse {
   orders: {
     edges: Array<{ node: OrderNode }>
+    pageInfo?: { hasNextPage: boolean; endCursor: string | null }
   }
 }
 
@@ -184,6 +185,7 @@ export async function GET(request: NextRequest) {
           variables: {
             query: emailQuery,
             first: 50,
+            after: null,
           },
         })
         byEmail = emailData.orders.edges.map((e) => e.node)
@@ -194,15 +196,16 @@ export async function GET(request: NextRequest) {
         console.warn('Orders by email query failed (non-fatal):', emailErr?.message)
       }
 
-      // 2) Fetch recent orders and filter by phone
-      const recentData = await shopifyAdminFetch<OrdersQueryResponse>({
-        query: ORDERS_BY_EMAIL_QUERY,
-        variables: { query: 'status:any', first: 100 },
-      })
+      // 2) Fetch recent orders with pagination and filter by phone (so we get all matches, not just from first 100)
+      const PAGE_SIZE = 100
+      const MAX_PAGES = 10 // cap at 1000 orders to avoid long runs
+      let byPhone: OrderNode[] = []
+      let cursor: string | null = null
+      let pageCount = 0
+      let lastRecentPage: OrdersQueryResponse['orders'] | null = null
 
-      const byPhone = recentData.orders.edges
-        .map((edge) => edge.node)
-        .filter((order) => {
+      const filterByPhone = (nodes: OrderNode[]) =>
+        nodes.filter((order) => {
           const orderPhones = [
             order.phone,
             order.shippingAddress?.phone ?? null,
@@ -218,8 +221,29 @@ export async function GET(request: NextRequest) {
           )
         })
 
+      while (pageCount < MAX_PAGES) {
+        const recentData: OrdersQueryResponse = await shopifyAdminFetch<OrdersQueryResponse>({
+          query: ORDERS_BY_EMAIL_QUERY,
+          variables: {
+            query: 'status:any',
+            first: PAGE_SIZE,
+            after: cursor,
+          },
+        })
+        lastRecentPage = recentData.orders
+        const nodes = recentData.orders.edges.map((edge: { node: OrderNode }) => edge.node)
+        const matches = filterByPhone(nodes)
+        byPhone = byPhone.concat(matches)
+        pageCount += 1
+        const pageInfo: { hasNextPage: boolean; endCursor: string | null } | undefined =
+          recentData.orders.pageInfo
+        const hasNextPage = pageInfo?.hasNextPage === true && pageInfo?.endCursor
+        if (!hasNextPage || nodes.length === 0) break
+        cursor = pageInfo!.endCursor
+      }
+
       if (byPhone.length > 0) {
-        console.log(`📱 Found ${byPhone.length} order(s) by phone`)
+        console.log(`📱 Found ${byPhone.length} order(s) by phone (scanned ${pageCount} page(s))`)
       }
 
       // Merge and dedupe by order id, sort by createdAt desc
@@ -234,8 +258,8 @@ export async function GET(request: NextRequest) {
 
       const filteredOrders = merged.map(orderToResult)
 
-      if (filteredOrders.length === 0 && recentData.orders.edges.length > 0) {
-        recentData.orders.edges.slice(0, 5).forEach((edge, i) => {
+      if (filteredOrders.length === 0 && (lastRecentPage?.edges.length ?? 0) > 0) {
+        lastRecentPage!.edges.slice(0, 5).forEach((edge: { node: OrderNode }) => {
           const o = edge.node
           const phones = [
             o.phone,

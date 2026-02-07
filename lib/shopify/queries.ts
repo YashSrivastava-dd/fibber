@@ -544,9 +544,10 @@ export const CUSTOMER_ORDERS_QUERY = `
 // Admin API: Orders lookup by generic search query
 // Note: Despite the name, this query can be used with any supported
 // Shopify order search string (email, status, etc.).
+// Pass $after for cursor-based pagination.
 export const ORDERS_BY_EMAIL_QUERY = `
-  query OrdersByQuery($query: String!, $first: Int!) {
-    orders(first: $first, query: $query, sortKey: CREATED_AT, reverse: true) {
+  query OrdersByQuery($query: String!, $first: Int!, $after: String) {
+    orders(first: $first, query: $query, sortKey: CREATED_AT, reverse: true, after: $after) {
       edges {
         node {
           id
@@ -601,6 +602,10 @@ export const ORDERS_BY_EMAIL_QUERY = `
             }
           }
         }
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
       }
     }
   }
