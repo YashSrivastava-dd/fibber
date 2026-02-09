@@ -24,7 +24,6 @@ export default function AccountDetailsPage() {
   const [displayName, setDisplayName] = useState('')
 
   const displayPhone = profile?.phone ?? phone ?? ''
-  const displayEmail = profile?.systemEmail ?? (uid ? `${uid}@fiberisefit.com` : '')
 
   useEffect(() => {
     let cancelled = false
@@ -159,18 +158,6 @@ export default function AccountDetailsPage() {
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
             className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 focus:border-gray-900 focus:ring-1 focus:ring-gray-900"
-          />
-        </div>
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-            Email address (read-only)
-          </label>
-          <input
-            id="email"
-            type="email"
-            value={displayEmail}
-            readOnly
-            className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2.5 text-gray-500 cursor-not-allowed"
           />
         </div>
         <div>

@@ -9,7 +9,6 @@ import ImageTextSection from '@/components/sections/ImageTextSection'
 import JourneySection from '@/components/sections/JourneySection'
 import RitualSection from '@/components/sections/RitualSection'
 import EmpoweringSection from '@/components/sections/EmpoweringSection'
-import BlogSection from '@/components/sections/BlogSection'
 import FullWidthVideoSection from '@/components/sections/FullWidthVideoSection'
 import TestimonialCarouselSection from '@/components/sections/TestimonialCarouselSection'
 
@@ -28,7 +27,6 @@ export default function Home() {
       <RitualSection />
       <EnergyResetSection />
       <EmpoweringSection />
-      <BlogSection />
       <FullWidthVideoSection />
       <TestimonialCarouselSection />
     </div>
