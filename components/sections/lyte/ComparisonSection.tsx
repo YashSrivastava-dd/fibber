@@ -20,16 +20,6 @@ const comparisonData = [
     competitor: 'Upto 42 hours',
     isText: true,
   },
-  {
-    feature: 'Weight',
-    lyte: true,
-    competitor: true,
-  },
-  {
-    feature: 'Stress',
-    lyte: true,
-    competitor: false,
-  },
 ]
 
 export default function ComparisonSection() {
