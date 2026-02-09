@@ -583,6 +583,16 @@ export const ORDERS_BY_EMAIL_QUERY = `
             country
             phone
           }
+          billingAddress {
+            name
+            address1
+            address2
+            city
+            province
+            zip
+            country
+            phone
+          }
           lineItems(first: 50) {
             edges {
               node {

@@ -52,6 +52,16 @@ type OrderNode = {
     country: string | null
     phone: string | null
   } | null
+  billingAddress: {
+    name: string | null
+    address1: string | null
+    address2: string | null
+    city: string | null
+    province: string | null
+    zip: string | null
+    country: string | null
+    phone: string | null
+  } | null
   lineItems: {
     edges: Array<{
       node: {
@@ -97,6 +107,18 @@ function orderToResult(order: OrderNode) {
           zip: order.shippingAddress.zip,
           country: order.shippingAddress.country,
           phone: order.shippingAddress.phone,
+        }
+      : null,
+    billingAddress: order.billingAddress
+      ? {
+          name: order.billingAddress.name,
+          address1: order.billingAddress.address1,
+          address2: order.billingAddress.address2,
+          city: order.billingAddress.city,
+          province: order.billingAddress.province,
+          zip: order.billingAddress.zip,
+          country: order.billingAddress.country,
+          phone: order.billingAddress.phone,
         }
       : null,
     items: order.lineItems.edges.map((itemEdge) => ({

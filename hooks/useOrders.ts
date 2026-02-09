@@ -1,10 +1,78 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useAuth } from '@/contexts/AuthContext'
 import type { Order } from '@/lib/orders/types'
+
+/** Shape returned by GET /api/orders */
+interface ApiOrder {
+  id: string
+  orderNumber: string
+  email: string | null
+  createdAt: string
+  status: string
+  financialStatus: string
+  totalAmount: number
+  currencyCode: string
+  contactPhone: string | null
+  shippingAddress: {
+    name: string | null
+    address1: string | null
+    address2: string | null
+    city: string | null
+    province: string | null
+    zip: string | null
+    country: string | null
+    phone: string | null
+  } | null
+  billingAddress: {
+    name: string | null
+    address1: string | null
+    address2: string | null
+    city: string | null
+    province: string | null
+    zip: string | null
+    country: string | null
+    phone: string | null
+  } | null
+  items: { title: string; quantity: number; price: number; image?: string }[]
+}
+
+function mapApiOrderToOrder(api: ApiOrder): Order {
+  return {
+    id: api.id,
+    name: api.orderNumber,
+    date: api.createdAt,
+    total: api.totalAmount,
+    currency: api.currencyCode,
+    paymentStatus: api.financialStatus?.toUpperCase() || 'PENDING',
+    fulfillmentStatus: api.status?.toUpperCase() || 'UNFULFILLED',
+    items: api.items.map((i) => ({ title: i.title, quantity: i.quantity, price: i.price })),
+  }
+}
+
+export interface OrderWithDetails extends Order {
+  email: string | null
+  contactPhone: string | null
+  shippingAddress: ApiOrder['shippingAddress']
+  billingAddress: ApiOrder['billingAddress']
+  items: { title: string; quantity: number; price: number; image?: string }[]
+}
+
+export function mapApiOrderToOrderWithDetails(api: ApiOrder): OrderWithDetails {
+  return {
+    ...mapApiOrderToOrder(api),
+    email: api.email,
+    contactPhone: api.contactPhone,
+    shippingAddress: api.shippingAddress,
+    billingAddress: api.billingAddress,
+    items: api.items,
+  }
+}
 
 interface UseOrdersResult {
   orders: Order[]
+  rawOrders: ApiOrder[]
   loading: boolean
   error: string | null
   hasNextPage: boolean
@@ -12,7 +80,9 @@ interface UseOrdersResult {
 }
 
 export function useOrders(): UseOrdersResult {
+  const { getIdToken } = useAuth()
   const [orders, setOrders] = useState<Order[]>([])
+  const [rawOrders, setRawOrders] = useState<ApiOrder[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [cursor, setCursor] = useState<string | null>(null)
@@ -28,14 +98,29 @@ export function useOrders(): UseOrdersResult {
       }
       setError(null)
 
+      const token = await getIdToken()
+      if (!token) {
+        setOrders([])
+        setRawOrders([])
+        setError('Not authenticated')
+        setLoading(false)
+        setLoadingMore(false)
+        return
+      }
+
       const url = new URL('/api/orders', window.location.origin)
       if (after) {
         url.searchParams.set('cursor', after)
       }
 
-      const res = await fetch(url.toString(), { method: 'GET' })
+      const res = await fetch(url.toString(), {
+        method: 'GET',
+        headers: { Authorization: `Bearer ${token}` },
+      })
+
       if (res.status === 401) {
         setOrders([])
+        setRawOrders([])
         setHasNextPage(false)
         setCursor(null)
         setError('Not authenticated')
@@ -43,14 +128,16 @@ export function useOrders(): UseOrdersResult {
       }
 
       const data = await res.json()
-
-      const newOrders: Order[] = data.orders || []
+      const apiOrders: ApiOrder[] = data.orders || []
+      const mapped = apiOrders.map(mapApiOrderToOrder)
       const pageInfo = data.pageInfo || { hasNextPage: false, endCursor: null }
 
       if (after) {
-        setOrders((prev) => [...prev, ...newOrders])
+        setOrders((prev) => [...prev, ...mapped])
+        setRawOrders((prev) => [...prev, ...apiOrders])
       } else {
-        setOrders(newOrders)
+        setOrders(mapped)
+        setRawOrders(apiOrders)
       }
 
       setHasNextPage(!!pageInfo.hasNextPage)
@@ -74,6 +161,5 @@ export function useOrders(): UseOrdersResult {
     }
   }
 
-  return { orders, loading, error, hasNextPage, loadMore }
+  return { orders, rawOrders, loading, error, hasNextPage, loadMore }
 }
-
