@@ -9,12 +9,40 @@ export default function ContactPage() {
     subject: '',
     message: '',
   })
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const [feedbackMessage, setFeedbackMessage] = useState('')
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Dummy submit - just show alert
-    alert('Thank you for your message! We will get back to you soon.')
-    setFormData({ name: '', email: '', subject: '', message: '' })
+    if (status === 'loading') return
+
+    setStatus('loading')
+    setFeedbackMessage('')
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      })
+
+      const data = await res.json().catch(() => ({}))
+
+      if (!res.ok) {
+        setStatus('error')
+        setFeedbackMessage(data.error || 'Something went wrong. Please try again.')
+        return
+      }
+
+      setStatus('success')
+      setFeedbackMessage(
+        data.message || 'Thank you for your message! We will get back to you soon.'
+      )
+      setFormData({ name: '', email: '', subject: '', message: '' })
+    } catch {
+      setStatus('error')
+      setFeedbackMessage('Something went wrong. Please try again.')
+    }
   }
 
   return (
@@ -96,11 +124,21 @@ export default function ContactPage() {
 
               <button
                 type="submit"
-                className="w-full bg-black text-white py-4 font-semibold uppercase tracking-wider hover:bg-gray-800 transition-colors"
+                disabled={status === 'loading'}
+                className="w-full bg-black text-white py-4 font-semibold uppercase tracking-wider hover:bg-gray-800 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                Send Message
+                {status === 'loading' ? 'Sending…' : 'Send Message'}
               </button>
             </form>
+            {feedbackMessage && (
+              <p
+                className={`mt-4 text-sm ${
+                  status === 'success' ? 'text-green-600' : 'text-red-600'
+                }`}
+              >
+                {feedbackMessage}
+              </p>
+            )}
           </div>
 
           {/* Contact Information */}
