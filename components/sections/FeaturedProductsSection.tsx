@@ -34,7 +34,7 @@ export default function FeaturedProductsSection() {
     async function fetchProducts() {
       try {
         console.log('FeaturedProductsSection: Fetching products...')
-        const response = await fetch('/api/shopify/products?first=10')
+        const response = await fetch('/api/shopify/products?all=true')
         
         if (!response.ok) {
           console.error('FeaturedProductsSection: API response not OK:', response.status)

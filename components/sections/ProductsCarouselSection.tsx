@@ -34,7 +34,7 @@ export default function ProductsCarouselSection() {
     async function fetchProducts() {
       try {
         console.log('ProductsCarouselSection: Fetching products...')
-        const response = await fetch('/api/shopify/products?first=10')
+        const response = await fetch('/api/shopify/products?all=true')
         
         if (!response.ok) {
           console.error('ProductsCarouselSection: API response not OK:', response.status)
