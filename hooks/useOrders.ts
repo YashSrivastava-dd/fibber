@@ -4,6 +4,13 @@ import { useEffect, useState } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import type { Order } from '@/lib/orders/types'
 
+/** Single tracking entry from fulfillments */
+export interface ApiOrderTracking {
+  company: string | null
+  number: string | null
+  url: string | null
+}
+
 /** Shape returned by GET /api/orders */
 interface ApiOrder {
   id: string
@@ -15,6 +22,8 @@ interface ApiOrder {
   totalAmount: number
   currencyCode: string
   contactPhone: string | null
+  deliveryStatus?: string | null
+  tracking?: ApiOrderTracking[]
   shippingAddress: {
     name: string | null
     address1: string | null
@@ -54,6 +63,8 @@ function mapApiOrderToOrder(api: ApiOrder): Order {
 export interface OrderWithDetails extends Order {
   email: string | null
   contactPhone: string | null
+  deliveryStatus?: string | null
+  tracking?: ApiOrderTracking[]
   shippingAddress: ApiOrder['shippingAddress']
   billingAddress: ApiOrder['billingAddress']
   items: { title: string; quantity: number; price: number; image?: string }[]
@@ -64,6 +75,8 @@ export function mapApiOrderToOrderWithDetails(api: ApiOrder): OrderWithDetails {
     ...mapApiOrderToOrder(api),
     email: api.email,
     contactPhone: api.contactPhone,
+    deliveryStatus: api.deliveryStatus ?? null,
+    tracking: api.tracking ?? [],
     shippingAddress: api.shippingAddress,
     billingAddress: api.billingAddress,
     items: api.items,

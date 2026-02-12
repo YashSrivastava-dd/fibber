@@ -25,6 +25,17 @@ function phonesMatch(userDigits: string, orderDigits: string): boolean {
   return false
 }
 
+type FulfillmentTrackingInfo = {
+  company: string | null
+  number: string | null
+  url: string | null
+}
+
+type FulfillmentNode = {
+  displayStatus: string | null
+  trackingInfo?: { first?: number } | Array<FulfillmentTrackingInfo>
+}
+
 type OrderNode = {
   id: string
   name: string
@@ -34,6 +45,7 @@ type OrderNode = {
   displayFulfillmentStatus: string | null
   displayFinancialStatus: string | null
   totalPriceSet: { shopMoney: { amount: string; currencyCode: string } }
+  fulfillments?: FulfillmentNode[] | { edges?: Array<{ node: FulfillmentNode }> }
   customer: {
     id: string
     email: string | null
@@ -81,7 +93,46 @@ interface OrdersQueryResponse {
   }
 }
 
+function getFulfillmentsList(order: OrderNode): FulfillmentNode[] {
+  const raw = order.fulfillments
+  if (!raw) return []
+  if (Array.isArray(raw)) return raw
+  return (raw.edges ?? []).map((e) => e.node)
+}
+
+function getTrackingFromFulfillments(fulfillments: FulfillmentNode[]): FulfillmentTrackingInfo[] {
+  const out: FulfillmentTrackingInfo[] = []
+  for (const f of fulfillments) {
+    const ti = f.trackingInfo
+    if (!ti) continue
+    const list = Array.isArray(ti) ? ti : (ti as { edges?: Array<{ node: FulfillmentTrackingInfo }> }).edges?.map((e) => e.node) ?? []
+    for (const t of list) {
+      if (t && (t.number || t.company)) {
+        out.push({
+          company: t.company ?? null,
+          number: t.number ?? null,
+          url: t.url ?? null,
+        })
+      }
+    }
+  }
+  return out
+}
+
+function getDeliveryStatus(order: OrderNode): string {
+  const fulfillments = getFulfillmentsList(order)
+  const tracking = getTrackingFromFulfillments(fulfillments)
+  const firstStatus = fulfillments[0]?.displayStatus
+  if (firstStatus) return firstStatus
+  if (tracking.length > 0) return 'Tracking added'
+  return ''
+}
+
 function orderToResult(order: OrderNode) {
+  const fulfillments = getFulfillmentsList(order)
+  const tracking = getTrackingFromFulfillments(fulfillments)
+  const deliveryStatus = getDeliveryStatus(order)
+
   return {
     id: order.id,
     orderNumber: order.name,
@@ -127,6 +178,8 @@ function orderToResult(order: OrderNode) {
       price: parseFloat(itemEdge.node.originalUnitPriceSet.shopMoney.amount),
       image: itemEdge.node.image?.url || '',
     })),
+    deliveryStatus: deliveryStatus || null,
+    tracking: tracking.length > 0 ? tracking : [],
   }
 }
 

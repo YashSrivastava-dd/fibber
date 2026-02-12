@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useOrders } from '@/hooks/useOrders'
@@ -10,6 +11,8 @@ export default function OrderDetailPage() {
   const { rawOrders, loading, error } = useOrders()
   const orderId = typeof params?.id === 'string' ? decodeURIComponent(params.id) : ''
   const order = rawOrders.find((o) => o.id === orderId)
+
+  const [inlineTrackingUrl, setInlineTrackingUrl] = useState<string | null>(null)
 
   const formatDate = (dateStr: string) => {
     try {
@@ -88,13 +91,50 @@ export default function OrderDetailPage() {
         currently <strong>{displayStatus}</strong>.
       </p>
 
-      {/* Shipping / tracking placeholder – can be filled when API supports it */}
+      {/* Delivery status and tracking */}
       {(order.status === 'FULFILLED' || order.status === 'fulfilled') && !isRefunded && (
         <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6">
-          <p className="text-gray-700 font-medium">Your order has been shipped.</p>
+          <p className="text-gray-700 font-medium">
+            {order.deliveryStatus || 'Your order has been shipped.'}
+          </p>
           <p className="text-sm text-gray-600 mt-1">
             Dispatched on: {formatShortDate(order.createdAt)}
           </p>
+          {order.tracking && order.tracking.length > 0 && (
+            <div className="mt-4 pt-3 border-t border-gray-200 space-y-2">
+              <p className="text-sm font-semibold text-gray-900">Tracking</p>
+              {order.tracking.map((t, idx) => (
+                <div key={idx} className="flex flex-wrap items-center gap-2 text-sm">
+                  {t.company && <span className="text-gray-600">{t.company}</span>}
+                  {t.number && (
+                    <span className="font-mono text-gray-800">
+                      {t.url ? (
+                        <a
+                          href={t.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:underline"
+                        >
+                          {t.number}
+                        </a>
+                      ) : (
+                        t.number
+                      )}
+                    </span>
+                  )}
+                  {t.url && (
+                    <button
+                      type="button"
+                      onClick={() => setInlineTrackingUrl(t.url!)}
+                      className="inline-flex px-2 py-1 rounded bg-black text-white text-xs font-medium hover:bg-gray-800"
+                    >
+                      Track
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
 
@@ -216,6 +256,30 @@ export default function OrderDetailPage() {
       >
         Go Back
       </Link>
+
+      {inlineTrackingUrl && (
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40">
+          <div className="relative w-full max-w-3xl mx-4 bg-white rounded-lg shadow-xl overflow-hidden">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200">
+              <p className="text-sm font-medium text-gray-900">Live shipment tracking</p>
+              <button
+                type="button"
+                onClick={() => setInlineTrackingUrl(null)}
+                className="text-sm text-gray-500 hover:text-gray-800"
+              >
+                Close
+              </button>
+            </div>
+            <div className="bg-gray-50 border-t border-gray-200">
+              <iframe
+                src={inlineTrackingUrl}
+                className="w-full h-[520px]"
+                loading="lazy"
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

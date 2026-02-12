@@ -611,6 +611,14 @@ export const ORDERS_BY_EMAIL_QUERY = `
               }
             }
           }
+          fulfillments {
+            displayStatus
+            trackingInfo(first: 5) {
+              company
+              number
+              url
+            }
+          }
         }
       }
       pageInfo {

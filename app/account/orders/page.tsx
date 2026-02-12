@@ -82,6 +82,7 @@ export default function AccountOrdersPage() {
                   <th className="text-left py-3 px-2 font-semibold text-gray-900">Order</th>
                   <th className="text-left py-3 px-2 font-semibold text-gray-900">Date</th>
                   <th className="text-left py-3 px-2 font-semibold text-gray-900">Status</th>
+                  <th className="text-left py-3 px-2 font-semibold text-gray-900">Delivery</th>
                   <th className="text-left py-3 px-2 font-semibold text-gray-900">Total</th>
                   <th className="text-center py-3 px-2 font-semibold text-gray-900">Actions</th>
                 </tr>
@@ -110,6 +111,14 @@ export default function AccountOrdersPage() {
                         >
                           {refunded ? 'Refunded' : formatStatus(order.status)}
                         </span>
+                      </td>
+                      <td className="py-4 px-2 text-gray-600">
+                        {order.deliveryStatus || (order.tracking?.length ? 'Tracking added' : '—')}
+                        {order.tracking?.length ? (
+                          <span className="block text-xs text-gray-500 mt-0.5">
+                            {order.tracking[0].number ?? order.tracking[0].company ?? ''}
+                          </span>
+                        ) : null}
                       </td>
                       <td className="py-4 px-2 text-gray-700">
                         {refunded ? (
