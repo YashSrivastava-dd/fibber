@@ -3,16 +3,21 @@
 import { useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { useAuth } from '@/contexts/AuthContext'
 import { useOrders } from '@/hooks/useOrders'
+import { FileDown } from 'lucide-react'
 
 export default function OrderDetailPage() {
   const params = useParams()
   const router = useRouter()
+  const { getIdToken } = useAuth()
   const { rawOrders, loading, error } = useOrders()
   const orderId = typeof params?.id === 'string' ? decodeURIComponent(params.id) : ''
   const order = rawOrders.find((o) => o.id === orderId)
 
   const [inlineTrackingUrl, setInlineTrackingUrl] = useState<string | null>(null)
+  const [invoiceLoading, setInvoiceLoading] = useState(false)
+  const [invoiceError, setInvoiceError] = useState<string | null>(null)
 
   const formatDate = (dateStr: string) => {
     try {
@@ -75,6 +80,37 @@ export default function OrderDetailPage() {
 
   const orderNumber = order.orderNumber?.replace(/^#/, '') || order.id
   const isRefunded = order.financialStatus?.toUpperCase() === 'REFUNDED'
+
+  const handleDownloadInvoice = async () => {
+    setInvoiceError(null)
+    setInvoiceLoading(true)
+    try {
+      const token = await getIdToken()
+      if (!token) {
+        setInvoiceError('Please sign in again.')
+        return
+      }
+      const res = await fetch(
+        `/api/shiprocket/invoice?orderNumber=${encodeURIComponent(orderNumber)}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      const data = await res.json()
+      if (!res.ok) {
+        setInvoiceError(data?.error ?? 'Could not get invoice')
+        return
+      }
+      if (data?.url) {
+        window.open(data.url, '_blank', 'noopener,noreferrer')
+      } else {
+        setInvoiceError('No invoice URL returned')
+      }
+    } catch (e) {
+      setInvoiceError(e instanceof Error ? e.message : 'Failed to download invoice')
+    } finally {
+      setInvoiceLoading(false)
+    }
+  }
+
   const subtotal = order.items?.reduce(
     (sum, i) => sum + (i.price || 0) * (i.quantity || 1),
     0
@@ -250,12 +286,26 @@ export default function OrderDetailPage() {
         </div>
       )}
 
-      <Link
-        href="/account/orders"
-        className="inline-flex px-4 py-2 rounded-lg border border-gray-300 font-medium text-gray-700 hover:bg-gray-50 transition-colors"
-      >
-        Go Back
-      </Link>
+      <div className="flex flex-wrap items-center gap-3">
+        <button
+          type="button"
+          onClick={handleDownloadInvoice}
+          disabled={invoiceLoading}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 font-medium text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <FileDown className="w-4 h-4" />
+          {invoiceLoading ? 'Loading…' : 'Download invoice'}
+        </button>
+        <Link
+          href="/account/orders"
+          className="inline-flex px-4 py-2 rounded-lg border border-gray-300 font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+        >
+          Go Back
+        </Link>
+      </div>
+      {invoiceError && (
+        <p className="mt-2 text-sm text-red-600">{invoiceError}</p>
+      )}
 
       {inlineTrackingUrl && (
         <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40">
