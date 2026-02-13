@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { X, Plus, Minus, ShoppingBag } from 'lucide-react'
+import { X, Plus, Minus, ShoppingBag, Tag, Loader2, Check } from 'lucide-react'
 import { useCartStore } from '@/store/cartStore'
 import { useAuth } from '@/contexts/AuthContext'
 import OTPModal from '@/components/OTPModal'
@@ -14,6 +14,22 @@ export default function CartDrawer() {
   const { isAuthenticated, getIdToken, loading: authLoading } = useAuth()
   const [isOTPModalOpen, setIsOTPModalOpen] = useState(false)
   const [isProcessingCheckout, setIsProcessingCheckout] = useState(false)
+  const [promoCode, setPromoCode] = useState('')
+  const [promoApplied, setPromoApplied] = useState(false)
+  const [promoError, setPromoError] = useState<string | null>(null)
+  const [pendingCheckoutUrl, setPendingCheckoutUrl] = useState<string | null>(null)
+
+  const handleApplyPromo = () => {
+    const code = promoCode.trim()
+    if (!code) {
+      setPromoError('Enter a promotion code')
+      setPromoApplied(false)
+      return
+    }
+    setPromoError(null)
+    setPromoApplied(true)
+    setPendingCheckoutUrl(null)
+  }
 
   const handleCheckout = async () => {
     if (!isAuthenticated) {
@@ -45,24 +61,31 @@ export default function CartDrawer() {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ items: cartItems }),
+        body: JSON.stringify({
+          items: cartItems,
+          discountCode: promoCode.trim() || undefined,
+        }),
       })
 
+      const data = await response.json().catch(() => ({}))
+
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}))
-        const errorMessage = errorData.error || 'Failed to create checkout'
-        
-        // If variant doesn't exist, suggest clearing cart
+        const errorMessage = data.error || 'Failed to create checkout'
         if (errorMessage.includes('does not exist') || errorMessage.includes('no longer available')) {
           throw new Error(
             `${errorMessage}\n\nPlease clear your cart and add products fresh from the Shop page.`
           )
         }
-        
         throw new Error(errorMessage)
       }
 
-      const { checkoutUrl } = await response.json()
+      const { checkoutUrl, discountError } = data
+
+      if (discountError) {
+        setPromoError(discountError)
+        setPendingCheckoutUrl(checkoutUrl || null)
+        return
+      }
 
       if (checkoutUrl) {
         closeCart()
@@ -180,12 +203,69 @@ export default function CartDrawer() {
           {/* Footer */}
           {items.length > 0 && (
             <div className="border-t border-gray-200 p-6 space-y-4">
+              {/* Promotion code */}
+              <div className="space-y-1">
+                <label htmlFor="cart-promo" className="text-sm font-medium text-gray-700 flex items-center gap-1.5">
+                  <Tag className="w-4 h-4" />
+                  Promotion code
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    id="cart-promo"
+                    type="text"
+                    value={promoCode}
+                    onChange={(e) => {
+                      setPromoCode(e.target.value.toUpperCase())
+                      setPromoError(null)
+                      setPromoApplied(false)
+                      setPendingCheckoutUrl(null)
+                    }}
+                    placeholder="e.g. FYBER10"
+                    disabled={isProcessingCheckout}
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-black focus:border-transparent disabled:bg-gray-50 disabled:text-gray-500"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleApplyPromo}
+                    disabled={isProcessingCheckout || !promoCode.trim()}
+                    className="px-4 py-2 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-800 hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+                  >
+                    Apply
+                  </button>
+                </div>
+                {promoApplied && promoCode.trim() && (
+                  <p className="text-xs text-green-700 flex items-center gap-1.5 animate-in fade-in slide-in-from-top-1 duration-300">
+                    <Check className="w-3.5 h-3.5 flex-shrink-0" />
+                    <span className="animate-pulse">Code <strong>{promoCode.trim()}</strong> will be applied at checkout.</span>
+                  </p>
+                )}
+                {promoError && (
+                  <p className="text-xs text-red-600 animate-in fade-in duration-200">{promoError}</p>
+                )}
+                {pendingCheckoutUrl && (
+                  <div className="flex flex-col gap-2">
+                    <p className="text-xs text-amber-700">Code not applied. You can continue without it.</p>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (pendingCheckoutUrl) {
+                          closeCart()
+                          window.location.href = pendingCheckoutUrl
+                        }
+                      }}
+                      className="text-sm font-medium text-black underline hover:no-underline"
+                    >
+                      Continue to checkout anyway
+                    </button>
+                  </div>
+                )}
+              </div>
               <div className="flex justify-between text-lg font-semibold">
                 <span>Subtotal</span>
                 <span>₹{getTotal().toFixed(2)}</span>
               </div>
               <p className="text-xs text-gray-500">
-                Shipping and discounts calculated at checkout.
+                Shipping and discounts applied at checkout.
               </p>
               <p className="text-xs text-gray-600">
                 Keep the pre-filled email at checkout so your order appears in Order History.
@@ -193,13 +273,21 @@ export default function CartDrawer() {
               <button
                 onClick={handleCheckout}
                 disabled={isProcessingCheckout || authLoading}
-                className="block w-full bg-black text-white text-center py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex items-center justify-center gap-2 w-full bg-black text-white text-center py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isProcessingCheckout
-                  ? 'Processing...'
-                  : authLoading
-                  ? 'Loading...'
-                  : 'Checkout'}
+                {isProcessingCheckout ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin flex-shrink-0" aria-hidden />
+                    <span className="animate-pulse">Applying promotion code...</span>
+                  </>
+                ) : authLoading ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin flex-shrink-0" aria-hidden />
+                    <span>Loading...</span>
+                  </>
+                ) : (
+                  'Checkout'
+                )}
               </button>
               <Link
                 href="/collections/all"

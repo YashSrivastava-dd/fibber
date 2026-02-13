@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { adminAuth, adminDb, isAdminInitialized, getInitError } from '@/lib/firebase/admin'
 import { shopifyFetch } from '@/lib/shopify/client'
-import { CART_CREATE_MUTATION, CART_UPDATE_MUTATION, PRODUCT_BY_HANDLE_QUERY } from '@/lib/shopify/queries'
+import { CART_CREATE_MUTATION, CART_UPDATE_MUTATION, CART_DISCOUNT_CODES_UPDATE_MUTATION } from '@/lib/shopify/queries'
 
 export const dynamic = 'force-dynamic'
 
@@ -74,9 +74,9 @@ export async function POST(request: NextRequest) {
     const userData = userDoc.data()
     const systemEmail = userData?.systemEmail || `${firebaseUid}@fiberisefit.com`
 
-    // Get cart items from request body
+    // Get cart items and optional discount code from request body
     const body = await request.json()
-    const { items }: { items: CartItem[] } = body
+    const { items, discountCode }: { items: CartItem[]; discountCode?: string } = body
 
     if (!items || !Array.isArray(items) || items.length === 0) {
       return NextResponse.json(
@@ -196,6 +196,43 @@ export async function POST(request: NextRequest) {
     } catch (error) {
       console.error('Error updating cart attributes:', error)
       // Continue even if attribute update fails
+    }
+
+    // Apply promotion/discount code if provided
+    const discountCodesToApply = discountCode?.trim()
+      ? [discountCode.trim()]
+      : []
+    if (discountCodesToApply.length > 0) {
+      try {
+        const discountResult = await shopifyFetch<{
+          cartDiscountCodesUpdate: {
+            cart: { id: string; checkoutUrl: string }
+            userErrors: Array<{ field: string[]; message: string }>
+          }
+        }>({
+          query: CART_DISCOUNT_CODES_UPDATE_MUTATION,
+          variables: { cartId, discountCodes: discountCodesToApply },
+        })
+        if (discountResult.cartDiscountCodesUpdate.cart?.checkoutUrl) {
+          checkoutUrl = discountResult.cartDiscountCodesUpdate.cart.checkoutUrl
+        }
+        if (discountResult.cartDiscountCodesUpdate.userErrors?.length > 0) {
+          const errMsg = discountResult.cartDiscountCodesUpdate.userErrors
+            .map((e) => e.message)
+            .join(', ')
+          console.warn('Discount code not applied:', errMsg)
+          return NextResponse.json(
+            {
+              checkoutUrl,
+              discountError: errMsg,
+            },
+            { status: 200 }
+          )
+        }
+      } catch (discountError: any) {
+        console.error('Error applying discount code:', discountError)
+        // Continue with checkout without discount
+      }
     }
 
     // Append email to checkout URL if possible (Shopify may use this for pre-filling)

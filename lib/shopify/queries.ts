@@ -278,6 +278,25 @@ export const CART_UPDATE_MUTATION = `
   }
 `
 
+export const CART_DISCOUNT_CODES_UPDATE_MUTATION = `
+  mutation cartDiscountCodesUpdate($cartId: ID!, $discountCodes: [String!]!) {
+    cartDiscountCodesUpdate(cartId: $cartId, discountCodes: $discountCodes) {
+      cart {
+        id
+        checkoutUrl
+        discountCodes {
+          code
+          applicable
+        }
+      }
+      userErrors {
+        field
+        message
+      }
+    }
+  }
+`
+
 export const CART_LINES_ADD_MUTATION = `
   mutation cartLinesAdd($cartId: ID!, $lines: [CartLineInput!]!) {
     cartLinesAdd(cartId: $cartId, lines: $lines) {
