@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { useCartStore } from '@/store/cartStore'
 import { ChevronRight, ChevronLeft, Plus, Minus } from 'lucide-react'
 import VideoSection from '@/components/sections/VideoSection'
+import ProductReviewsSection from '@/components/sections/ProductReviewsSection'
 
 interface ProductVariant {
   id: string
@@ -543,6 +544,12 @@ export default function ProductPage({ slug }: ProductPageProps) {
               <div className="text-sm text-gray-600 mt-4 space-y-1">
                 <p>+10000 Happy Customers · Free shipping Pan India</p>
                 <p className="text-xs text-gray-500">Free delivery · COD available · Easy returns</p>
+                <a
+                  href="#reviews"
+                  className="inline-block text-xs font-medium text-black underline underline-offset-2 hover:no-underline mt-2"
+                >
+                  See ratings &amp; reviews →
+                </a>
               </div>
 
               {/* Payment Icons */}
@@ -816,6 +823,9 @@ export default function ProductPage({ slug }: ProductPageProps) {
           </div>
         </div>
       </section>
+
+      {/* Ratings & Reviews — user can add a review */}
+      <ProductReviewsSection productSlug={product.slug || product.handle} productTitle={product.title} />
 
       {/* Two-image promo section */}
       <section className="w-full bg-white">
