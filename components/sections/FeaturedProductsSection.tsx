@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useCartStore } from '@/store/cartStore'
+import { getProductBadges } from '@/lib/product-badges'
 
 interface Product {
   id: string
@@ -124,14 +125,31 @@ Control Appetite. Refine Weight          </p>
               ref={scrollContainerRef}
               className="flex gap-8 overflow-x-auto scrollbar-hide scroll-smooth pb-4 justify-center px-12"
             >
-              {products.map((product) => (
+              {products.map((product, index) => {
+                const badges = getProductBadges(product, index)
+                return (
                 <div
                   key={product.id}
                   className="flex-shrink-0 w-[300px] md:w-[350px] group"
                 >
-                  {/* Product Image */}
+                  {/* Product Image + top-left tags */}
                   <Link href={`/products/${product.slug}`}>
                     <div className="relative aspect-square bg-white rounded-lg overflow-hidden mb-4">
+                      {/* Tags on top left */}
+                      <div className="absolute top-2 left-2 z-10 flex flex-col gap-1.5 max-w-[70%]">
+                        {badges.map((badge) => (
+                          <span
+                            key={badge.label}
+                            className={`inline-block px-2.5 py-1 text-[10px] sm:text-xs font-semibold uppercase tracking-wider rounded ${
+                              badge.variant === 'primary'
+                                ? 'bg-black text-white'
+                                : 'bg-white/95 border border-gray-300 text-gray-900'
+                            }`}
+                          >
+                            {badge.label}
+                          </span>
+                        ))}
+                      </div>
                       <Image
                         src={product.image || '/placeholder-product.png'}
                         alt={product.title}
@@ -182,7 +200,8 @@ Control Appetite. Refine Weight          </p>
                     </button>
                   </div>
                 </div>
-              ))}
+              )
+              })}
             </div>
 
             {/* Right Arrow */}

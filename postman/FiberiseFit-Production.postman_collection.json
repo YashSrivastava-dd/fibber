@@ -1,0 +1,265 @@
+{
+  "info": {
+    "name": "FiberiseFit Production",
+    "description": "All APIs for https://fiberisefit.com\n\n• No login: Use \"Shopify (no login)\", \"Contact & Newsletter\", \"Tracking webhook\", \"Auth\", \"Checkout branding\".\n• Login required: \"User\", \"Orders\", \"Shiprocket\", \"Checkout create\" — set variable firebaseIdToken.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://fiberisefit.com" },
+    { "key": "firebaseIdToken", "value": "", "type": "string" },
+    { "key": "orderNumber", "value": "1021" },
+    { "key": "webhookSecret", "value": "", "type": "string" },
+    { "key": "productHandle", "value": "7-day-pack" },
+    { "key": "collectionHandle", "value": "all" }
+  ],
+  "item": [
+    {
+      "name": "Shopify (no login)",
+      "description": "All Shopify APIs — no Authorization header needed.",
+      "item": [
+        {
+          "name": "Get products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/shopify/products?first=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "shopify", "products"],
+              "query": [
+                { "key": "first", "value": "20", "description": "Products per page" },
+                { "key": "after", "value": "", "disabled": true, "description": "Cursor for next page" },
+                { "key": "all", "value": "true", "disabled": true, "description": "Fetch all pages" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get product by handle",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/shopify/product/{{productHandle}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "shopify", "product", "{{productHandle}}"]
+            },
+            "description": "Replace productHandle (e.g. 7-day-pack, 30-day-pack, 90-day-pack, lyte)."
+          }
+        },
+        {
+          "name": "Get collection",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/shopify/collections/{{collectionHandle}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "shopify", "collections", "{{collectionHandle}}"],
+              "query": [
+                { "key": "first", "value": "50", "disabled": true },
+                { "key": "after", "value": "", "disabled": true }
+              ]
+            },
+            "description": "Replace collectionHandle (e.g. all, featured)."
+          }
+        },
+        {
+          "name": "Get orders (admin list)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/shopify/orders?maxPages=5",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "shopify", "orders"],
+              "query": [{ "key": "maxPages", "value": "5", "description": "Max pages to fetch" }]
+            },
+            "description": "Returns orders from Shopify Admin API (server-side token)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Contact & Newsletter (no login)",
+      "item": [
+        {
+          "name": "Contact form",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"subject\": \"Inquiry\",\n  \"message\": \"Hello, I have a question.\"\n}\n"
+            },
+            "url": "{{baseUrl}}/api/contact"
+          }
+        },
+        {
+          "name": "Newsletter subscribe",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"subscriber@example.com\"\n}\n"
+            },
+            "url": "{{baseUrl}}/api/newsletter"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tracking webhook (no login)",
+      "item": [
+        {
+          "name": "POST tracking webhook",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "x-api-key", "value": "{{webhookSecret}}", "disabled": true }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"order_id\": \"1373900_1021\",\n  \"awb\": \"19041424751540\",\n  \"courier_name\": \"Delhivery Surface\",\n  \"current_status\": \"IN TRANSIT\",\n  \"shipment_status\": \"IN TRANSIT\",\n  \"scans\": [\n    {\n      \"date\": \"2023-05-19 11:59:16\",\n      \"activity\": \"Manifested - Manifest uploaded\",\n      \"location\": \"Chomu_SamodRd_D (Rajasthan)\",\n      \"sr-status-label\": \"MANIFEST GENERATED\"\n    }\n  ]\n}\n"
+            },
+            "url": "{{baseUrl}}/api/tracking/webhook"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth (no login)",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"customer@example.com\",\n  \"password\": \"your-password\"\n}\n"
+            },
+            "url": "{{baseUrl}}/api/auth/login"
+          }
+        },
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"customer@example.com\",\n  \"password\": \"your-password\",\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\"\n}\n"
+            },
+            "url": "{{baseUrl}}/api/auth/register"
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{baseUrl}}/api/auth/logout"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Checkout (no login for branding)",
+      "item": [
+        {
+          "name": "Checkout branding",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/checkout-branding"
+          }
+        }
+      ]
+    },
+    {
+      "name": "User (login required)",
+      "item": [
+        {
+          "name": "Get profile",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{firebaseIdToken}}" }],
+            "url": "{{baseUrl}}/api/user"
+          }
+        },
+        {
+          "name": "Update profile",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{firebaseIdToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"displayName\": \"John D\"\n}\n"
+            },
+            "url": "{{baseUrl}}/api/user"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders (login required)",
+      "item": [
+        {
+          "name": "Get my orders",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{firebaseIdToken}}" }],
+            "url": "{{baseUrl}}/api/orders"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Shiprocket (login required)",
+      "item": [
+        {
+          "name": "Get invoice URL",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{firebaseIdToken}}" }],
+            "url": "{{baseUrl}}/api/shiprocket/invoice?orderNumber={{orderNumber}}"
+          }
+        },
+        {
+          "name": "Get tracking",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{firebaseIdToken}}" }],
+            "url": "{{baseUrl}}/api/shiprocket/tracking?orderNumber={{orderNumber}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Checkout create (login required)",
+      "item": [
+        {
+          "name": "Create checkout",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{firebaseIdToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lineItems\": [\n    { \"variantId\": \"gid://shopify/ProductVariant/123\", \"quantity\": 1 }\n  ]\n}\n"
+            },
+            "url": "{{baseUrl}}/api/checkout/create"
+          }
+        }
+      ]
+    }
+  ]
+}

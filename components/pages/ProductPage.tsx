@@ -219,6 +219,87 @@ export default function ProductPage({ slug }: ProductPageProps) {
           </div>
         </div>
 
+        {/* Variant carousel + ATC (screenshot format) — when multiple variants */}
+        {product.variants && product.variants.length > 1 && (
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
+            <p className="text-center text-base md:text-lg text-gray-700 mb-8 max-w-2xl mx-auto">
+              A science-driven approach to feeling full, lighter, and in control.
+            </p>
+            <div className="relative">
+              <div className="flex gap-6 overflow-x-auto scrollbar-hide scroll-smooth pb-4 snap-x snap-mandatory justify-center px-2">
+                {product.variants.map((variant) => {
+                  const isSelected = selectedVariant?.id === variant.id
+                  return (
+                    <button
+                      key={variant.id}
+                      type="button"
+                      onClick={() => variant.available && setSelectedVariant(variant)}
+                      disabled={!variant.available}
+                      className={`flex-shrink-0 w-[180px] sm:w-[200px] snap-center rounded-xl border-2 bg-white overflow-hidden transition-all ${
+                        isSelected
+                          ? 'border-black shadow-lg ring-2 ring-black ring-offset-2'
+                          : variant.available
+                          ? 'border-gray-200 hover:border-gray-400'
+                          : 'border-gray-200 opacity-60 cursor-not-allowed'
+                      }`}
+                    >
+                      <div className="relative aspect-[3/4] bg-gray-50">
+                        <Image
+                          src={product.image || '/placeholder-product.png'}
+                          alt={`${product.title} - ${variant.name}`}
+                          fill
+                          className="object-contain p-4"
+                          sizes="200px"
+                        />
+                      </div>
+                      <div className="p-4 text-center">
+                        <p className="text-sm font-semibold text-gray-900">{variant.name}</p>
+                        <p className="text-lg font-bold text-black mt-1">₹{variant.price.toFixed(2)}</p>
+                      </div>
+                    </button>
+                  )
+                })}
+              </div>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6">
+                <div className="flex items-center border border-gray-300 rounded-lg">
+                  <button
+                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                    className="px-4 py-3 hover:bg-gray-100 transition-colors text-gray-800"
+                    aria-label="Decrease quantity"
+                  >
+                    <Minus className="w-4 h-4" />
+                  </button>
+                  <span className="px-6 py-3 font-medium text-gray-900 min-w-[3rem] text-center">
+                    {quantity}
+                  </span>
+                  <button
+                    onClick={() => setQuantity(quantity + 1)}
+                    className="px-4 py-3 hover:bg-gray-100 transition-colors text-gray-800"
+                    aria-label="Increase quantity"
+                  >
+                    <Plus className="w-4 h-4" />
+                  </button>
+                </div>
+                <button
+                  onClick={handleAddToCart}
+                  disabled={!isAvailable}
+                  className={`w-full sm:w-auto min-w-[200px] py-4 px-8 rounded-lg font-semibold text-sm uppercase tracking-wider border-2 transition-colors ${
+                    isAvailable
+                      ? 'border-black text-black bg-white hover:bg-black hover:text-white'
+                      : 'border-gray-300 bg-gray-100 text-gray-500 cursor-not-allowed'
+                  }`}
+                >
+                  {isAvailable ? 'ADD TO CART' : 'OUT OF STOCK'}
+                </button>
+              </div>
+              {/* Trust strip below ATC */}
+              <p className="text-center text-xs text-gray-500 mt-4">
+                Free delivery · COD available · Easy returns
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* Main Product Content - 50/50 Split */}
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 pb-16">
         <div className="flex flex-col lg:flex-row gap-0 lg:items-start">
@@ -426,9 +507,10 @@ export default function ProductPage({ slug }: ProductPageProps) {
                 </button>
               </div>
 
-              {/* Customer and Shipping Info */}
-              <div className="text-sm text-gray-600 mt-4">
-                <p>+10000 Happy Customers | Free shipping on US</p>
+              {/* Trust strip + social proof */}
+              <div className="text-sm text-gray-600 mt-4 space-y-1">
+                <p>+10000 Happy Customers · Free shipping Pan India</p>
+                <p className="text-xs text-gray-500">Free delivery · COD available · Easy returns</p>
               </div>
 
               {/* Payment Icons */}

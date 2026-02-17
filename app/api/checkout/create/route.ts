@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { adminAuth, adminDb, isAdminInitialized, getInitError } from '@/lib/firebase/admin'
 import { shopifyFetch } from '@/lib/shopify/client'
-import { CART_CREATE_MUTATION, CART_UPDATE_MUTATION, CART_DISCOUNT_CODES_UPDATE_MUTATION } from '@/lib/shopify/queries'
+import { CART_CREATE_MUTATION, CART_UPDATE_MUTATION, CART_BUYER_IDENTITY_UPDATE_MUTATION, CART_DISCOUNT_CODES_UPDATE_MUTATION } from '@/lib/shopify/queries'
 
 export const dynamic = 'force-dynamic'
 
@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
     }
 
     const firebaseUid = decodedToken.uid
-    const phone = decodedToken.phone_number
+    const phone = decodedToken.phone_number as string | undefined
 
     if (!firebaseUid) {
       return NextResponse.json(
@@ -198,6 +198,40 @@ export async function POST(request: NextRequest) {
       // Continue even if attribute update fails
     }
 
+    // Set buyer identity (phone) so checkout Contact field is prefilled automatically
+    if (phone && phone.trim()) {
+      const digits = phone.replace(/\D/g, '').slice(-10)
+      if (digits.length >= 10) {
+        const phoneE164 = `+91${digits}`
+        try {
+          const identityResult = await shopifyFetch<{
+            cartBuyerIdentityUpdate: {
+              cart: { id: string; checkoutUrl: string } | null
+              userErrors: Array<{ field: string[]; message: string }>
+            }
+          }>({
+            query: CART_BUYER_IDENTITY_UPDATE_MUTATION,
+            variables: {
+              cartId,
+              buyerIdentity: {
+                phone: phoneE164,
+                countryCode: 'IN',
+              },
+            },
+          })
+          if (identityResult.cartBuyerIdentityUpdate.userErrors?.length > 0) {
+            console.warn('Cart buyer identity update warnings:', identityResult.cartBuyerIdentityUpdate.userErrors)
+          }
+          if (identityResult.cartBuyerIdentityUpdate.cart?.checkoutUrl) {
+            checkoutUrl = identityResult.cartBuyerIdentityUpdate.cart.checkoutUrl
+          }
+        } catch (err) {
+          console.error('Error setting cart buyer identity (phone):', err)
+          // Continue with checkout without phone prefill
+        }
+      }
+    }
+
     // Apply promotion/discount code if provided
     const discountCodesToApply = discountCode?.trim()
       ? [discountCode.trim()]
@@ -235,16 +269,20 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Append email to checkout URL if possible (Shopify may use this for pre-filling)
-    // Note: This is a best-effort approach. Shopify's guest checkout may not support this.
-    if (checkoutUrl && systemEmail) {
+    // Pre-fill only phone on checkout — do not send email (user wants mobile number only).
+    if (checkoutUrl) {
       try {
         const url = new URL(checkoutUrl)
-        url.searchParams.set('email', systemEmail)
+        if (phone && phone.trim()) {
+          const normalizedPhone = phone.replace(/\D/g, '').slice(-10)
+          if (normalizedPhone.length >= 10) {
+            url.searchParams.set('checkout[shipping_address][phone]', normalizedPhone)
+          }
+        }
+        // Intentionally not setting checkout[email] so the contact field is not prefilled with system email.
         checkoutUrl = url.toString()
       } catch (error) {
-        // If URL parsing fails, use original checkoutUrl
-        console.error('Error appending email to checkout URL:', error)
+        console.error('Error appending prefill params to checkout URL:', error)
       }
     }
 

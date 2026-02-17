@@ -111,12 +111,14 @@ export default function CartDrawer() {
         onClick={closeCart}
       />
 
-      {/* Drawer */}
-      <div className="fixed right-0 top-0 bottom-0 w-full sm:w-96 bg-white z-50 shadow-2xl overflow-y-auto">
+      {/* Drawer — width accommodates card layout */}
+      <div className="fixed right-0 top-0 bottom-0 w-full sm:max-w-[420px] sm:w-[420px] bg-[#F5F3EF] z-50 shadow-2xl overflow-y-auto">
         <div className="flex flex-col h-full">
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-gray-200">
-            <h2 className="text-xl font-semibold">Shopping Cart</h2>
+          <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 bg-white">
+            <h2 className="text-lg sm:text-xl font-semibold uppercase tracking-wider text-black">
+              Shopping Cart
+            </h2>
             <button
               onClick={closeCart}
               className="p-2 hover:bg-gray-100 rounded-full transition-colors"
@@ -126,61 +128,89 @@ export default function CartDrawer() {
             </button>
           </div>
 
-          {/* Cart Items */}
-          <div className="flex-1 overflow-y-auto p-6">
+          {/* Cart Items — card format inspired by product card layout */}
+          <div className="flex-1 overflow-y-auto p-4 sm:p-6">
             {items.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-full text-center">
+              <div className="flex flex-col items-center justify-center min-h-[280px] text-center px-4">
                 <ShoppingBag className="w-16 h-16 text-gray-300 mb-4" />
                 <p className="text-gray-500 mb-2">Your cart is empty</p>
                 <Link
                   href="/collections/all"
                   onClick={closeCart}
-                  className="text-black underline"
+                  className="text-black font-medium underline underline-offset-2"
                 >
                   Continue shopping
                 </Link>
               </div>
             ) : (
-              <div className="space-y-6">
+              <div className="space-y-4">
                 {items.map((item) => (
-                  <div key={item.id} className="flex gap-4">
-                    <div className="relative w-20 h-20 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                  <article
+                    key={item.id}
+                    className="rounded-xl border border-gray-200 bg-white overflow-hidden shadow-sm"
+                  >
+                    {/* Product image — prominent top */}
+                    <div className="relative w-full aspect-square max-h-40 sm:max-h-44 bg-gray-50">
                       <Image
                         src={item.image}
                         alt={item.title}
                         fill
-                        className="object-cover"
+                        className="object-contain p-3"
+                        sizes="(max-width: 384px) 100vw, 384px"
                       />
                     </div>
-                    <div className="flex-1">
-                      <h3 className="font-medium text-sm mb-1">{item.title}</h3>
+
+                    {/* Content block — name, descriptor, price, quantity */}
+                    <div className="p-4 space-y-3">
+                      {/* Product name */}
+                      <h3 className="font-semibold text-gray-900 text-sm leading-tight">
+                        {item.title}
+                      </h3>
+
+                      {/* Variant / short descriptor (USP-style line) */}
                       {item.variant && (
-                        <p className="text-xs text-gray-500 mb-2">
+                        <p className="text-xs text-gray-600 border-l-2 border-gray-200 pl-2">
                           {item.variant}
                         </p>
                       )}
-                      <p className="text-sm font-semibold mb-2">
-                        ₹{item.price.toFixed(2)}
+
+                      {/* Trust / benefit line (format only, project copy) */}
+                      <p className="text-xs text-gray-500">
+                        Free shipping · Easy returns
                       </p>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center border border-gray-300 rounded">
+
+                      {/* Price block — unit price + line total */}
+                      <div className="flex flex-wrap items-baseline justify-between gap-2">
+                        <div>
+                          <span className="text-lg font-bold text-black">
+                            ₹{(item.price * item.quantity).toFixed(2)}
+                          </span>
+                          <span className="text-xs text-gray-500 ml-1">
+                            (₹{item.price.toFixed(2)} × {item.quantity})
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Quantity + Remove row — full-width CTA style */}
+                      <div className="flex items-center justify-between gap-2 pt-1 border-t border-gray-100">
+                        <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
                           <button
                             onClick={() =>
                               updateQuantity(item.id, item.quantity - 1)
                             }
-                            className="p-1 hover:bg-gray-100"
+                            className="p-2.5 hover:bg-gray-100 transition-colors text-gray-700"
                             aria-label="Decrease quantity"
                           >
                             <Minus className="w-4 h-4" />
                           </button>
-                          <span className="px-3 py-1 text-sm">
+                          <span className="px-4 py-2 text-sm font-medium text-gray-900 min-w-[2.5rem] text-center">
                             {item.quantity}
                           </span>
                           <button
                             onClick={() =>
                               updateQuantity(item.id, item.quantity + 1)
                             }
-                            className="p-1 hover:bg-gray-100"
+                            className="p-2.5 hover:bg-gray-100 transition-colors text-gray-700"
                             aria-label="Increase quantity"
                           >
                             <Plus className="w-4 h-4" />
@@ -188,25 +218,25 @@ export default function CartDrawer() {
                         </div>
                         <button
                           onClick={() => removeItem(item.id)}
-                          className="text-xs text-gray-500 hover:text-black underline"
+                          className="text-xs font-medium text-gray-500 hover:text-black underline underline-offset-2 transition-colors"
                         >
                           Remove
                         </button>
                       </div>
                     </div>
-                  </div>
+                  </article>
                 ))}
               </div>
             )}
           </div>
 
-          {/* Footer */}
+          {/* Footer — card-style section with full-width CTA */}
           {items.length > 0 && (
-            <div className="border-t border-gray-200 p-6 space-y-4">
-              {/* Promotion code */}
-              <div className="space-y-1">
-                <label htmlFor="cart-promo" className="text-sm font-medium text-gray-700 flex items-center gap-1.5">
-                  <Tag className="w-4 h-4" />
+            <div className="border-t border-gray-200 p-4 sm:p-6 space-y-4 bg-white">
+              {/* Promotion code — labelled block */}
+              <div className="space-y-2">
+                <label htmlFor="cart-promo" className="text-xs font-semibold uppercase tracking-wider text-gray-700 flex items-center gap-1.5">
+                  <Tag className="w-3.5 h-3.5" />
                   Promotion code
                 </label>
                 <div className="flex gap-2">
@@ -222,29 +252,29 @@ export default function CartDrawer() {
                     }}
                     placeholder="e.g. FYBER10"
                     disabled={isProcessingCheckout}
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-black focus:border-transparent disabled:bg-gray-50 disabled:text-gray-500"
+                    className="flex-1 px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-black focus:border-transparent disabled:bg-gray-50 disabled:text-gray-500"
                   />
                   <button
                     type="button"
                     onClick={handleApplyPromo}
                     disabled={isProcessingCheckout || !promoCode.trim()}
-                    className="px-4 py-2 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-800 hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+                    className="px-4 py-2.5 rounded-lg border border-gray-300 bg-white text-sm font-semibold uppercase tracking-wider text-gray-800 hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
                   >
                     Apply
                   </button>
                 </div>
                 {promoApplied && promoCode.trim() && (
-                  <p className="text-xs text-green-700 flex items-center gap-1.5 animate-in fade-in slide-in-from-top-1 duration-300">
-                    <Check className="w-3.5 h-3.5 flex-shrink-0" />
-                    <span className="animate-pulse">Code <strong>{promoCode.trim()}</strong> will be applied at checkout.</span>
+                  <p className="text-xs text-gray-700 flex items-center gap-1.5">
+                    <Check className="w-3.5 h-3.5 flex-shrink-0 text-black" />
+                    <span>Code <strong>{promoCode.trim()}</strong> will be applied at checkout.</span>
                   </p>
                 )}
                 {promoError && (
-                  <p className="text-xs text-red-600 animate-in fade-in duration-200">{promoError}</p>
+                  <p className="text-xs text-red-600">{promoError}</p>
                 )}
                 {pendingCheckoutUrl && (
                   <div className="flex flex-col gap-2">
-                    <p className="text-xs text-amber-700">Code not applied. You can continue without it.</p>
+                    <p className="text-xs text-gray-600">Code not applied. You can continue without it.</p>
                     <button
                       type="button"
                       onClick={() => {
@@ -260,7 +290,9 @@ export default function CartDrawer() {
                   </div>
                 )}
               </div>
-              <div className="flex justify-between text-lg font-semibold">
+
+              {/* Subtotal row */}
+              <div className="flex justify-between text-base font-semibold text-black">
                 <span>Subtotal</span>
                 <span>₹{getTotal().toFixed(2)}</span>
               </div>
@@ -270,19 +302,21 @@ export default function CartDrawer() {
               <p className="text-xs text-gray-600">
                 Keep the pre-filled email at checkout so your order appears in Order History.
               </p>
+
+              {/* Full-width primary CTA — same format as card “ADD TO CART” */}
               <button
                 onClick={handleCheckout}
                 disabled={isProcessingCheckout || authLoading}
-                className="flex items-center justify-center gap-2 w-full bg-black text-white text-center py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-4 px-6 rounded-lg font-semibold text-sm uppercase tracking-wider bg-black text-white hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isProcessingCheckout ? (
                   <>
-                    <Loader2 className="w-5 h-5 animate-spin flex-shrink-0" aria-hidden />
-                    <span className="animate-pulse">Applying promotion code...</span>
+                    <Loader2 className="w-5 h-5 animate-spin flex-shrink-0 inline-block mr-2 align-middle" aria-hidden />
+                    <span>Applying...</span>
                   </>
                 ) : authLoading ? (
                   <>
-                    <Loader2 className="w-5 h-5 animate-spin flex-shrink-0" aria-hidden />
+                    <Loader2 className="w-5 h-5 animate-spin flex-shrink-0 inline-block mr-2 align-middle" aria-hidden />
                     <span>Loading...</span>
                   </>
                 ) : (
@@ -292,7 +326,7 @@ export default function CartDrawer() {
               <Link
                 href="/collections/all"
                 onClick={closeCart}
-                className="block w-full text-center py-3 text-sm underline"
+                className="block w-full text-center py-3 text-sm font-medium text-gray-700 hover:text-black underline underline-offset-2 transition-colors"
               >
                 Continue shopping
               </Link>
