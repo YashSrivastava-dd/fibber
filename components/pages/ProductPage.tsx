@@ -12,6 +12,7 @@ interface ProductVariant {
   gid: string
   name: string
   price: number
+  compareAtPrice?: number | null
   available: boolean
 }
 
@@ -21,6 +22,7 @@ interface Product {
   handle: string
   description: string
   price: number
+  comparePrice?: number | null
   image: string
   images: string[]
   available: boolean
@@ -65,7 +67,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
         setError(null)
         console.log('Fetching product with slug:', slug)
         
-        const response = await fetch(`/api/shopify/product/${slug}`)
+        const response = await fetch(`/api/shopify/product/${slug}`, { cache: 'no-store' })
         
         if (!response.ok) {
           const errorData = await response.json().catch(() => ({ error: 'Unknown error' }))
@@ -192,7 +194,11 @@ export default function ProductPage({ slug }: ProductPageProps) {
     )
   }
 
-  const displayPrice = selectedVariant?.price || product.price
+  const displayPrice = selectedVariant?.price ?? product.price
+  const displayCompareAt = selectedVariant?.compareAtPrice ?? product.comparePrice ?? null
+  const discountPercent = displayCompareAt != null && displayCompareAt > displayPrice && displayPrice > 0
+    ? Math.round((1 - displayPrice / displayCompareAt) * 100)
+    : null
   const isAvailable = selectedVariant?.available ?? product.available
   const displayImages = product.images && product.images.length > 0 ? product.images : [product.image]
   const ingredients = extractIngredients(product.title, product.description)
@@ -254,7 +260,20 @@ export default function ProductPage({ slug }: ProductPageProps) {
                       </div>
                       <div className="p-4 text-center">
                         <p className="text-sm font-semibold text-gray-900">{variant.name}</p>
-                        <p className="text-lg font-bold text-black mt-1">₹{variant.price.toFixed(2)}</p>
+                        <p className="text-xs text-gray-500 mt-0.5">Serving size: 11.5 gm each packet</p>
+                        <div className="mt-1">
+                          {variant.compareAtPrice != null && variant.compareAtPrice > variant.price ? (
+                            <>
+                              <span className="text-sm text-gray-400 line-through mr-1">₹{variant.compareAtPrice.toFixed(2)}</span>
+                              <span className="text-lg font-bold text-black">₹{variant.price.toFixed(2)}</span>
+                              <span className="ml-1 text-xs font-semibold text-red-600">
+                                {Math.round((1 - variant.price / variant.compareAtPrice) * 100)}% OFF
+                              </span>
+                            </>
+                          ) : (
+                            <p className="text-lg font-bold text-black">₹{variant.price.toFixed(2)}</p>
+                          )}
+                        </div>
                       </div>
                     </button>
                   )
@@ -404,9 +423,10 @@ export default function ProductPage({ slug }: ProductPageProps) {
               </div>
 
               {/* Product Title */}
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-black uppercase leading-[1.1] mb-4">
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-black uppercase leading-[1.1] mb-1">
                 {product.title}
               </h1>
+              <p className="text-sm text-gray-600 mb-4">Serving size: 11.5 gm each packet</p>
 
               {/* Ingredient Tags */}
               <div className="flex flex-wrap gap-2 mb-4">
@@ -464,9 +484,21 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
               {/* Price */}
               <div className="space-y-1 mt-6">
-                <p className="text-4xl md:text-5xl font-bold text-black">
-                  ₹{displayPrice.toFixed(2)}
-                </p>
+                <div className="flex flex-wrap items-baseline gap-2">
+                  {displayCompareAt != null && displayCompareAt > displayPrice ? (
+                    <>
+                      <span className="text-xl md:text-2xl text-gray-400 line-through">₹{displayCompareAt.toFixed(2)}</span>
+                      <span className="text-4xl md:text-5xl font-bold text-black">₹{displayPrice.toFixed(2)}</span>
+                      {discountPercent != null && discountPercent > 0 && (
+                        <span className="text-sm font-semibold text-red-600 bg-red-50 px-2 py-0.5 rounded">
+                          {discountPercent}% OFF
+                        </span>
+                      )}
+                    </>
+                  ) : (
+                    <span className="text-4xl md:text-5xl font-bold text-black">₹{displayPrice.toFixed(2)}</span>
+                  )}
+                </div>
                 <p className="text-sm text-gray-600 font-normal">Tax included.</p>
               </div>
 

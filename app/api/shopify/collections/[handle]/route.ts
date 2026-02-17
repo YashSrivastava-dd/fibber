@@ -55,15 +55,22 @@ export async function GET(
       formatProduct(edge.node)
     )
 
-    return NextResponse.json({
-      collection: {
-        id: data.collection.id,
-        title: data.collection.title,
-        description: data.collection.description,
+    return NextResponse.json(
+      {
+        collection: {
+          id: data.collection.id,
+          title: data.collection.title,
+          description: data.collection.description,
+        },
+        products,
+        pageInfo: data.collection.products.pageInfo,
       },
-      products,
-      pageInfo: data.collection.products.pageInfo,
-    })
+      {
+        headers: {
+          'Cache-Control': 'no-store, max-age=0',
+        },
+      }
+    )
   } catch (error: any) {
     console.error('Error fetching collection:', error)
     return NextResponse.json(

@@ -95,6 +95,24 @@ export function formatProduct(product: any) {
     metafields: { servings, ingredients }
   })
 
+  const variantsFormatted = (product.variants?.edges?.map((edge: any) => {
+    const vPrice = parseFloat(edge.node.price?.amount || '0')
+    const vCompareAt = edge.node.compareAtPrice?.amount ? parseFloat(edge.node.compareAtPrice.amount) : null
+    return {
+      id: edge.node.id || '',
+      gid: edge.node.id || '',
+      name: edge.node.title || '',
+      price: vPrice,
+      compareAtPrice: vCompareAt != null && vCompareAt > vPrice ? vCompareAt : null,
+      available: edge.node.availableForSale === true,
+      selectedOptions: edge.node.selectedOptions || [],
+    }
+  }) || []) as Array<{ id: string; gid: string; name: string; price: number; compareAtPrice: number | null; available: boolean; selectedOptions: any[] }>
+
+  // Product-level compare price: use first variant's compare-at when it's a discount
+  const firstVariantCompare = variantsFormatted[0]?.compareAtPrice
+  const comparePrice = firstVariantCompare != null && firstVariantCompare > price ? firstVariantCompare : null
+
   return {
     id: variantGID, // Use variant GID for cart (full GID format: gid://shopify/ProductVariant/123)
     productId: product.id || '', // Keep product ID for reference
@@ -104,18 +122,11 @@ export function formatProduct(product: any) {
     descriptionHtml: product.descriptionHtml || '',
     price,
     maxPrice: maxPrice > price ? maxPrice : null,
-    comparePrice: null, // Can be added if needed
+    comparePrice,
     image: image?.url || '',
     images: product.images?.edges?.map((edge: any) => edge.node.url) || [],
     available: isAvailable, // Only true if explicitly available
-    variants: product.variants?.edges?.map((edge: any) => ({
-      id: edge.node.id || '', // Full GID for variants
-      gid: edge.node.id || '', // Alias for clarity
-      name: edge.node.title || '',
-      price: parseFloat(edge.node.price?.amount || '0'),
-      available: edge.node.availableForSale === true, // Only true if explicitly true
-      selectedOptions: edge.node.selectedOptions || [],
-    })) || [],
+    variants: variantsFormatted,
     slug: product.handle || '',
     // Metafields from Shopify
     servings,

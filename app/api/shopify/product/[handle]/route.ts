@@ -40,7 +40,14 @@ export async function GET(
     const product = formatProduct(data.product)
     console.log('Product formatted successfully:', product.title)
 
-    return NextResponse.json({ product })
+    return NextResponse.json(
+      { product },
+      {
+        headers: {
+          'Cache-Control': 'no-store, max-age=0',
+        },
+      }
+    )
   } catch (error: any) {
     console.error('Error fetching product:', error)
     console.error('Error details:', {

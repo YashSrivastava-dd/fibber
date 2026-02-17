@@ -1,6 +1,6 @@
 /**
  * Returns up to 2 badge labels for product cards (top-left tags).
- * Uses real data (discount %) when available; USP labels from title or fallback.
+ * USP labels from title or fallback by position; no discount badges.
  */
 
 export interface ProductBadge {
@@ -12,6 +12,7 @@ interface ProductForBadges {
   title?: string
   price?: number
   maxPrice?: number | null
+  comparePrice?: number | null
 }
 
 export function getProductBadges(
@@ -19,20 +20,6 @@ export function getProductBadges(
   index: number
 ): ProductBadge[] {
   const badges: ProductBadge[] = []
-
-  // Discount badge when we have compare-at price (real data only)
-  if (
-    product.maxPrice != null &&
-    product.maxPrice > (product.price ?? 0) &&
-    (product.price ?? 0) > 0
-  ) {
-    const pct = Math.round(
-      (1 - (product.price ?? 0) / product.maxPrice) * 100
-    )
-    if (pct > 0) {
-      badges.push({ label: `${pct}% OFF`, variant: 'primary' })
-    }
-  }
 
   // USP / category badge from title or fallback by position
   const title = (product.title ?? '').toUpperCase()

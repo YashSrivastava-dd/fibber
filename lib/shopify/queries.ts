@@ -39,6 +39,10 @@ export const PRODUCTS_QUERY = `
                   amount
                   currencyCode
                 }
+                compareAtPrice {
+                  amount
+                  currencyCode
+                }
                 availableForSale
                 selectedOptions {
                   name
@@ -108,6 +112,10 @@ export const PRODUCT_BY_HANDLE_QUERY = `
               amount
               currencyCode
             }
+            compareAtPrice {
+              amount
+              currencyCode
+            }
             availableForSale
             selectedOptions {
               name
@@ -162,6 +170,10 @@ export const COLLECTION_QUERY = `
                 node {
                   id
                   price {
+                    amount
+                    currencyCode
+                  }
+                  compareAtPrice {
                     amount
                     currencyCode
                   }

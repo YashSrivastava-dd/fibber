@@ -12,6 +12,7 @@ interface Product {
   title: string
   price: number
   maxPrice?: number | null
+  comparePrice?: number | null
   image: string
   slug: string
   available: boolean
@@ -35,7 +36,7 @@ export default function ProductsCarouselSection() {
     async function fetchProducts() {
       try {
         console.log('ProductsCarouselSection: Fetching products...')
-        const response = await fetch('/api/shopify/products?all=true')
+        const response = await fetch('/api/shopify/products?all=true', { cache: 'no-store' })
         
         if (!response.ok) {
           console.error('ProductsCarouselSection: API response not OK:', response.status)
@@ -148,15 +149,30 @@ export default function ProductsCarouselSection() {
                   </Link>
 
                   {/* Product Info */}
-                  <div className="text-center">
-                    <Link href={`/products/${product.slug}`}>
-                      <h3 className="text-lg font-normal mb-2 hover:underline">
+                  <div className="text-center space-y-2">
+                    <Link href={`/products/${product.slug}`} className="block">
+                      <h3 className="text-lg font-normal hover:underline">
                         {product.title}
                       </h3>
                     </Link>
-                    <p className="text-xl font-normal mb-4">
-                      ₹{product.price.toFixed(2)}
+                    <p className="text-xs text-gray-500">Serving size: 11.5 gm </p>
+                    <p className="text-xl font-normal pt-1">
+                      {(product.comparePrice ?? (product.maxPrice != null && product.maxPrice > product.price ? product.maxPrice : null)) != null &&
+                      (product.comparePrice ?? product.maxPrice)! > product.price ? (
+                        <>
+                          <span className="line-through text-gray-400 mr-2">
+                            ₹{(product.comparePrice ?? product.maxPrice)!.toFixed(2)}
+                          </span>
+                          <span>₹{product.price.toFixed(2)}</span>
+                          <span className="ml-1 text-sm font-semibold text-red-600">
+                            ({Math.round((1 - product.price / (product.comparePrice ?? product.maxPrice)!) * 100)}% OFF)
+                          </span>
+                        </>
+                      ) : (
+                        `₹${product.price.toFixed(2)}`
+                      )}
                     </p>
+                    <div className="pt-1">
                     <button
                       onClick={() => addItem({
                         id: product.id,
@@ -173,6 +189,7 @@ export default function ProductsCarouselSection() {
                     >
                       {product.available ? 'ADD TO CART' : 'OUT OF STOCK'}
                     </button>
+                    </div>
                   </div>
                 </div>
               )

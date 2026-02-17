@@ -54,12 +54,19 @@ export async function GET(request: NextRequest) {
 
     const products = allProducts.map((node) => formatProduct(node))
 
-    return NextResponse.json({
-      products,
-      total: products.length,
-      ...(lastPageInfo && !fetchAll ? { pageInfo: lastPageInfo } : {}),
-      ...(fetchAll ? { pageInfo: { pagesFetched: pageCount } } : {}),
-    })
+    return NextResponse.json(
+      {
+        products,
+        total: products.length,
+        ...(lastPageInfo && !fetchAll ? { pageInfo: lastPageInfo } : {}),
+        ...(fetchAll ? { pageInfo: { pagesFetched: pageCount } } : {}),
+      },
+      {
+        headers: {
+          'Cache-Control': 'no-store, max-age=0',
+        },
+      }
+    )
   } catch (error: any) {
     console.error('Error fetching products:', error)
     return NextResponse.json(
