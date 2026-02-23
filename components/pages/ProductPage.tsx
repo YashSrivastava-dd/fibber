@@ -4,9 +4,10 @@ import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useCartStore } from '@/store/cartStore'
-import { ChevronRight, ChevronLeft, Plus, Minus } from 'lucide-react'
+import { ChevronRight, ChevronLeft, Plus, Minus, Star } from 'lucide-react'
 import VideoSection from '@/components/sections/VideoSection'
 import ProductReviewsSection from '@/components/sections/ProductReviewsSection'
+import PaymentIcons from '@/components/PaymentIcons'
 
 interface ProductVariant {
   id: string
@@ -47,8 +48,15 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const [joinEmail, setJoinEmail] = useState('')
   const [joinSubmitted, setJoinSubmitted] = useState(false)
   const [showStickyAddToCart, setShowStickyAddToCart] = useState(false)
+  const [reviewRating, setReviewRating] = useState<{ averageRating: number; totalCount: number } | null>(null)
   const heroRef = useRef<HTMLDivElement>(null)
   const addItem = useCartStore((state) => state.addItem)
+
+  const DEFAULT_RATING = 4.8
+  const displayRating = reviewRating && reviewRating.totalCount > 0
+    ? reviewRating.averageRating
+    : DEFAULT_RATING
+  const displayReviewCount = reviewRating?.totalCount ?? 0
 
   useEffect(() => {
     const el = heroRef.current
@@ -108,6 +116,25 @@ export default function ProductPage({ slug }: ProductPageProps) {
     if (slug) {
       fetchProduct()
     }
+  }, [slug])
+
+  useEffect(() => {
+    if (!slug) return
+    let cancelled = false
+    async function fetchReviewSummary() {
+      try {
+        const res = await fetch(`/api/products/${encodeURIComponent(slug)}/reviews`, { cache: 'no-store' })
+        const data = await res.json()
+        if (cancelled) return
+        if (typeof data.averageRating === 'number' && typeof data.totalCount === 'number') {
+          setReviewRating({ averageRating: data.averageRating, totalCount: data.totalCount })
+        }
+      } catch {
+        if (!cancelled) setReviewRating(null)
+      }
+    }
+    fetchReviewSummary()
+    return () => { cancelled = true }
   }, [slug])
 
   const handleAddToCart = () => {
@@ -202,7 +229,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
     : null
   const isAvailable = selectedVariant?.available ?? product.available
   const displayImages = product.images && product.images.length > 0 ? product.images : [product.image]
-  const ingredients = extractIngredients(product.title, product.description)
+  const ingredients = ['Unflavoured', 'Watermelon', 'Lemon']
   
   // Extract product type/category from title or use default
   const productType = product.title.toUpperCase().includes('PLANT-BASED') 
@@ -210,6 +237,16 @@ export default function ProductPage({ slug }: ProductPageProps) {
     : product.title.toUpperCase().includes('VEGAN')
     ? 'VEGAN'
     : 'SUPPLEMENT'
+
+  // Servings: Starter Pack = 30, Transformation Pack = 90
+  const getServings = (label: string) => {
+    const l = label.toLowerCase()
+    if (l.includes('starter')) return 30
+    if (l.includes('transformation')) return 90
+    return 90
+  }
+  // Base servings on product title (Starter Pack = 30, Transformation Pack = 90), not variant name
+  const displayServings = getServings(product.title)
 
   return (
     <div className={`min-h-screen ${showStickyAddToCart ? 'pb-20' : ''}`}>
@@ -261,7 +298,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
                       </div>
                       <div className="p-4 text-center">
                         <p className="text-sm font-semibold text-gray-900">{variant.name}</p>
-                        <p className="text-xs text-gray-500 mt-0.5">Serving size: 11.5 gm each packet</p>
+                        <p className="text-xs text-gray-500 mt-0.5">Servings : {getServings(variant.name)}</p>
                         <div className="mt-1">
                           {variant.compareAtPrice != null && variant.compareAtPrice > variant.price ? (
                             <>
@@ -274,6 +311,25 @@ export default function ProductPage({ slug }: ProductPageProps) {
                           ) : (
                             <p className="text-lg font-bold text-black">₹{variant.price.toFixed(2)}</p>
                           )}
+                        </div>
+                        <p className="text-[10px] text-gray-500 mt-1">MRP (incl. of all taxes)</p>
+                        <div className="flex items-center justify-center gap-1 mt-1.5">
+                          <div className="flex items-center gap-0.5">
+                            {[1, 2, 3, 4, 5].map((i) => (
+                              <Star
+                                key={i}
+                                className={`w-3 h-3 ${
+                                  i <= displayRating
+                                    ? 'fill-amber-400 text-amber-400'
+                                    : i - 1 < displayRating && displayRating < i
+                                    ? 'fill-amber-400/60 text-amber-400'
+                                    : 'text-gray-300'
+                                }`}
+                                aria-hidden
+                              />
+                            ))}
+                          </div>
+                          <span className="text-xs font-medium text-gray-700">{displayRating.toFixed(1)}</span>
                         </div>
                       </div>
                     </button>
@@ -361,32 +417,24 @@ export default function ProductPage({ slug }: ProductPageProps) {
                 />
               </div>
 
-              {/* Image Navigation Controls */}
+              {/* Image Navigation Bar - Below image */}
               {displayImages.length > 1 && (
-                <>
-                  {/* Image Counter */}
-                  <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded text-sm font-medium text-black z-10">
-                    {selectedImageIndex + 1}/{displayImages.length}
+                <div className="flex justify-center mt-6">
+                  <div className="flex items-center gap-2 bg-white/95 backdrop-blur-md px-3 py-2.5 rounded-full border border-gray-200/80 shadow-md">
+                    {displayImages.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setSelectedImageIndex(index)}
+                        className={`rounded-full transition-all duration-200 ${
+                          index === selectedImageIndex
+                            ? 'w-2.5 h-2.5 bg-black ring-2 ring-black/20'
+                            : 'w-2 h-2 bg-gray-300 hover:bg-gray-400'
+                        }`}
+                        aria-label={`Go to image ${index + 1}`}
+                      />
+                    ))}
                   </div>
-
-                  {/* Next Image Arrow - Large and Prominent */}
-                  <button
-                    onClick={nextImage}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 bg-[#FFB6C1]/90 hover:bg-[#FFB6C1] backdrop-blur-sm rounded-full p-4 transition-all shadow-lg z-10"
-                    aria-label="Next image"
-                  >
-                    <ChevronRight className="w-8 h-8 text-black" />
-                  </button>
-
-                  {/* Previous Image Arrow */}
-                  <button
-                    onClick={prevImage}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 bg-[#FFB6C1]/90 hover:bg-[#FFB6C1] backdrop-blur-sm rounded-full p-4 transition-all shadow-lg z-10 opacity-0 group-hover:opacity-100"
-                    aria-label="Previous image"
-                  >
-                    <ChevronLeft className="w-8 h-8 text-black" />
-                  </button>
-                </>
+                </div>
               )}
 
               {/* Mobile Thumbnails */}
@@ -416,18 +464,18 @@ export default function ProductPage({ slug }: ProductPageProps) {
           </div>
 
           {/* Right Section - Product Details (50%) */}
-          <div className="w-full lg:w-1/2 lg:pl-6 pt-8 lg:pt-0 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto lg:pr-2 scrollbar-hide">
-            <div className="space-y-6 pb-8">
+          <div className="w-full lg:w-1/2 min-w-0 lg:pl-6 pt-8 lg:pt-0 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto overflow-x-hidden lg:pr-2 scrollbar-hide">
+            <div className="space-y-6 pb-8 min-w-0">
               {/* Product Type/Category */}
               <div className="text-xs uppercase tracking-wider text-gray-500 font-medium mb-2">
                 {productType}
               </div>
 
               {/* Product Title */}
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-black uppercase leading-[1.1] mb-1">
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-black uppercase leading-[1.1] mb-1 break-words">
                 {product.title}
               </h1>
-              <p className="text-sm text-gray-600 mb-4">Serving size: 11.5 gm each packet</p>
+              <p className="text-sm text-gray-600 mb-4">Servings : {displayServings}</p>
 
               {/* Ingredient Tags */}
               <div className="flex flex-wrap gap-2 mb-4">
@@ -500,7 +548,30 @@ export default function ProductPage({ slug }: ProductPageProps) {
                     <span className="text-4xl md:text-5xl font-bold text-black">₹{displayPrice.toFixed(2)}</span>
                   )}
                 </div>
-                <p className="text-sm text-gray-600 font-normal">Tax included.</p>
+                <p className="text-sm text-gray-600 font-normal">MRP (incl. of all taxes)</p>
+                <p className="text-sm text-gray-500">Tax included.</p>
+                {/* Rating: from reviews when available, else default 4.8 */}
+                <div className="flex items-center gap-2 mt-2">
+                  <div className="flex items-center gap-0.5">
+                    {[1, 2, 3, 4, 5].map((i) => (
+                      <Star
+                        key={i}
+                        className={`w-4 h-4 ${
+                          i <= displayRating
+                            ? 'fill-amber-400 text-amber-400'
+                            : i - 1 < displayRating && displayRating < i
+                            ? 'fill-amber-400/60 text-amber-400'
+                            : 'text-gray-300'
+                        }`}
+                        aria-hidden
+                      />
+                    ))}
+                  </div>
+                  <span className="text-sm font-medium text-gray-800">{displayRating.toFixed(1)}</span>
+                  {displayReviewCount > 0 && (
+                    <span className="text-xs text-gray-500">({displayReviewCount} {displayReviewCount === 1 ? 'review' : 'reviews'})</span>
+                  )}
+                </div>
               </div>
 
               {/* Quantity Selector and Add to Cart */}
@@ -542,8 +613,8 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
               {/* Trust strip + social proof */}
               <div className="text-sm text-gray-600 mt-4 space-y-1">
-                <p>+10000 Happy Customers · Free shipping Pan India</p>
-                <p className="text-xs text-gray-500">Free delivery · COD available · Easy returns</p>
+                <p>Free shipping Pan India</p>
+                <p className="text-xs text-gray-500">Free delivery · Easy returns</p>
                 <a
                   href="#reviews"
                   className="inline-block text-xs font-medium text-black underline underline-offset-2 hover:no-underline mt-2"
@@ -552,23 +623,10 @@ export default function ProductPage({ slug }: ProductPageProps) {
                 </a>
               </div>
 
-              {/* Payment Icons */}
+              {/* Payment Icons - UPI first, then Visa, MC, Amex, Diners, PayPal */}
               <div className="flex items-center gap-3 mt-4">
                 <span className="text-xs text-gray-600 font-medium">We accept:</span>
-                <div className="flex items-center gap-2">
-                  <div className="w-10 h-6 bg-gray-100 rounded flex items-center justify-center">
-                    <span className="text-xs font-bold text-gray-800">VISA</span>
-                  </div>
-                  <div className="w-10 h-6 bg-gray-100 rounded flex items-center justify-center">
-                    <span className="text-xs font-bold text-gray-800">MC</span>
-                  </div>
-                  <div className="w-10 h-6 bg-gray-100 rounded flex items-center justify-center">
-                    <span className="text-xs font-bold text-gray-800">AMEX</span>
-                  </div>
-                  <div className="w-10 h-6 bg-gray-100 rounded flex items-center justify-center">
-                    <span className="text-xs font-bold text-gray-800">PP</span>
-                  </div>
-                </div>
+                <PaymentIcons iconClassName="w-9 h-6 object-contain flex-shrink-0" />
               </div>
 
               {/* Accordion Sections */}
@@ -590,10 +648,16 @@ export default function ProductPage({ slug }: ProductPageProps) {
                   </button>
                   {expandedAccordion === 'benefits' && (
                     <div className="pb-4 text-sm text-gray-700 leading-relaxed">
-                      <p>
-                        Fill nutritional gaps and feel your best with this comprehensive multivitamin. 
-                        Supports immunity, energy, mood, sleep, hormones, periods, muscle recovery, and skin health.
-                      </p>
+
+                      <ul className="list-disc list-inside space-y-2">
+                        <li>Helps manage appetite naturally</li>
+                        <li>Supports weight management goals</li>
+                        <li>Promotes digestive comfort</li>
+                        <li>Encourages mindful portion control</li>
+                        <li>High fiber content for better satiety</li>
+                        <li>Zero added sugar</li>
+                        <li>Only 19 kcal per serving</li>
+                      </ul>
                     </div>
                   )}
                 </div>
@@ -615,9 +679,16 @@ export default function ProductPage({ slug }: ProductPageProps) {
                   </button>
                   {expandedAccordion === 'how-to-take' && (
                     <div className="pb-4 text-sm text-gray-700 leading-relaxed">
+                      <ul className="list-disc list-inside space-y-2 mb-3">
+                        <li>Mix 1 serving (11.5g) in 200 ml room-temperature water</li>
+                        <li>Stir well and consume 45–60 minutes before meals</li>
+                        <li>Do not mix in chilled water</li>
+                      </ul>
+                      <p className="mb-2">
+                        Unflavoured variant can also be added to coffee or tea.
+                      </p>
                       <p>
-                        Take one capsule daily with a meal or as directed by your healthcare provider. 
-                        For best results, take at the same time each day with a full glass of water.
+                        For best results, stay well-hydrated and practice mindful eating.
                       </p>
                     </div>
                   )}
@@ -639,11 +710,27 @@ export default function ProductPage({ slug }: ProductPageProps) {
                     />
                   </button>
                   {expandedAccordion === 'ingredients' && (
-                    <div className="pb-4 text-sm text-gray-700 leading-relaxed">
-                      <p>
-                        Vitamins A-E, Iron, Zinc, Folate, Cranberry, Thiamin, and other essential nutrients. 
-                        100% Plant-Based. 60 Capsules per bottle.
-                      </p>
+                    <div className="pb-4 text-sm text-gray-700 leading-relaxed space-y-4">
+                      <div>
+                       
+                        <ul className="list-disc list-inside space-y-1 mb-3">
+                          <li>Soluble Dietary Fiber</li>
+                          <li>L-Carnitine L-Tartrate</li>
+                          <li>L-Tyrosine</li>
+                          <li>Lactobacillus gasseri</li>
+                        </ul>
+                        <p className="font-semibold text-gray-800 mb-1">Flavoured Variants Also Contain:</p>
+                        <ul className="list-disc list-inside space-y-1 mb-3">
+                          <li>Acidity Regulator (INS 330)</li>
+                          <li>Anticaking Agent (INS 551)</li>
+                          <li>Sweetener (INS 955 – Sucralose)</li>
+                          <li>Nature Identical Flavouring Substances</li>
+                        </ul>
+                        <p className="font-semibold text-gray-800 mb-1">Unflavoured Variant Contains:</p>
+                        <ul className="list-disc list-inside space-y-1">
+                          <li>Anticaking Agent (INS 551)</li>
+                        </ul>
+                      </div>
                     </div>
                   )}
                 </div>

@@ -7,7 +7,6 @@ import { useRouter } from 'next/navigation'
 import { ShoppingBag, Menu, X, User } from 'lucide-react'
 import { useCartStore } from '@/store/cartStore'
 import { useAuth } from '@/contexts/AuthContext'
-import OTPModal from '@/components/OTPModal'
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -22,7 +21,6 @@ import { cn } from '@/lib/utils'
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [isOTPModalOpen, setIsOTPModalOpen] = useState(false)
   const { openCart, getItemCount } = useCartStore()
   const { isAuthenticated, loading: authLoading } = useAuth()
   const router = useRouter()
@@ -67,9 +65,7 @@ export default function Header() {
           <div className="relative flex items-center justify-between h-16">
             {/* Mobile Menu Button */}
             <button
-              className={`lg:hidden p-2 transition-colors z-10 ${
-                isScrolled ? 'text-black' : 'text-black'
-              }`}
+              className="lg:hidden p-2 transition-colors z-10 text-[#1a1a1a]"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-label="Toggle menu"
             >
@@ -100,7 +96,7 @@ export default function Header() {
                       className={cn(
                         navigationMenuTriggerStyle(),
                         'text-xs font-semibold uppercase tracking-wider bg-transparent hover:bg-transparent hover:opacity-70 h-auto px-3 py-2',
-                        isScrolled ? 'text-black' : 'text-black'
+                        'text-[#1a1a1a]'
                       )}
                     >
                       SCIENCE
@@ -113,7 +109,7 @@ export default function Header() {
                       className={cn(
                         navigationMenuTriggerStyle(),
                         'text-xs font-semibold uppercase tracking-wider bg-transparent hover:bg-transparent hover:opacity-70 h-auto px-3 py-2',
-                        isScrolled ? 'text-black' : 'text-black'
+                        'text-[#1a1a1a]'
                       )}
                     >
                       CONTACT
@@ -126,7 +122,7 @@ export default function Header() {
                       className={cn(
                         navigationMenuTriggerStyle(),
                         'text-xs font-semibold uppercase tracking-wider bg-transparent hover:bg-transparent hover:opacity-70 h-auto px-3 py-2',
-                        isScrolled ? 'text-black' : 'text-black'
+                        'text-[#1a1a1a]'
                       )}
                     >
                       LYTE
@@ -145,12 +141,10 @@ export default function Header() {
                     if (isAuthenticated) {
                       router.push('/account')
                     } else {
-                      setIsOTPModalOpen(true)
+                      router.push('/account/login')
                     }
                   }}
-                  className={`hidden lg:flex items-center gap-2 px-4 py-2 transition-colors ${
-                    isScrolled ? 'text-black' : 'text-black'
-                  } hover:opacity-70 font-semibold text-sm uppercase tracking-wider`}
+                  className="hidden lg:flex items-center gap-2 px-4 py-2 transition-colors text-[#1a1a1a] hover:opacity-70 font-semibold text-sm uppercase tracking-wider"
                   aria-label={isAuthenticated ? 'My Account' : 'Login'}
                 >
                   <User className="w-5 h-5" />
@@ -166,11 +160,11 @@ export default function Header() {
                       router.push('/account')
                       setIsMobileMenuOpen(false)
                     } else {
-                      setIsOTPModalOpen(true)
+                      router.push('/account/login')
                       setIsMobileMenuOpen(false)
                     }
                   }}
-                  className="lg:hidden p-2 transition-colors text-black hover:opacity-70"
+                  className="lg:hidden p-2 transition-colors text-[#1a1a1a] hover:opacity-70"
                   aria-label={isAuthenticated ? 'My Account' : 'Login'}
                 >
                   <User className="w-5 h-5" />
@@ -180,14 +174,12 @@ export default function Header() {
               {/* Cart */}
               <button
                 onClick={openCart}
-                className={`relative p-2 transition-colors ${
-                  isScrolled ? 'text-black' : 'text-black'
-                } hover:opacity-70`}
+                className="relative p-2 transition-colors text-[#1a1a1a] hover:opacity-70"
                 aria-label="Shopping cart"
               >
                 <ShoppingBag className="w-5 h-5" />
                 {itemCount > 0 && (
-                  <span className="absolute top-0 right-0 bg-black text-white text-xs rounded-full w-4 h-4 flex items-center justify-center text-[10px]">
+                  <span className="absolute top-0 right-0 bg-[#1a1a1a] text-white text-xs rounded-full w-4 h-4 flex items-center justify-center text-[10px]">
                     {itemCount}
                   </span>
                 )}
@@ -204,7 +196,7 @@ export default function Header() {
                 <Link
                   key={link.name}
                   href={link.href}
-                  className="block text-sm font-semibold uppercase tracking-wide py-2 text-black"
+                  className="block text-sm font-semibold uppercase tracking-wide py-2 text-[#1a1a1a]"
                   onClick={() => {
                     setIsMobileMenuOpen(false)
                   }}
@@ -218,11 +210,11 @@ export default function Header() {
                     if (isAuthenticated) {
                       router.push('/account')
                     } else {
-                      setIsOTPModalOpen(true)
+                      router.push('/account/login')
                     }
                     setIsMobileMenuOpen(false)
                   }}
-                  className="block w-full text-left text-sm font-semibold uppercase tracking-wide py-2 text-black"
+                  className="block w-full text-left text-sm font-semibold uppercase tracking-wide py-2 text-[#1a1a1a]"
                 >
                   {isAuthenticated ? 'My Account' : 'Login'}
                 </button>
@@ -231,9 +223,6 @@ export default function Header() {
           </div>
         )}
       </header>
-
-      {/* OTP Modal */}
-      <OTPModal isOpen={isOTPModalOpen} onClose={() => setIsOTPModalOpen(false)} />
     </>
   )
 }

@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import NewsletterForm from '@/components/NewsletterForm'
+import PaymentIcons from '@/components/PaymentIcons'
 
 export default function Footer() {
   const footerLinks = {
@@ -153,28 +154,11 @@ export default function Footer() {
               </a>
             </div>
 
-            {/* Right - Payment Icons */}
-            
-            <div className="flex items-center gap-2 flex-wrap justify-center">
-            <div className="bg-white rounded px-2 py-1">
-                <span className="text-xs font-bold text-green-600">UPI</span>
-              </div>
-              <div className="bg-white rounded px-2 py-1">
-                <span className="text-xs font-bold text-blue-600">VISA</span>
-              </div>
-              <div className="bg-white rounded px-2 py-1">
-                <span className="text-xs font-bold text-red-500">MC</span>
-              </div>
-              <div className="bg-white rounded px-2 py-1">
-                <span className="text-xs font-bold text-blue-500">AMEX</span>
-              </div>
-             
-             
-              <div className="bg-white rounded px-2 py-1">
-                <span className="text-xs font-bold text-gray-600">Diners</span>
-              </div>
-                
-            </div>
+            {/* Right - Payment Icons (UPI first, then card brands) */}
+            <PaymentIcons
+              className="justify-center"
+              iconClassName="w-9 h-6 object-contain flex-shrink-0"
+            />
           </div>
         </div>
       </div>

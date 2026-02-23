@@ -1,18 +1,18 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { X, Plus, Minus, ShoppingBag, Tag, Loader2, Check } from 'lucide-react'
 import { useCartStore } from '@/store/cartStore'
 import { useAuth } from '@/contexts/AuthContext'
-import OTPModal from '@/components/OTPModal'
 import Image from 'next/image'
 import Link from 'next/link'
 
 export default function CartDrawer() {
+  const router = useRouter()
   const { isOpen, items, closeCart, updateQuantity, removeItem, getTotal } =
     useCartStore()
   const { isAuthenticated, getIdToken, loading: authLoading } = useAuth()
-  const [isOTPModalOpen, setIsOTPModalOpen] = useState(false)
   const [isProcessingCheckout, setIsProcessingCheckout] = useState(false)
   const [promoCode, setPromoCode] = useState('')
   const [promoApplied, setPromoApplied] = useState(false)
@@ -33,7 +33,8 @@ export default function CartDrawer() {
 
   const handleCheckout = async () => {
     if (!isAuthenticated) {
-      setIsOTPModalOpen(true)
+      closeCart()
+      router.push('/account/login')
       return
     }
 
@@ -334,14 +335,6 @@ export default function CartDrawer() {
           )}
         </div>
       </div>
-
-      {/* OTP Modal */}
-      <OTPModal
-        isOpen={isOTPModalOpen}
-        onClose={() => {
-          setIsOTPModalOpen(false)
-        }}
-      />
     </>
   )
 }

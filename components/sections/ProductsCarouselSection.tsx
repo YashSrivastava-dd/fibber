@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Star } from 'lucide-react'
 import { useCartStore } from '@/store/cartStore'
 import { getProductBadges } from '@/lib/product-badges'
 
@@ -172,6 +172,15 @@ export default function ProductsCarouselSection() {
                         `₹${product.price.toFixed(2)}`
                       )}
                     </p>
+                    <p className="text-xs text-gray-500">MRP (incl. of all taxes)</p>
+                    <div className="flex items-center justify-center gap-1.5 py-1">
+                      <div className="flex items-center gap-0.5">
+                        {[1, 2, 3, 4, 5].map((i) => (
+                          <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" aria-hidden />
+                        ))}
+                      </div>
+                      <span className="text-sm font-medium text-gray-800">4.8</span>
+                    </div>
                     <div className="pt-1">
                     <button
                       onClick={() => addItem({

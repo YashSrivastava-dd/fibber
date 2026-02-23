@@ -297,10 +297,10 @@ export default function OrderDetailPage() {
           {invoiceLoading ? 'Loading…' : 'Download invoice'}
         </button>
         <Link
-          href="/account/orders"
-          className="inline-flex px-4 py-2 rounded-lg border border-gray-300 font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+          href={`/contact?subject=Order%20Issue&order=${encodeURIComponent(orderId)}`}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 font-medium text-gray-700 hover:bg-gray-50 transition-colors"
         >
-          Go Back
+          Issue with order
         </Link>
       </div>
       {invoiceError && (
