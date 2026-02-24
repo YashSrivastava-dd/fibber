@@ -1,0 +1,156 @@
+// =============================================================================
+// Zoho SalesIQ – Context handler: order_support_lookup
+// Copy this into your SalesIQ Script → Context handler.
+// Replace YOUR_SUPPORT_SHARED_SECRET and yourdomain.com with your values.
+// =============================================================================
+
+response = Map();
+
+if(context_id.equals("order_support_lookup"))
+{
+    // 1) Read phone number the visitor entered
+    phoneAnswer = answers.get("phone").get("text");
+    phoneAnswer = ifnull(phoneAnswer,"").trim();
+
+    if(phoneAnswer.isEmpty())
+    {
+        response.put("action","reply");
+        response.put("replies",{
+            "I couldn't read your phone number. Please type your registered mobile number (e.g. +91XXXXXXXXXX)."
+        });
+        return response;
+    }
+
+    // 2) Build JSON body as string (Map.toString() may not produce valid JSON)
+    bodyString = '{"phone":"' + phoneAnswer + '"}';
+
+    headers = Map();
+    headers.put("Content-Type","application/json");
+    headers.put("Authorization","Bearer YOUR_SUPPORT_SHARED_SECRET"); // <-- change
+
+    url = "https://fiberisefit.com/api/support/order-by-phone";       // <-- or your domain
+
+    // 3) Call the backend. postUrl(..., false) returns Map with responseCode, responseText, responseHeader
+    rawResp = postUrl(url, bodyString, headers, false);
+
+    // 4) Get body and parse JSON (responseText is the body; may be string)
+    respMap = Map();
+    bodyContent = rawResp.get("responseText");
+    respCode = ifnull(rawResp.get("responseCode"),0);
+
+    if(respCode != 200)
+    {
+        response.put("action","reply");
+        response.put("replies",{
+            "Sorry, I couldn't contact our order system right now. Please try again in a few minutes."
+        });
+        return response;
+    }
+
+    try
+    {
+        if(bodyContent != null)
+        {
+            if(isText(bodyContent))
+            {
+                respMap = bodyContent.toMap();
+            }
+            else
+            {
+                respMap = bodyContent;
+            }
+        }
+    }
+    catch(e)
+    {
+        response.put("action","reply");
+        response.put("replies",{
+            "Sorry, I couldn't contact our order system right now. Please try again in a few minutes."
+        });
+        return response;
+    }
+
+    // 5) Handle no order found
+    found = ifnull(respMap.get("found"),false);
+
+    if(!found)
+    {
+        msgList = List();
+        msgList.add("I couldn't find any recent orders for that phone number.");
+        noMsg = ifnull(
+            respMap.get("message"),
+            "If you recently placed an order, it may take a few minutes to sync. You can also share your order ID with our team."
+        );
+        msgList.add(noMsg);
+
+        response.put("action","reply");
+        response.put("replies",msgList);
+        return response;
+    }
+
+    // 6) Build response from order details
+    order = respMap.get("order");
+
+    orderNumber = ifnull(order.get("orderNumber"),"N/A");
+    createdAt = ifnull(order.get("createdAt"),"N/A");
+    fulfillmentStatus = ifnull(order.get("fulfillmentStatus"),"PENDING");
+    deliveryStatus = ifnull(order.get("deliveryStatus"),"");
+    totalAmount = ifnull(order.get("totalAmount"),0.0);
+    currencyCode = ifnull(order.get("currencyCode"),"INR");
+
+    items = ifnull(order.get("items"),List());
+    firstItemTitle = "";
+    if(items.size() > 0)
+    {
+        firstItem = items.get(0);
+        firstItemTitle = ifnull(firstItem.get("title"),"");
+    }
+
+    trackingList = ifnull(order.get("tracking"),List());
+    trackingMsg = "";
+    if(trackingList.size() > 0)
+    {
+        t = trackingList.get(0);
+        tCompany = ifnull(t.get("company"),"");
+        tNumber = ifnull(t.get("number"),"");
+        tUrl = ifnull(t.get("url"),"");
+
+        trackingMsg = "Tracking: " + tCompany + " " + tNumber;
+        if(!tUrl.isEmpty())
+        {
+            trackingMsg = trackingMsg + " (" + tUrl + ")";
+        }
+    }
+
+    replies = List();
+    replies.add("Here are your latest order details:");
+    replies.add("Order: " + orderNumber + "\nPlaced on: " + createdAt);
+    if(!firstItemTitle.isEmpty())
+    {
+        replies.add("Main item: " + firstItemTitle);
+    }
+
+    statusLine = "Status: " + fulfillmentStatus;
+    if(!deliveryStatus.isEmpty())
+    {
+        statusLine = statusLine + " (" + deliveryStatus + ")";
+    }
+    replies.add(statusLine);
+
+    replies.add("Total: " + totalAmount.toString() + " " + currencyCode);
+    if(!trackingMsg.isEmpty())
+    {
+        replies.add(trackingMsg);
+    }
+
+    response.put("action","reply");
+    response.put("replies",replies);
+    response.put("suggestions",{
+        "Track another order",
+        "Talk to a human agent"
+    });
+
+    return response;
+}
+
+return response;
