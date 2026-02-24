@@ -223,6 +223,13 @@ export async function POST(req: NextRequest) {
         ? ((body as any).phoneNumber as string)
         : null
 
+  // Optional: how many recent orders to return (default 1, max 20)
+  const rawLimit = (body as any)?.limit ?? (body as any)?.count
+  const limit = Math.min(
+    Math.max(1, typeof rawLimit === 'number' ? rawLimit : parseInt(String(rawLimit), 10) || 1),
+    20
+  )
+
   if (!phone) {
     return NextResponse.json(
       {
@@ -307,22 +314,25 @@ export async function POST(req: NextRequest) {
         {
           found: false,
           order: null,
+          orders: [],
           message: 'No order found for this phone number.',
         },
         { status: 200 }
       )
     }
 
-    const latest = matches.sort(
+    const sorted = matches.sort(
       (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    )[0]
-
-    const result = orderToSupportResult(latest)
+    )
+    const toReturn = sorted.slice(0, limit).map(orderToSupportResult)
+    const first = toReturn[0]
 
     return NextResponse.json(
       {
         found: true,
-        order: result,
+        order: first,
+        orders: toReturn,
+        count: toReturn.length,
       },
       { status: 200 }
     )

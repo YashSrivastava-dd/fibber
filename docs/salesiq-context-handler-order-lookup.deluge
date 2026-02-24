@@ -21,14 +21,15 @@ if(context_id.equals("order_support_lookup"))
         return response;
     }
 
-    // 2) Build JSON body as string (Map.toString() may not produce valid JSON)
-    bodyString = '{"phone":"' + phoneAnswer + '"}';
+    // 2) Build JSON body: request up to 10 recent orders
+    bodyString = '{"phone":"' + phoneAnswer + '","limit":10}';
 
     headers = Map();
     headers.put("Content-Type","application/json");
-    headers.put("Authorization","Bearer YOUR_SUPPORT_SHARED_SECRET"); // <-- change
+    // Use the EXACT same secret as in your .env SALESIQ_SUPPORT_SHARED_SECRET (no spaces, same as in curl)
+    headers.put("Authorization","Bearer e2ecf0a3f1820ac818a68ea3591c5a0c539a9becb7c468a0f028e436047097ff");
 
-    url = "https://fiberisefit.com/api/support/order-by-phone";       // <-- or your domain
+    url = "https://fiberisefit.com/api/support/order-by-phone";
 
     // 3) Call the backend. postUrl(..., false) returns Map with responseCode, responseText, responseHeader
     rawResp = postUrl(url, bodyString, headers, false);
@@ -41,9 +42,18 @@ if(context_id.equals("order_support_lookup"))
     if(respCode != 200)
     {
         response.put("action","reply");
-        response.put("replies",{
-            "Sorry, I couldn't contact our order system right now. Please try again in a few minutes."
-        });
+        if(respCode == 401)
+        {
+            response.put("replies",{
+                "The order system connection was rejected. Please ask your administrator to check the SalesIQ script authorization token."
+            });
+        }
+        else
+        {
+            response.put("replies",{
+                "Sorry, I couldn't contact our order system right now. Please try again in a few minutes."
+            });
+        }
         return response;
     }
 
@@ -65,7 +75,16 @@ if(context_id.equals("order_support_lookup"))
     {
         response.put("action","reply");
         response.put("replies",{
-            "Sorry, I couldn't contact our order system right now. Please try again in a few minutes."
+            "Sorry, the order system returned a response we couldn't read. Please try again or contact support."
+        });
+        return response;
+    }
+
+    if(respMap.isEmpty())
+    {
+        response.put("action","reply");
+        response.put("replies",{
+            "Sorry, the order system returned an empty response. Please try again in a few minutes."
         });
         return response;
     }
@@ -88,59 +107,87 @@ if(context_id.equals("order_support_lookup"))
         return response;
     }
 
-    // 6) Build response from order details
-    order = respMap.get("order");
-
-    orderNumber = ifnull(order.get("orderNumber"),"N/A");
-    createdAt = ifnull(order.get("createdAt"),"N/A");
-    fulfillmentStatus = ifnull(order.get("fulfillmentStatus"),"PENDING");
-    deliveryStatus = ifnull(order.get("deliveryStatus"),"");
-    totalAmount = ifnull(order.get("totalAmount"),0.0);
-    currencyCode = ifnull(order.get("currencyCode"),"INR");
-
-    items = ifnull(order.get("items"),List());
-    firstItemTitle = "";
-    if(items.size() > 0)
+    // 6) Build response from order(s): use "orders" array if present, else single "order"
+    ordersList = respMap.get("orders");
+    if(ordersList == null)
     {
-        firstItem = items.get(0);
-        firstItemTitle = ifnull(firstItem.get("title"),"");
-    }
-
-    trackingList = ifnull(order.get("tracking"),List());
-    trackingMsg = "";
-    if(trackingList.size() > 0)
-    {
-        t = trackingList.get(0);
-        tCompany = ifnull(t.get("company"),"");
-        tNumber = ifnull(t.get("number"),"");
-        tUrl = ifnull(t.get("url"),"");
-
-        trackingMsg = "Tracking: " + tCompany + " " + tNumber;
-        if(!tUrl.isEmpty())
+        singleOrder = respMap.get("order");
+        ordersList = List();
+        if(singleOrder != null)
         {
-            trackingMsg = trackingMsg + " (" + tUrl + ")";
+            ordersList.add(singleOrder);
         }
     }
 
     replies = List();
-    replies.add("Here are your latest order details:");
-    replies.add("Order: " + orderNumber + "\nPlaced on: " + createdAt);
-    if(!firstItemTitle.isEmpty())
+    orderCount = ordersList.size();
+    if(orderCount == 0)
     {
-        replies.add("Main item: " + firstItemTitle);
+        replies.add("No order details to show.");
+    }
+    else if(orderCount == 1)
+    {
+        replies.add("Here is your latest order:");
+    }
+    else
+    {
+        replies.add("You have " + orderCount + " recent orders (newest first):");
     }
 
-    statusLine = "Status: " + fulfillmentStatus;
-    if(!deliveryStatus.isEmpty())
+    for(idx = 0; idx < ordersList.size(); idx = idx + 1)
     {
-        statusLine = statusLine + " (" + deliveryStatus + ")";
-    }
-    replies.add(statusLine);
+        order = ordersList.get(idx);
+        orderNumber = ifnull(order.get("orderNumber"),"N/A");
+        createdAt = ifnull(order.get("createdAt"),"N/A");
+        fulfillmentStatus = ifnull(order.get("fulfillmentStatus"),"PENDING");
+        deliveryStatus = ifnull(order.get("deliveryStatus"),"");
+        totalAmount = ifnull(order.get("totalAmount"),0.0);
+        currencyCode = ifnull(order.get("currencyCode"),"INR");
 
-    replies.add("Total: " + totalAmount.toString() + " " + currencyCode);
-    if(!trackingMsg.isEmpty())
-    {
-        replies.add(trackingMsg);
+        items = ifnull(order.get("items"),List());
+        firstItemTitle = "";
+        if(items.size() > 0)
+        {
+            firstItem = items.get(0);
+            firstItemTitle = ifnull(firstItem.get("title"),"");
+        }
+
+        trackingList = ifnull(order.get("tracking"),List());
+        trackingMsg = "";
+        if(trackingList.size() > 0)
+        {
+            t = trackingList.get(0);
+            tCompany = ifnull(t.get("company"),"");
+            tNumber = ifnull(t.get("number"),"");
+            tUrl = ifnull(t.get("url"),"");
+
+            trackingMsg = "Tracking: " + tCompany + " " + tNumber;
+            if(!tUrl.isEmpty())
+            {
+                trackingMsg = trackingMsg + " (" + tUrl + ")";
+            }
+        }
+
+        if(orderCount > 1)
+        {
+            replies.add("--- Order " + (idx + 1) + " ---");
+        }
+        replies.add("Order: " + orderNumber + ", placed on " + createdAt);
+        if(!firstItemTitle.isEmpty())
+        {
+            replies.add("Item: " + firstItemTitle);
+        }
+        statusLine = "Status: " + fulfillmentStatus;
+        if(!deliveryStatus.isEmpty())
+        {
+            statusLine = statusLine + " (" + deliveryStatus + ")";
+        }
+        replies.add(statusLine);
+        replies.add("Total: " + totalAmount.toString() + " " + currencyCode);
+        if(!trackingMsg.isEmpty())
+        {
+            replies.add(trackingMsg);
+        }
     }
 
     response.put("action","reply");
