@@ -144,6 +144,7 @@ export default function ProductsCarouselSection() {
                         alt={product.title}
                         fill
                         className="object-contain group-hover:scale-105 transition-transform duration-300"
+                        unoptimized
                       />
                     </div>
                   </Link>

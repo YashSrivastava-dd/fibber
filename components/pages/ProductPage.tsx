@@ -294,6 +294,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
                           fill
                           className="object-contain p-4"
                           sizes="200px"
+                          unoptimized
                         />
                       </div>
                       <div className="p-4 text-center">
@@ -393,13 +394,14 @@ export default function ProductPage({ slug }: ProductPageProps) {
                         ? 'border-black scale-105'
                         : 'border-transparent hover:border-gray-400'
                     }`}
-                  >
-                    <Image
-                      src={image}
-                      alt={`${product.title} - Image ${index + 1}`}
-                      fill
-                      className="object-cover"
-                    />
+                    >
+                      <Image
+                        src={image}
+                        alt={`${product.title} - Image ${index + 1}`}
+                        fill
+                        className="object-cover"
+                        unoptimized
+                      />
                   </button>
                 ))}
               </div>
@@ -414,6 +416,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
                   fill
                   className="object-contain p-8"
                   priority
+                  unoptimized
                 />
               </div>
 
@@ -455,6 +458,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
                         alt={`${product.title} - Image ${index + 1}`}
                         fill
                         className="object-cover"
+                        unoptimized
                       />
                     </button>
                   ))}

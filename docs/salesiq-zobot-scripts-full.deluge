@@ -1,14 +1,108 @@
 // =============================================================================
-// Zoho SalesIQ – Context handler: order_support_lookup
-// Copy this into your SalesIQ Script → Context handler.
-// Replace YOUR_SUPPORT_SHARED_SECRET and yourdomain.com with your values.
+// ZOHO SALESIQ – FULL SCRIPTS FOR FIBERISEFIT ORDER SUPPORT BOT
+// =============================================================================
+// 1. Message handler → paste into Zoho SalesIQ → Zoe → Message handler
+// 2. Context handler → paste into Zoho SalesIQ → Zoe → Context handler
 // =============================================================================
 
+
+// ##############################
+// 1. MESSAGE HANDLER
+// ##############################
+// Paste this entire block into: SalesIQ Script → Zoe | Message handler
+
+/*
+response = Map();
+msg = message.get("text");
+
+if(operation.equals("chat"))
+{
+    if(
+        !msg.equalsIgnoreCase("I'm new here, just browsing") &&
+        !msg.equalsIgnoreCase("I'm an existing customer and need help") &&
+        !msg.equalsIgnoreCase("I want a product demo")
+    )
+    {
+        response = Map();
+        response.put("action","reply");
+        response.put("replies",{"Hello there! Looking for anything specific?"});
+        response.put("suggestions",{
+            "I'm new here, just browsing",
+            "I'm an existing customer and need help",
+            "I want a product demo"
+        });
+        return response;
+    }
+
+    if(msg.equalsIgnoreCase("I'm new here, just browsing"))
+    {
+        response.put("action","context");
+        response.put("context_id","browsing");
+        question = {
+            "name":"browsing",
+            "replies":{
+                "Awesome. Let's get you started right away. Here's an on demand product demo that you can watch at your own pace."
+            },
+            "suggestions":{"Thanks"}
+        };
+        response.put("questions",{question});
+    }
+    else if(msg.equalsIgnoreCase("I'm an existing customer and need help"))
+    {
+        response.put("action","context");
+        response.put("context_id","order_support_lookup");
+        question = {
+            "name":"phone",
+            "replies":{
+                "Welcome back! To check your order, please share your registered mobile number (with country code, e.g. +91XXXXXXXXXX)."
+            }
+        };
+        response.put("questions",{question});
+    }
+    else if(msg.equalsIgnoreCase("I want a product demo"))
+    {
+        response.put("action","context");
+        response.put("context_id","demo");
+        question = {
+            "name":"time",
+            "replies":{
+                "Great! Let's set up a personalized demo. When would you like to schedule it?"
+            },
+            "input":{"type":"calendar"}
+        };
+        response.put("questions",{question});
+    }
+    else
+    {
+        response = Map();
+        response.put("action","reply");
+        response.put("replies",{"Is there anything else I can help you with?"});
+        response.put("suggestions",{
+            "I'm new here, just browsing",
+            "I'm an existing customer and need help",
+            "I want a product demo"
+        });
+        return response;
+    }
+
+    return response;
+}
+
+return response;
+*/
+
+
+// ##############################
+// 2. CONTEXT HANDLER
+// ##############################
+// Paste this entire block into: SalesIQ Script → Zoe | Context handler
+// Handles context_id "order_support_lookup" (order lookup by phone)
+
+/*
 response = Map();
 
 if(context_id.equals("order_support_lookup"))
 {
-    // 1) Read phone number the visitor entered
     phoneAnswer = answers.get("phone").get("text");
     phoneAnswer = ifnull(phoneAnswer,"").trim();
 
@@ -21,20 +115,16 @@ if(context_id.equals("order_support_lookup"))
         return response;
     }
 
-    // 2) Build JSON body: request up to 10 recent orders
     bodyString = '{"phone":"' + phoneAnswer + '","limit":10}';
 
     headers = Map();
     headers.put("Content-Type","application/json");
-    // Use the EXACT same secret as in your .env SALESIQ_SUPPORT_SHARED_SECRET (no spaces, same as in curl)
     headers.put("Authorization","Bearer e2ecf0a3f1820ac818a68ea3591c5a0c539a9becb7c468a0f028e436047097ff");
 
     url = "https://fiberisefit.com/api/support/order-by-phone";
 
-    // 3) Call the backend. postUrl(..., false) returns Map with responseCode, responseText, responseHeader
     rawResp = postUrl(url, bodyString, headers, false);
 
-    // 4) Get body and parse JSON (responseText is the body; may be string)
     respMap = Map();
     bodyContent = rawResp.get("responseText");
     respCode = ifnull(rawResp.get("responseCode"),0);
@@ -89,7 +179,6 @@ if(context_id.equals("order_support_lookup"))
         return response;
     }
 
-    // 5) Handle no order found
     found = ifnull(respMap.get("found"),false);
 
     if(!found)
@@ -107,7 +196,6 @@ if(context_id.equals("order_support_lookup"))
         return response;
     }
 
-    // 6) Build response from order(s): use "orders" array if present, else single "order"
     ordersList = respMap.get("orders");
     if(ordersList == null)
     {
@@ -220,3 +308,4 @@ if(context_id.equals("order_support_lookup"))
 }
 
 return response;
+*/
