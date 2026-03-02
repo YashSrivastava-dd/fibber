@@ -2,8 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { adminAuth, adminDb, isAdminInitialized, getInitError } from '@/lib/firebase/admin'
 import { shopifyFetch } from '@/lib/shopify/client'
 import { CART_CREATE_MUTATION, CART_UPDATE_MUTATION, CART_BUYER_IDENTITY_UPDATE_MUTATION, CART_DISCOUNT_CODES_UPDATE_MUTATION } from '@/lib/shopify/queries'
-import { systemEmailFromPhone } from '@/lib/user-identifier'
-
 export const dynamic = 'force-dynamic'
 
 interface CartItem {
@@ -66,9 +64,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const userData = userDoc.data()
-    const systemEmail = userData?.systemEmail ?? systemEmailFromPhone(phone)
-
     // Get cart items and optional discount code from request body
     const body = await request.json()
     const { items, discountCode }: { items: CartItem[]; discountCode?: string } = body
@@ -113,10 +108,6 @@ export async function POST(request: NextRequest) {
         {
           key: 'user_phone',
           value: phone,
-        },
-        {
-          key: 'system_email',
-          value: systemEmail,
         },
       ],
     }
@@ -179,10 +170,6 @@ export async function POST(request: NextRequest) {
             {
               key: 'user_phone',
               value: phone,
-            },
-            {
-              key: 'system_email',
-              value: systemEmail,
             },
           ],
         },

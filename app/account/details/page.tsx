@@ -9,7 +9,6 @@ interface UserProfile {
   lastName: string
   displayName: string
   phone: string | null
-  systemEmail: string
 }
 
 export default function AccountDetailsPage() {

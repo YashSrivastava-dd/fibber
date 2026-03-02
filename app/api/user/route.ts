@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { adminAuth, adminDb, isAdminInitialized, getInitError } from '@/lib/firebase/admin'
-import { systemEmailFromPhone } from '@/lib/user-identifier'
-
 export const dynamic = 'force-dynamic'
 
 async function getDecodedToken(request: NextRequest) {
@@ -37,12 +35,10 @@ export async function GET(request: NextRequest) {
     )
   }
   const userDocId = phone
-  const systemEmail = systemEmailFromPhone(phone)
   const userDoc = await adminDb.collection('users').doc(userDocId).get()
   if (!userDoc.exists) {
     return NextResponse.json({
       phone,
-      systemEmail,
       firstName: '',
       lastName: '',
       displayName: '',
@@ -51,7 +47,6 @@ export async function GET(request: NextRequest) {
   const data = userDoc.data()
   return NextResponse.json({
     phone: data?.phone ?? phone ?? null,
-    systemEmail: data?.systemEmail ?? systemEmail,
     firstName: data?.firstName ?? '',
     lastName: data?.lastName ?? '',
     displayName: data?.displayName ?? '',
@@ -79,7 +74,6 @@ export async function PATCH(request: NextRequest) {
     )
   }
   const userDocId = phone
-  const systemEmail = systemEmailFromPhone(phone)
   const body = await request.json().catch(() => ({}))
   const updates: Record<string, unknown> = { updatedAt: new Date() }
   if (typeof body.firstName === 'string') updates.firstName = body.firstName
@@ -95,7 +89,6 @@ export async function PATCH(request: NextRequest) {
   } else {
     await userRef.set({
       phone,
-      systemEmail,
       ...updates,
       createdAt: new Date(),
     })
@@ -134,9 +127,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const systemEmail = systemEmailFromPhone(phone)
     const userDocId = phone
-
     const userRef = adminDb.collection('users').doc(userDocId)
     const userDoc = await userRef.get()
     const now = new Date()
@@ -144,13 +135,11 @@ export async function POST(request: NextRequest) {
     if (userDoc.exists) {
       await userRef.update({
         phone,
-        systemEmail,
         updatedAt: now,
       })
     } else {
       await userRef.set({
         phone,
-        systemEmail,
         createdAt: now,
         updatedAt: now,
       })

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { adminAuth, isAdminInitialized, getInitError } from '@/lib/firebase/admin'
 import { shopifyAdminFetch } from '@/lib/shopify/admin-client'
 import { ORDERS_BY_EMAIL_QUERY } from '@/lib/shopify/queries'
-import { normalizePhone, systemEmailFromPhone } from '@/lib/user-identifier'
+import { normalizePhone } from '@/lib/user-identifier'
 
 export const dynamic = 'force-dynamic'
 
@@ -227,7 +227,6 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    const systemEmail = systemEmailFromPhone(phone)
     const normalizedUserPhone = normalizePhone(phone)
 
     // Check if we have Shopify Admin API token
@@ -243,29 +242,9 @@ export async function GET(request: NextRequest) {
     }
 
     try {
-      console.log(`🔍 Fetching orders for phone: ${phone}, systemEmail: ${systemEmail}`)
+      console.log(`🔍 Fetching orders for phone: ${phone}`)
 
-      // 1) Fetch orders that have our synthetic email (Shopify search; quote email so @ is valid)
-      let byEmail: OrderNode[] = []
-      try {
-        const emailQuery = `email:"${systemEmail.replace(/"/g, '\\"')}"`
-        const emailData = await shopifyAdminFetch<OrdersQueryResponse>({
-          query: ORDERS_BY_EMAIL_QUERY,
-          variables: {
-            query: emailQuery,
-            first: 50,
-            after: null,
-          },
-        })
-        byEmail = emailData.orders.edges.map((e) => e.node)
-        if (byEmail.length > 0) {
-          console.log(`📧 Found ${byEmail.length} order(s) by systemEmail`)
-        }
-      } catch (emailErr: any) {
-        console.warn('Orders by email query failed (non-fatal):', emailErr?.message)
-      }
-
-      // 2) Fetch recent orders with pagination and filter by phone (so we get all matches, not just from first 100)
+      // Fetch recent orders with pagination and filter by phone
       const PAGE_SIZE = 100
       const MAX_PAGES = 10 // cap at 1000 orders to avoid long runs
       let byPhone: OrderNode[] = []
@@ -315,9 +294,9 @@ export async function GET(request: NextRequest) {
         console.log(`📱 Found ${byPhone.length} order(s) by phone (scanned ${pageCount} page(s))`)
       }
 
-      // Merge and dedupe by order id, sort by createdAt desc
+      // Dedupe by order id, sort by createdAt desc
       const seen = new Set<string>()
-      const merged = [...byEmail, ...byPhone]
+      const merged = byPhone
         .filter((order) => {
           if (seen.has(order.id)) return false
           seen.add(order.id)
@@ -340,7 +319,7 @@ export async function GET(request: NextRequest) {
         })
       }
 
-      console.log(`✅ Returning ${filteredOrders.length} orders (email: ${byEmail.length}, phone: ${byPhone.length})`)
+      console.log(`✅ Returning ${filteredOrders.length} orders (phone: ${byPhone.length})`)
       return NextResponse.json({ orders: filteredOrders })
     } catch (shopifyError: any) {
       console.error('❌ Error fetching orders from Shopify:', shopifyError)
