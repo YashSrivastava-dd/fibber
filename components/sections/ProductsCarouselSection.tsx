@@ -156,7 +156,11 @@ export default function ProductsCarouselSection() {
                         {product.title}
                       </h3>
                     </Link>
-                    <p className="text-xs text-gray-500">Serving size: 11.5 gm </p>
+                    {(() => {
+                      const t = product.title?.toLowerCase() ?? ''
+                      const servings = t.includes('starter pack') ? 'Servings : 30 Sachets' : t.includes('transformation pack') ? 'Servings : 90 Sachets' : null
+                      return servings ? <p className="text-xs text-gray-500">{servings}</p> : null
+                    })()}
                     <p className="text-xl font-normal pt-1">
                       {(product.comparePrice ?? (product.maxPrice != null && product.maxPrice > product.price ? product.maxPrice : null)) != null &&
                       (product.comparePrice ?? product.maxPrice)! > product.price ? (

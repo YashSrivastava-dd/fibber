@@ -25,6 +25,52 @@ interface ProductReviewsSectionProps {
   productTitle?: string
 }
 
+// Default seeded testimonials used when there are no real reviews yet
+const SEEDED_TESTIMONIALS = [
+  {
+    rating: 5,
+    comment:
+      'I didn’t think something this small would make a difference, but I genuinely feel less heavy after meals now. It’s become my quiet little habit.',
+    authorName: 'Priya S., Bengaluru',
+  },
+  {
+    rating: 5,
+    comment:
+      'By 4 PM every day I used to crash so hard. Since I started Fyber, I just… don’t. I feel steady. That’s the best way to put it.',
+    authorName: 'Aman K., Gurugram',
+  },
+  {
+    rating: 4,
+    comment:
+      'I was sceptical at first. But after a week, I noticed I wasn’t feeling bloated every evening. That’s when I knew it was working.',
+    authorName: 'Sneha R., Mumbai',
+  },
+  {
+    rating: 4,
+    comment:
+      'It’s not some dramatic overnight change. It’s just that my digestion feels smoother, and I don’t think about it as much anymore.',
+    authorName: 'Rohan P., Pune',
+  },
+  {
+    rating: 5,
+    comment:
+      'I like that it doesn’t make me feel weird or weak. I just feel normal… but better.',
+    authorName: 'Meera L., Chennai',
+  },
+  {
+    rating: 4,
+    comment:
+      'My routine’s pretty hectic, and I eat at odd hours. Fyber kind of keeps me balanced, even when my schedule isn’t.',
+    authorName: 'Karthik V., Hyderabad',
+  },
+  {
+    rating: 4,
+    comment:
+      'No big weight loss results for me. But my weight certainly didn’t increase… unlike before!',
+    authorName: 'Anjali D., Delhi',
+  },
+] as const
+
 function formatDate(iso: string): string {
   if (!iso || typeof iso !== 'string') return ''
   try {
@@ -65,9 +111,29 @@ export default function ProductReviewsSection({ productSlug, productTitle }: Pro
     try {
       const res = await fetch(`/api/products/${encodeURIComponent(productSlug)}/reviews`, { cache: 'no-store' })
       const data = await res.json()
-      if (data.reviews) setReviews(data.reviews)
-      if (typeof data.averageRating === 'number') setAverageRating(data.averageRating)
-      if (typeof data.totalCount === 'number') setTotalCount(data.totalCount)
+      if (Array.isArray(data.reviews) && data.reviews.length > 0) {
+        // Real user reviews exist – show them and use their stats
+        setReviews(data.reviews)
+        if (typeof data.averageRating === 'number') setAverageRating(data.averageRating)
+        if (typeof data.totalCount === 'number') setTotalCount(data.totalCount)
+      } else {
+        // No real reviews yet – show seeded testimonials as defaults
+        const seededReviews: ProductReview[] = SEEDED_TESTIMONIALS.map((t, idx) => ({
+          id: `seed-${idx}`,
+          productSlug,
+          rating: t.rating,
+          comment: t.comment,
+          authorName: t.authorName,
+          authorId: null,
+          createdAt: '',
+        }))
+        setReviews(seededReviews)
+        // Use a friendly default average and count for seeded testimonials
+        const sum = seededReviews.reduce((acc, r) => acc + r.rating, 0)
+        const avg = Math.round((sum / seededReviews.length) * 10) / 10
+        setAverageRating(avg)
+        setTotalCount(seededReviews.length)
+      }
     } catch {
       setReviews([])
     } finally {

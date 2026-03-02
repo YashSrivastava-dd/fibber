@@ -137,6 +137,24 @@ export default function ProductPage({ slug }: ProductPageProps) {
     return () => { cancelled = true }
   }, [slug])
 
+  // Auto-advance main product image every 5s (desktop & mobile)
+  useEffect(() => {
+    if (!product) return
+    const images =
+      product.images && product.images.length > 0
+        ? product.images
+        : product.image
+          ? [product.image]
+          : []
+    if (images.length <= 1) return
+
+    const intervalId = setInterval(() => {
+      setSelectedImageIndex((prev) => (prev + 1) % images.length)
+    }, 5000)
+
+    return () => clearInterval(intervalId)
+  }, [product?.id, product?.images?.length])
+
   const handleAddToCart = () => {
     if (!product || !selectedVariant) return
 
@@ -494,11 +512,11 @@ export default function ProductPage({ slug }: ProductPageProps) {
               </div>
 
               {/* Product Description */}
-              {product.description && (
-                <div className="text-base text-gray-700 leading-relaxed">
+              {(product as any).descriptionHtml && (
+                <div className="text-sm text-gray-700 leading-relaxed product-description">
                   <div
-                    className="prose prose-sm max-w-none prose-gray"
-                    dangerouslySetInnerHTML={{ __html: product.description }}
+                    className="prose prose-sm max-w-none prose-gray prose-p:text-sm prose-li:text-sm prose-headings:text-base"
+                    dangerouslySetInnerHTML={{ __html: (product as any).descriptionHtml }}
                   />
                 </div>
               )}
@@ -652,15 +670,13 @@ export default function ProductPage({ slug }: ProductPageProps) {
                   </button>
                   {expandedAccordion === 'benefits' && (
                     <div className="pb-4 text-sm text-gray-700 leading-relaxed">
-
-                      <ul className="list-disc list-inside space-y-2">
-                        <li>Helps manage appetite naturally</li>
-                        <li>Supports weight management goals</li>
-                        <li>Promotes digestive comfort</li>
-                        <li>Encourages mindful portion control</li>
-                        <li>High fiber content for better satiety</li>
-                        <li>Zero added sugar</li>
-                        <li>Only 19 kcal per serving</li>
+                      <ul className="space-y-2">
+                        <li>✓ Smart craving control</li>
+                        <li>✓ Supports weight management</li>
+                        <li>✓ Prebiotic + Probiotic support</li>
+                        <li>✓ Helps prevent glucose spikes &amp; crashes</li>
+                        <li>✓ Encourages healthy fat metabolism</li>
+                        <li>✓ Promotes steady energy</li>
                       </ul>
                     </div>
                   )}
@@ -683,17 +699,12 @@ export default function ProductPage({ slug }: ProductPageProps) {
                   </button>
                   {expandedAccordion === 'how-to-take' && (
                     <div className="pb-4 text-sm text-gray-700 leading-relaxed">
-                      <ul className="list-disc list-inside space-y-2 mb-3">
-                        <li>Mix 1 serving (11.5g) in 200 ml room-temperature water</li>
-                        <li>Stir well and consume 45–60 minutes before meals</li>
-                        <li>Do not mix in chilled water</li>
+                      {/* <p className="mb-2"><strong>How to Take:</strong></p> */}
+                      <ul className="list-disc list-inside space-y-1">
+                        <li>Mix one sachet in 200 ml of water, 30–60 minutes before a meal.</li>
+                    
+                        <li>Consume 1–2 sachets daily.</li>
                       </ul>
-                      <p className="mb-2">
-                        Unflavoured variant can also be added to coffee or tea.
-                      </p>
-                      <p>
-                        For best results, stay well-hydrated and practice mindful eating.
-                      </p>
                     </div>
                   )}
                 </div>
@@ -714,27 +725,15 @@ export default function ProductPage({ slug }: ProductPageProps) {
                     />
                   </button>
                   {expandedAccordion === 'ingredients' && (
-                    <div className="pb-4 text-sm text-gray-700 leading-relaxed space-y-4">
-                      <div>
-                       
-                        <ul className="list-disc list-inside space-y-1 mb-3">
-                          <li>Soluble Dietary Fiber</li>
-                          <li>L-Carnitine L-Tartrate</li>
-                          <li>L-Tyrosine</li>
-                          <li>Lactobacillus gasseri</li>
-                        </ul>
-                        <p className="font-semibold text-gray-800 mb-1">Flavoured Variants Also Contain:</p>
-                        <ul className="list-disc list-inside space-y-1 mb-3">
-                          <li>Acidity Regulator (INS 330)</li>
-                          <li>Anticaking Agent (INS 551)</li>
-                          <li>Sweetener (INS 955 – Sucralose)</li>
-                          <li>Nature Identical Flavouring Substances</li>
-                        </ul>
-                        <p className="font-semibold text-gray-800 mb-1">Unflavoured Variant Contains:</p>
-                        <ul className="list-disc list-inside space-y-1">
-                          <li>Anticaking Agent (INS 551)</li>
-                        </ul>
-                      </div>
+                    <div className="pb-4 text-sm text-gray-700 leading-relaxed space-y-3">
+                      {/* <p><strong>Ingredients</strong></p> */}
+                      <p>Patented Lean-X blend with:</p>
+                      <ul className="list-disc list-inside space-y-1">
+                        <li>Soluble dietary fiber</li>
+                        <li>Lactobacillus gasseri ( Probiotic )</li>
+                        <li>L-Carnitine &amp; L-tartrate (LCLT)</li>
+                        <li>L-Tyrosine</li>
+                      </ul>
                     </div>
                   )}
                 </div>
@@ -747,11 +746,10 @@ export default function ProductPage({ slug }: ProductPageProps) {
                 </h2>
                 <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-2 -mx-2 px-2">
                   {[
-                    '/ritual/154359.jpg',
-                    '/ritual/154361.jpg',
-                    '/ritual/Make_the_man_2k_202601120957.jpeg',
-                    '/ritual/Make_this_image_2k_202601091748.jpeg',
-                    '/ritual/An_aesthetic_and_2k_202601091659.jpeg',
+                    '/product page routine images/FIBERISE A+-12.png',
+                    '/product page routine images/FIBERISE A+-13.png',
+                    '/product page routine images/FIBERISE A+-14.png',
+                    '/product page routine images/FIBERISE A+-15.png',
                   ].map((imagePath, index) => (
                     <div
                       key={index}
@@ -773,7 +771,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
       </div>
       </div>
 
-      {/* Full-width image below hero with marquee */}
+      {/* Full-width image below hero with marquee
       <div className="w-full relative">
         <Image
           src="/BlueSet.png"
@@ -792,35 +790,76 @@ export default function ProductPage({ slug }: ProductPageProps) {
             <span className="inline-block px-8">Real Stories , Real Result</span>
           </div>
         </div>
+      </div> */}
+
+      <div className="w-full relative mt-10">
+        <Image
+          src="/product page routine images/FIBERISE A+-09.png"
+          alt="Lean-X advanced fiber nutrition"
+          width={1920}
+          height={1080}
+          className="w-full h-auto object-cover"
+          sizes="100vw"
+        />
       </div>
 
-      <VideoSection />
+      {/* Traditional dieting vs Fyber banner */}
+      <div className="w-full relative mt-8">
+        <Image
+          src="/product page routine images/FIBERISE A+-10.png"
+          alt="Traditional dieting vs Fyber comparison"
+          width={1920}
+          height={1080}
+          className="w-full h-auto object-cover"
+          sizes="100vw"
+        />
+      </div>
 
-      {/* Why Women's Multi Capsules Section */}
-      <div className="w-full bg-[#FFE4E9] py-12 md:py-16 lg:py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-            {/* Left Side - Text Content */}
-            <div className="order-2 lg:order-1">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-black uppercase mb-4 md:mb-6">
-                WHY WOMEN'S MULTI CAPSULES?
-              </h2>
-              <p className="text-base md:text-lg text-black leading-relaxed">
-                Women's Multi is designed to support women's daily nutritional needs.
-              </p>
-            </div>
+      {/* From first sip to long-term shift banner */}
+      <div className="w-full relative mt-8">
+        <Image
+          src="/product page routine images/FIBERISE A+-11.png"
+          alt="From first sip to long-term shift"
+          width={1920}
+          height={1080}
+          className="w-full h-auto object-cover"
+          sizes="100vw"
+        />
+      </div>
 
-            {/* Right Side - Image */}
-            <div className="order-1 lg:order-2 flex justify-center lg:justify-end">
-              <div className="relative w-full max-w-md aspect-square">
-                <Image
-                  src="/placeholder-women-multi.jpg"
-                  alt="Women's Multi Capsules"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-            </div>
+      {/* Revolutionary science behind Fyber banner */}
+      <div className="w-full relative mt-8">
+        <Image
+          src="/product page routine images/FIBERISE A+-08.png"
+          alt="The revolutionary science behind Fyber"
+          width={1920}
+          height={1080}
+          className="w-full h-auto object-cover"
+          sizes="100vw"
+        />
+      </div>
+
+      {/* Calm, intelligent, effortless well-being banner with marquee text */}
+      <div className="w-full relative mt-8">
+        <Image
+          src="/product page routine images/FIBERISE A+-16.png"
+          alt="Calm and effortless well-being"
+          width={1920}
+          height={1080}
+          className="w-full h-auto object-cover"
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 flex items-center pointer-events-none overflow-hidden">
+          <div
+            className="flex whitespace-nowrap text-white tracking-[0.3em] text-xl md:text-3xl lg:text-4xl font-normal animate-marquee"
+            style={{ fontFamily: 'QuadratGrotesk, sans-serif' }}
+          >
+            <span className="inline-block px-8">
+              BECAUSE WEIGHT MANAGEMENT AND WELL-BEING SHOULD FEEL INTELLIGENT, CALM AND EFFORTLESS.
+            </span>
+            <span className="inline-block px-8">
+              BECAUSE WEIGHT MANAGEMENT AND WELL-BEING SHOULD FEEL INTELLIGENT, CALM AND EFFORTLESS.
+            </span>
           </div>
         </div>
       </div>
@@ -857,7 +896,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
       </section>
 
       {/* FAQ Section */}
-      <section className="w-full bg-white py-12 md:py-16" style={{ fontFamily: 'QuadratGrotesk, sans-serif' }}>
+      <section className="w-full bg-white py-12 md:py-16" style={{ fontFamily: 'Montserrat, sans-serif' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12 md:mb-16">
             <p className="text-base md:text-lg text-gray-500 font-medium mb-2">
@@ -871,23 +910,39 @@ export default function ProductPage({ slug }: ProductPageProps) {
             {[
               {
                 id: 'faq-1',
-                question: 'Are wellness supplements safe to use?',
-                answer: 'Yes. Our supplements are formulated with quality ingredients and manufactured under strict standards. We recommend consulting your healthcare provider before starting any new supplement, especially if you have existing conditions or take other medications.',
+                question: 'Can I lose weight just by taking FYBER?',
+                answer:
+                  'Not by itself. FYBER can support weight management by helping control cravings and making you feel fuller, but sustainable weight loss also needs balanced eating and activity. Think of FYBER as an assistant, not a standalone solution.',
               },
               {
                 id: 'faq-2',
-                question: 'How should I store my supplements?',
-                answer: 'Store in a cool, dry place away from direct sunlight. Keep the bottle tightly closed and out of reach of children. Avoid storing in humid areas like the bathroom.',
+                question: 'Is FYBER like Ozempic?',
+                answer:
+                  'No. Ozempic is a prescription medication that affects insulin and appetite signals. Fyber is a dietary fiber supplement, not a drug. It works by supporting digestion and appetite control, not by altering hormones the way medications do.',
               },
               {
                 id: 'faq-3',
-                question: 'Do you offer international shipping?',
-                answer: 'Yes. We ship to multiple countries. Shipping costs and delivery times vary by location. You can see options at checkout.',
+                question: 'Does FYBER have any side effects?',
+                answer:
+                  'Most people tolerate fiber well, but when you start or increase fiber quickly, you might experience mild effects like gas, bloating, and mild stomach discomfort. These usually ease as your body adjusts. Drinking enough water can help reduce these side effects.',
               },
               {
                 id: 'faq-4',
-                question: 'What is your return policy?',
-                answer: 'We offer a satisfaction guarantee. If you are not satisfied with your purchase, contact us within the specified return window for a refund or exchange. See our full policy in the footer or contact page.',
+                question: 'What happens if I stop taking FYBER?',
+                answer:
+                  'Nothing dramatic. You may notice your cravings slowly returning to previous patterns with less support for digestion and satiety. It doesn’t cause sudden weight gain; you simply lose the extra support it was providing.',
+              },
+              {
+                id: 'faq-5',
+                question: 'Is FYBER safe during PMS when cravings are high?',
+                answer:
+                  'Generally, yes. Fiber supplements are normally safe and can help with feelings of fullness when cravings spike. However, if you have specific health conditions like IBS or stomach sensitivity, check with your doctor.',
+              },
+              {
+                id: 'faq-6',
+                question: 'Does FYBER cause deficiencies?',
+                answer:
+                  'No. Dietary fiber does not block nutrients or cause deficiencies when taken as directed. In fact, it is part of a healthy diet. Just make sure you’re also eating nutrient-rich foods and staying hydrated.',
               },
             ].map((faq) => (
               <div key={faq.id} className="border-b border-gray-200 py-6 md:py-8 first:pt-0">

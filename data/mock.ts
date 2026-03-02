@@ -90,7 +90,7 @@ export const prebioticProbioticData = {
     ],
   },
   probiotic: {
-    title: 'Probiotic Strains',
+    title: 'Lactobacillus gasseri ( Probiotic )',
     subtitle: 'Live Beneficial Bacteria',
     description: 'Clinically studied strains of beneficial bacteria that colonize your gut and work synergistically with prebiotics to optimize your microbiome.',
     features: [
