@@ -2,12 +2,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import { adminAuth, isAdminInitialized, getInitError } from '@/lib/firebase/admin'
 import { shopifyAdminFetch } from '@/lib/shopify/admin-client'
 import { ORDERS_BY_EMAIL_QUERY } from '@/lib/shopify/queries'
+import { normalizePhone, systemEmailFromPhone } from '@/lib/user-identifier'
 
 export const dynamic = 'force-dynamic'
-
-function normalizePhone(phone?: string | null): string {
-  return phone ? phone.replace(/\D/g, '') : ''
-}
 
 /** Returns true if two digit-only strings represent the same phone (exact or last-10 match for country code). */
 function phonesMatch(userDigits: string, orderDigits: string): boolean {
@@ -222,19 +219,16 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    const firebaseUid = decodedToken.uid
     const phone = decodedToken.phone_number as string | undefined
-
-    if (!firebaseUid) {
+    if (!phone) {
       return NextResponse.json(
-        { error: 'Invalid token: No UID found', orders: [] },
+        { error: 'Phone number required. Please sign in with phone.', orders: [] },
         { status: 400 }
       )
     }
 
-    // Synthetic email we set on checkout (uid@fiberisefit.com) – orders placed via our flow may have this
-    const systemEmail = `${firebaseUid}@fiberisefit.com`
-    const normalizedUserPhone = phone ? normalizePhone(phone) : ''
+    const systemEmail = systemEmailFromPhone(phone)
+    const normalizedUserPhone = normalizePhone(phone)
 
     // Check if we have Shopify Admin API token
     if (!process.env.SHOPIFY_ADMIN_ACCESS_TOKEN) {
@@ -249,7 +243,7 @@ export async function GET(request: NextRequest) {
     }
 
     try {
-      console.log(`🔍 Fetching orders for uid: ${firebaseUid}, phone: ${phone ?? 'none'}, systemEmail: ${systemEmail}`)
+      console.log(`🔍 Fetching orders for phone: ${phone}, systemEmail: ${systemEmail}`)
 
       // 1) Fetch orders that have our synthetic email (Shopify search; quote email so @ is valid)
       let byEmail: OrderNode[] = []

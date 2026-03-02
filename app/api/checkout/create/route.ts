@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { adminAuth, adminDb, isAdminInitialized, getInitError } from '@/lib/firebase/admin'
 import { shopifyFetch } from '@/lib/shopify/client'
 import { CART_CREATE_MUTATION, CART_UPDATE_MUTATION, CART_BUYER_IDENTITY_UPDATE_MUTATION, CART_DISCOUNT_CODES_UPDATE_MUTATION } from '@/lib/shopify/queries'
+import { systemEmailFromPhone } from '@/lib/user-identifier'
 
 export const dynamic = 'force-dynamic'
 
@@ -48,21 +49,15 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const firebaseUid = decodedToken.uid
     const phone = decodedToken.phone_number as string | undefined
-
-    if (!firebaseUid) {
+    if (!phone) {
       return NextResponse.json(
-        { error: 'Invalid token: No UID found' },
+        { error: 'Phone number required. Please sign in with phone.' },
         { status: 400 }
       )
     }
 
-    // Use phone number as primary user document key when available so that
-    // the same phone maps to the same user document across platforms.
-    const userDocId = phone || firebaseUid
-
-    // Get user from Firestore to get systemEmail
+    const userDocId = phone
     const userDoc = await adminDb.collection('users').doc(userDocId).get()
     if (!userDoc.exists) {
       return NextResponse.json(
@@ -72,7 +67,7 @@ export async function POST(request: NextRequest) {
     }
 
     const userData = userDoc.data()
-    const systemEmail = userData?.systemEmail || `${firebaseUid}@fiberisefit.com`
+    const systemEmail = userData?.systemEmail ?? systemEmailFromPhone(phone)
 
     // Get cart items and optional discount code from request body
     const body = await request.json()
@@ -116,8 +111,8 @@ export async function POST(request: NextRequest) {
       lines: cartLines,
       attributes: [
         {
-          key: 'firebase_uid',
-          value: firebaseUid,
+          key: 'user_phone',
+          value: phone,
         },
         {
           key: 'system_email',
@@ -166,8 +161,7 @@ export async function POST(request: NextRequest) {
     const cartId = cartResult.cartCreate.cart.id
     let checkoutUrl = cartResult.cartCreate.cart.checkoutUrl
 
-    // Update cart attributes to ensure firebase_uid is set
-    // (This is a backup in case attributes weren't set during creation)
+    // Update cart attributes to ensure user_phone is set
     try {
       await shopifyFetch<{
         cartAttributesUpdate: {
@@ -183,8 +177,8 @@ export async function POST(request: NextRequest) {
           cartId,
           attributes: [
             {
-              key: 'firebase_uid',
-              value: firebaseUid,
+              key: 'user_phone',
+              value: phone,
             },
             {
               key: 'system_email',

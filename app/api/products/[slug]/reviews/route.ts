@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { adminDb, isAdminInitialized, getInitError, adminAuth } from '@/lib/firebase/admin'
+import { normalizePhone } from '@/lib/user-identifier'
 import type { DocumentSnapshot } from 'firebase-admin/firestore'
 
 export const dynamic = 'force-dynamic'
@@ -129,20 +130,21 @@ export async function POST(
         const token = authHeader.slice(7)
         if (adminAuth) {
           const decoded = await adminAuth.verifyIdToken(token)
-          authorId = decoded.uid
           const phone = decoded.phone_number as string | undefined
-          const userDocId = phone || authorId
-          // Prefer first name from users collection, then displayName, then token name, never phone as name
-          if (adminDb) {
-            const userDoc = await adminDb.collection('users').doc(userDocId).get()
-            const userData = userDoc.data()
-            const firstName = (userData?.firstName as string)?.trim()
-            const displayNameFromProfile = (userData?.displayName as string)?.trim()
-            if (firstName) displayName = firstName
-            else if (displayNameFromProfile) displayName = displayNameFromProfile
+          if (phone) {
+            authorId = normalizePhone(phone)
+            const userDocId = phone
+            if (adminDb) {
+              const userDoc = await adminDb.collection('users').doc(userDocId).get()
+              const userData = userDoc.data()
+              const firstName = (userData?.firstName as string)?.trim()
+              const displayNameFromProfile = (userData?.displayName as string)?.trim()
+              if (firstName) displayName = firstName
+              else if (displayNameFromProfile) displayName = displayNameFromProfile
+            }
+            if (!displayName) displayName = (decoded.name as string)?.trim() || ''
+            if (!displayName) displayName = `User ***${phone.slice(-4)}`
           }
-          if (!displayName) displayName = (decoded.name as string)?.trim() || ''
-          if (!displayName) displayName = `User ${authorId.slice(0, 8)}`
         }
       } catch {
         // continue without auth

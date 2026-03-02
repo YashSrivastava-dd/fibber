@@ -13,7 +13,7 @@ interface UserProfile {
 }
 
 export default function AccountDetailsPage() {
-  const { phone, uid, user, getIdToken } = useAuth()
+  const { phone, user, getIdToken } = useAuth()
   const [profile, setProfile] = useState<UserProfile | null>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)

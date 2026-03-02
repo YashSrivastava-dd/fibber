@@ -9,7 +9,7 @@ import { useState, useEffect } from 'react'
 
 export default function AccountDashboardPage() {
   const router = useRouter()
-  const { phone, uid, getIdToken } = useAuth()
+  const { phone, getIdToken } = useAuth()
   const [profile, setProfile] = useState<{
     firstName?: string
     lastName?: string
@@ -41,8 +41,7 @@ export default function AccountDashboardPage() {
   const displayName =
     [profile?.firstName, profile?.lastName].filter(Boolean).join(' ') ||
     profile?.displayName ||
-    (phone ? phone.replace(/\D/g, '').slice(-10) : null) ||
-    (uid ? `user-${uid.slice(0, 8)}` : null) ||
+    (phone ? `***${phone.replace(/\D/g, '').slice(-4)}` : null) ||
     'there'
 
   const handleLogout = async () => {
