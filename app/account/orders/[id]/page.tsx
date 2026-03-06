@@ -6,16 +6,18 @@ import Link from 'next/link'
 import { useAuth } from '@/contexts/AuthContext'
 import { useOrders } from '@/hooks/useOrders'
 import { FileDown } from 'lucide-react'
+import IssueWithOrderModal from '@/components/IssueWithOrderModal'
 
 export default function OrderDetailPage() {
   const params = useParams()
   const router = useRouter()
-  const { getIdToken } = useAuth()
+  const { getIdToken, phone } = useAuth()
   const { rawOrders, loading, error } = useOrders()
   const orderId = typeof params?.id === 'string' ? decodeURIComponent(params.id) : ''
   const order = rawOrders.find((o) => o.id === orderId)
 
   const [inlineTrackingUrl, setInlineTrackingUrl] = useState<string | null>(null)
+  const [issueModalOpen, setIssueModalOpen] = useState(false)
   const [invoiceLoading, setInvoiceLoading] = useState(false)
   const [invoiceError, setInvoiceError] = useState<string | null>(null)
 
@@ -296,13 +298,22 @@ export default function OrderDetailPage() {
           <FileDown className="w-4 h-4" />
           {invoiceLoading ? 'Loading…' : 'Download invoice'}
         </button>
-        <Link
-          href={`/contact?subject=Order%20Issue&order=${encodeURIComponent(orderId)}`}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+        <button
+          type="button"
+          onClick={() => setIssueModalOpen(true)}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-black text-white font-medium hover:bg-gray-800 transition-colors"
         >
-          Issue with order
-        </Link>
+          Issue with order ?
+        </button>
       </div>
+
+      <IssueWithOrderModal
+        isOpen={issueModalOpen}
+        onClose={() => setIssueModalOpen(false)}
+        prefillOrderId={order?.orderNumber ?? ''}
+        prefillPhone={phone ?? ''}
+      />
+
       {invoiceError && (
         <p className="mt-2 text-sm text-red-600">{invoiceError}</p>
       )}

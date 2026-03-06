@@ -11,6 +11,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { shopifyAdminFetch } from '@/lib/shopify/admin-client'
 import { getShiprocketToken } from '@/lib/shiprocket/client'
+import { validateSupportRequest, extractOrderNumber } from '@/lib/support/auth'
+import { logSupportEvent } from '@/lib/support/logger'
 
 export const dynamic = 'force-dynamic'
 
@@ -260,32 +262,11 @@ function formatDate(iso: string): string {
 
 export async function POST(req: NextRequest) {
 
-  // 1. Guard: shared secret must be configured
-  const sharedSecret = process.env.SALESIQ_SUPPORT_SHARED_SECRET
-  if (!sharedSecret) {
-    console.error('[get-order] SALESIQ_SUPPORT_SHARED_SECRET is not configured')
-    return NextResponse.json(
-      { success: false, message: 'Something went wrong' },
-      { status: 500 }
-    )
-  }
+  // 1. Auth + rate limit
+  const auth = validateSupportRequest(req)
+  if (!auth.ok) return auth.errorResponse!
 
-  // 2. Auth: Zoho SalesIQ sends the secret in x-salesiq-signature (or Authorization: Bearer)
-  const providedSecret = (
-    req.headers.get('x-salesiq-signature') ??
-    req.headers.get('authorization')
-  )
-    ?.replace(/^Bearer\s+/i, '')
-    .trim()
-
-  if (!providedSecret || providedSecret !== sharedSecret) {
-    return NextResponse.json(
-      { success: false, message: 'Unauthorized' },
-      { status: 401 }
-    )
-  }
-
-  // 3. Parse request body
+  // 2. Parse request body
   let body: RequestBody
   try {
     body = (await req.json()) as RequestBody
@@ -296,16 +277,22 @@ export async function POST(req: NextRequest) {
     )
   }
 
-  // 4. Validate required field: orderNumber
-  const rawOrderNumber = typeof body?.orderNumber === 'string' ? body.orderNumber.trim() : ''
-  if (!rawOrderNumber) {
+  // 3. Validate + sanitize orderNumber (handles all formats: 1021, #1021, "order 1021")
+  const rawOrderNumber = typeof body?.orderNumber === 'string' ? body.orderNumber : ''
+  if (!rawOrderNumber.trim()) {
     return NextResponse.json(
       { success: false, message: 'orderNumber is required' },
       { status: 400 }
     )
   }
 
-  const orderNumber = normalizeOrderNumber(rawOrderNumber)
+  const orderNumber = extractOrderNumber(rawOrderNumber)
+  if (!orderNumber) {
+    return NextResponse.json(
+      { success: false, message: 'Could not extract a valid order number. Please provide just the number, e.g. 1021.' },
+      { status: 400 }
+    )
+  }
 
   // Optional identity fields for verification
   const rawEmail = typeof body?.email === 'string' ? body.email.trim().toLowerCase() : ''
@@ -337,7 +324,7 @@ export async function POST(req: NextRequest) {
   }
 
   if (!shopifyOrder) {
-    // Return 200 so Zobot can read message field without error handling
+    logSupportEvent({ action: 'order_lookup', orderNumber, result: 'not_found', ip: auth.ip })
     return NextResponse.json(
       { success: false, message: 'Order not found' },
       { status: 200 }
@@ -389,6 +376,14 @@ export async function POST(req: NextRequest) {
       quantity: edge.node.quantity,
     })),
   }
+
+  logSupportEvent({
+    action: 'order_lookup',
+    orderNumber,
+    result: 'found',
+    ip: auth.ip,
+    meta: { fulfillmentStatus: order.fulfillmentStatus, paymentStatus: order.paymentStatus },
+  })
 
   return NextResponse.json({ success: true, order, shipment }, { status: 200 })
 }
