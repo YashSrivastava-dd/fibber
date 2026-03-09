@@ -494,7 +494,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
               </div>
 
               {/* Product Title */}
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-black uppercase leading-[1.1] mb-1 break-words">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black uppercase leading-[1.1] mb-1 break-words">
                 {product.title}
               </h1>
               <p className="text-sm text-gray-600 mb-4">Servings : {displayServings}</p>

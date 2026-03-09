@@ -115,7 +115,7 @@ Control Appetite. Refine Weight          </p>
             {/* Left Arrow */}
             <button
               onClick={() => scroll('left')}
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white border border-gray-200 rounded-full p-2 shadow-lg hover:bg-gray-50 transition-colors"
+              className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white border border-gray-200 rounded-full p-2 shadow-lg hover:bg-gray-50 transition-colors"
               aria-label="Scroll left"
             >
               <ChevronLeft className="w-6 h-6 text-black" />
@@ -124,14 +124,14 @@ Control Appetite. Refine Weight          </p>
             {/* Products Container */}
             <div
               ref={scrollContainerRef}
-              className="flex gap-8 overflow-x-auto scrollbar-hide scroll-smooth pb-4 justify-center px-12"
+              className="flex gap-6 md:gap-8 overflow-x-auto scrollbar-hide scroll-smooth pb-4 px-4 -mx-4 md:mx-0 md:px-12 md:justify-center"
             >
               {products.map((product, index) => {
                 const badges = getProductBadges(product, index)
                 return (
                 <div
                   key={product.id}
-                  className="flex-shrink-0 w-[300px] md:w-[350px] group"
+                  className="flex-shrink-0 w-[260px] sm:w-[280px] md:w-[350px] group"
                 >
                   {/* Product Image + top-left tags */}
                   <Link href={`/products/${product.slug}`}>
@@ -199,23 +199,24 @@ Control Appetite. Refine Weight          </p>
                       <span className="text-sm font-medium text-gray-800">4.8</span>
                     </div>
                     <div className="pt-1">
-                    {/* Button - Hidden by default, appears on product hover */}
-                    <button
-                      onClick={() => addItem({
-                        id: product.id,
-                        title: product.title,
-                        price: product.price,
-                        image: product.image,
-                      })}
-                      disabled={!product.available}
-                      className={`w-full py-3 px-6 rounded-lg font-normal text-sm transition-all duration-300 ${
-                        product.available
-                          ? 'bg-white border-2 border-black text-black opacity-0 group-hover:opacity-100 group-hover:translate-y-0 translate-y-2 hover:bg-black hover:text-white'
-                          : 'bg-gray-200 text-gray-500 cursor-not-allowed border-2 border-gray-300 opacity-0 group-hover:opacity-100'
-                      }`}
-                    >
-                      {product.available ? 'ADD TO CART' : 'OUT OF STOCK'}
-                    </button>
+                      <button
+                        onClick={() =>
+                          addItem({
+                            id: product.id,
+                            title: product.title,
+                            price: product.price,
+                            image: product.image,
+                          })
+                        }
+                        disabled={!product.available}
+                        className={`w-full py-3 px-6 rounded-lg font-normal text-sm transition-all duration-300 ${
+                          product.available
+                            ? 'bg-white border-2 border-black text-black hover:bg-black hover:text-white md:opacity-0 md:group-hover:opacity-100 md:group-hover:translate-y-0 md:translate-y-2'
+                            : 'bg-gray-200 text-gray-500 cursor-not-allowed border-2 border-gray-300 md:opacity-0 md:group-hover:opacity-100'
+                        }`}
+                      >
+                        {product.available ? 'ADD TO CART' : 'OUT OF STOCK'}
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -226,7 +227,7 @@ Control Appetite. Refine Weight          </p>
             {/* Right Arrow */}
             <button
               onClick={() => scroll('right')}
-              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white border border-gray-200 rounded-full p-2 shadow-lg hover:bg-gray-50 transition-colors"
+              className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white border border-gray-200 rounded-full p-2 shadow-lg hover:bg-gray-50 transition-colors"
               aria-label="Scroll right"
             >
               <ChevronRight className="w-6 h-6 text-black" />

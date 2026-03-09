@@ -215,6 +215,14 @@ html {
   opacity: 0;
 }
 
+/* LYTE banner blocks: subtle appear when in view */
+.lyte-banner-block {
+  opacity: 0;
+}
+.lyte-banner-block.is-visible {
+  animation: fade-in-up 0.7s ease-out forwards;
+}
+
 .delay-75 {
   animation-delay: 75ms;
 }
