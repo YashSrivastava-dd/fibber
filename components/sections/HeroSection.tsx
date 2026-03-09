@@ -45,9 +45,13 @@ export default function HeroSection() {
                       text-white/80 md:text-gray-500">
           SCIENCE BACKED | NATURAL WEIGHT-MANAGEMENT SOLUTION
         </p>
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[0.95] tracking-tight mb-4
-                       text-white md:text-gray-900">
-          CONTROL<br />CRAVINGS.<br />MANAGE<br />WEIGHT.
+        <h1 className="font-bold tracking-tight mb-8 text-white md:text-gray-900">
+          <span className="block text-4xl sm:text-5xl lg:text-6xl xl:text-7xl leading-tight whitespace-nowrap">
+            CONTROL CRAVINGS.
+          </span>
+          <span className="block mt-4 text-3xl sm:text-4xl lg:text-5xl xl:text-6xl leading-tight whitespace-nowrap">
+            MANAGE WEIGHT.
+          </span>
         </h1>
         <p className="text-sm sm:text-base leading-relaxed max-w-sm
                       text-white/70 md:text-gray-500">
