@@ -89,7 +89,7 @@ export default function LyteProductPage({ slug }: LyteProductPageProps) {
   }
 
   const DEFAULT_RATING = 4.8
-  const displayReviewCount = 0
+  const displayReviewCount: number = 0
   const displayRating = DEFAULT_RATING
 
   // Sticky bar on scroll
@@ -153,7 +153,11 @@ export default function LyteProductPage({ slug }: LyteProductPageProps) {
     if (!product) return
     const id = selectedVariant?.id ?? product.id
     const price = selectedVariant?.price ?? product.price
-    addItem({ id, title: product.title, price, image: product.image, quantity })
+
+    // Match cart behavior on other product pages: add one item per quantity
+    for (let i = 0; i < quantity; i++) {
+      addItem({ id, title: product.title, price, image: product.image })
+    }
   }
 
   // ─── Derived ───────────────────────────────────────────────────────────────
