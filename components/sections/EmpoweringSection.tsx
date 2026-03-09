@@ -8,6 +8,7 @@ export default function EmpoweringSection() {
   const [scrollProgress, setScrollProgress] = useState(0)
   const [isInView, setIsInView] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  const enableMobileAnimation = false
 
   useEffect(() => {
     // Check if mobile on mount and resize
@@ -21,6 +22,13 @@ export default function EmpoweringSection() {
 
   useEffect(() => {
     const handleScroll = () => {
+      // For mobile, we currently disable the scroll-based animation entirely
+      if (isMobile && !enableMobileAnimation) {
+        setScrollProgress(0)
+        setIsInView(false)
+        return
+      }
+
       if (!containerRef.current) return
 
       const rect = containerRef.current.getBoundingClientRect()
@@ -28,16 +36,12 @@ export default function EmpoweringSection() {
       const containerHeight = rect.height
       const windowHeight = window.innerHeight
 
-      // Mobile-specific: Start animation after arrow is scrolled past
-      // With reduced height, use minimal offset to trigger animation
-      const startOffset = isMobile ? 0 : 0
-
       // Check if section is in view for sticky/fixed effect
       const inView = containerTop <= 0 && containerTop > -(containerHeight - windowHeight)
       setIsInView(inView)
 
       // Calculate progress based on how far we've scrolled through the container
-      if (isMobile) {
+      if (isMobile && enableMobileAnimation) {
         // Mobile: Track scroll from when container enters viewport
         // Animation starts immediately when container top reaches viewport top (containerTop <= 0)
         if (containerTop <= 0) {
@@ -75,32 +79,30 @@ export default function EmpoweringSection() {
     window.scrollBy({ top: window.innerHeight, behavior: 'smooth' })
   }
 
-  // Yellow circle (LEFT) - appears first (0-50% scroll), moves from bottom to top and exits
+  // Yellow circle (LEFT) - appears first (0-50% scroll), moves from bottom to top and exits (desktop only)
   const yellowProgress = Math.min(1, scrollProgress * 2) // 0->1 during first 50%
   // For desktop: percentage-based top positioning
   const yellowY = 110 - (yellowProgress * 130) // 110% -> -20% (exits at top)
-  // For mobile: use translateY in vh units with much reduced movement speed
-  // Reduced from 90vh to 60vh to make circles move much slower
-  const yellowTranslateY = isMobile ? (60 - (yellowProgress * 60)) : 0
+  // For mobile: animation disabled, keep translateY static
+  const yellowTranslateY = isMobile && enableMobileAnimation ? (60 - (yellowProgress * 60)) : 0
   const yellowOpacity = yellowProgress < 0.9 ? (yellowProgress > 0.05 ? 1 : 0) : Math.max(0, 1 - (yellowProgress - 0.9) * 10)
 
   // Blue circle (RIGHT) - appears AFTER yellow exits (50-100% scroll)
   const blueProgress = Math.max(0, Math.min(1, (scrollProgress - 0.5) * 2)) // 0->1 during second 50%
   const blueY = 110 - (blueProgress * 130) // 110% -> -20% (exits at top)
-  // For mobile: use translateY in vh units with much reduced movement speed
-  // Reduced from 90vh to 60vh to make circles move much slower
-  const blueTranslateY = isMobile ? (60 - (blueProgress * 60)) : 0
+  // For mobile: animation disabled, keep translateY static
+  const blueTranslateY = isMobile && enableMobileAnimation ? (60 - (blueProgress * 60)) : 0
   const blueOpacity = blueProgress < 0.9 ? (blueProgress > 0.05 ? 1 : 0) : Math.max(0, 1 - (blueProgress - 0.9) * 10)
 
-  // On mobile: keep fixed only during animation to stick text in background
-  // After animation, allow normal scrolling so sections below are visible
-  const isAnimationActive = isMobile && scrollProgress > 0 && scrollProgress < 1
-  const animationEnded = isMobile && scrollProgress >= 1
+  // On mobile: animation disabled, keep section non-fixed
+  const isAnimationActive = isMobile && enableMobileAnimation && scrollProgress > 0 && scrollProgress < 1
+  const animationEnded = isMobile && enableMobileAnimation && scrollProgress >= 1
   // Only stay fixed during active animation
   const shouldStayFixed = isMobile && isAnimationActive
 
   // Reduce container height after animation to eliminate extra space
   const getContainerHeight = () => {
+    if (isMobile && !enableMobileAnimation) return '100vh'
     if (isMobile && animationEnded) return '100vh' // Minimal height after animation
     if (isMobile) return '220vh' // Full height during animation
     return '400vh' // Desktop height

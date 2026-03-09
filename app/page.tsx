@@ -1,6 +1,5 @@
 import HeroSection from '@/components/sections/HeroSection'
 import FeaturedProductsSection from '@/components/sections/FeaturedProductsSection'
-import ReelsSection from '@/components/sections/ReelsSection'
 import MeditationImageSection from '@/components/sections/MeditationImageSection'
 import EnergyResetSection from '@/components/sections/EnergyResetSection'
 import VideoSection from '@/components/sections/VideoSection'
@@ -21,7 +20,7 @@ export default function Home() {
       <MeditationImageSection />
       <VideoSection />
       {/* <ProductShowcaseSection /> */}
-      <ReelsSection />
+      {/* <ReelsSection /> */}
       <ImageTextSection />
       <JourneySection />
       <RitualSection />
