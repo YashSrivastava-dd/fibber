@@ -102,7 +102,7 @@ export default function EmpoweringSection() {
 
   // Reduce container height after animation to eliminate extra space
   const getContainerHeight = () => {
-    if (isMobile && !enableMobileAnimation) return '100vh'
+    if (isMobile && !enableMobileAnimation) return 'auto'
     if (isMobile && animationEnded) return '100vh' // Minimal height after animation
     if (isMobile) return '220vh' // Full height during animation
     return '400vh' // Desktop height
@@ -116,7 +116,7 @@ export default function EmpoweringSection() {
     >
       {/* Mobile: Fixed during and after animation to keep text stuck, Desktop: Fixed/absolute positioning */}
       <div 
-        className={`${isMobile && !shouldStayFixed ? 'static' : 'md:static'} top-0 left-0 w-full h-screen bg-[#F5F3EF] flex flex-col items-center justify-center md:justify-start pt-0 md:pt-20 px-4 pb-0 overflow-hidden md:overflow-visible z-20`}
+        className={`${isMobile && !shouldStayFixed ? 'static' : 'md:static'} top-0 left-0 w-full h-auto md:h-screen bg-[#F5F3EF] flex flex-col items-center justify-center md:justify-start pt-0 md:pt-20 px-4 pb-0 overflow-hidden md:overflow-visible z-20`}
         style={isMobile ? {
           position: shouldStayFixed ? 'fixed' : 'static',
           // Prevent layout shifts and flickering

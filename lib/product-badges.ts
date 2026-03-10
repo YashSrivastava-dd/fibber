@@ -24,7 +24,7 @@ export function getProductBadges(
   // USP / category badge from title or fallback by position
   const title = (product.title ?? '').toUpperCase()
   if (title.includes('LYTE') || title.includes('CRAVING')) {
-    badges.push({ label: 'CRAVING CONTROL', variant: 'secondary' })
+    // No badge for LYTE
   } else if (title.includes('WEIGHT') || title.includes('MANAGEMENT')) {
     badges.push({ label: 'WEIGHT MANAGEMENT', variant: 'secondary' })
   } else if (title.includes('GUT') || title.includes('FIBER')) {
@@ -36,7 +36,7 @@ export function getProductBadges(
   } else if (index === 1) {
     badges.push({ label: 'TRENDING', variant: 'primary' })
   } else {
-    badges.push({ label: 'SCIENCE-BACKED', variant: 'secondary' })
+    badges.push({ label: 'VALUE-PACKED', variant: 'secondary' })
   }
 
   return badges.slice(0, 2)

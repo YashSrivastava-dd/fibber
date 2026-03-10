@@ -31,7 +31,7 @@ export default function EnergyResetSection() {
   const duplicatedReviews = [...doctorReviews, ...doctorReviews]
 
   return (
-    <section className="w-full bg-[#f5f3ef] py-20 md:py-28 lg:py-32">
+    <section className="w-full bg-[#f5f3ef] pt-6 pb-12 md:py-28 lg:py-32">
       <div className="max-w-full mx-auto px-0">
         <header className="text-center mb-14 md:mb-16 px-4 sm:px-6 lg:px-8">
           <h2

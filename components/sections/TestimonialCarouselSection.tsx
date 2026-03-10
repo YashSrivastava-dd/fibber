@@ -1,26 +1,22 @@
 'use client'
 
 import { useState, useCallback } from 'react'
-import Image from 'next/image'
 
 const testimonials = [
   {
     id: 1,
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80',
     name: 'Martin B.',
     quote: '"Finally, a product that delivers on its promises. My skin glows, and I feel amazing inside and out!"',
     rating: 5,
   },
   {
     id: 2,
-    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80',
     name: 'Sarah L.',
     quote: '"I\'ve tried countless supplements, but nothing compares to this. My energy levels have never been better!"',
     rating: 5,
   },
   {
     id: 3,
-    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80',
     name: 'James K.',
     quote: '"The quality is exceptional. I noticed improvements in my wellness within the first week of use."',
     rating: 5,
@@ -65,16 +61,6 @@ export default function TestimonialCarouselSection() {
 
         {/* Content */}
         <div className="max-w-3xl mx-auto text-center px-12 md:px-16">
-          {/* Profile Image */}
-          <div className="w-20 h-20 md:w-24 md:h-24 mx-auto mb-5 relative rounded-full overflow-hidden shadow-lg">
-            <Image
-              src={testimonial.image}
-              alt={testimonial.name}
-              fill
-              className="object-cover"
-            />
-          </div>
-
           {/* Star Rating */}
           <div className="flex justify-center gap-1 mb-8">
             {[...Array(testimonial.rating)].map((_, i) => (

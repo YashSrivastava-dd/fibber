@@ -48,11 +48,12 @@ export default function VideoSection() {
   return (
     <section className="w-full bg-fyber-ivory-dream py-10 md:py-14 lg:py-16">
       {/* Section Title */}
-      <h2 className="text-center text-xl md:text-2xl lg:text-3xl font-semibold tracking-wider uppercase mb-8 md:mb-12 px-4">
-        SCIENCE MEETS EVERYDAY CONTROL
+      <h2 className="text-center text-xl md:text-2xl lg:text-3xl font-semibold tracking-wider uppercase mb-8 md:mb-12">
+        <span className="md:hidden">SCIENCE MEETS<br />EVERYDAY CONTROL</span>
+        <span className="hidden md:inline">SCIENCE MEETS EVERYDAY CONTROL</span>
       </h2>
 
-      <div className="max-w-6xl mx-auto px-4">
+      <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-3 items-center">
           {/* Left Features */}
           <div className="flex flex-col gap-6 md:gap-8">
@@ -78,13 +79,13 @@ export default function VideoSection() {
 
           {/* Center Video */}
           <div className="relative flex items-center justify-center order-first lg:order-none">
-            <div className="relative w-full max-w-sm aspect-[3/4] rounded-2xl overflow-hidden">
+            <div className="relative w-full max-w-sm aspect-[3/4] rounded-2xl overflow-hidden border-0 border-none shadow-none ring-0">
               <video
                 autoPlay
                 loop
                 muted
                 playsInline
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover border-0 outline-none"
               >
                 <source src="/videos/f087c0f71002463594892e68000dfe75.HD-720p-4.5Mbps-40573155.mp4" type="video/mp4" />
               </video>

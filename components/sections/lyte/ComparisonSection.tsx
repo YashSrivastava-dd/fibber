@@ -62,7 +62,7 @@ export default function ComparisonSection() {
               <div className="text-2xl font-light text-white mb-2">LYTE</div>
             </div>
             <div className="bg-white/5 p-6 text-center">
-              <div className="text-2xl font-light text-gray-400 mb-2">Apple Watch</div>
+              <div className="text-2xl font-light text-gray-400 mb-2">Leading Watch</div>
             </div>
 
             {/* Rows */}

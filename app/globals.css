@@ -60,10 +60,13 @@ a {
   text-decoration: none;
 }
 
-/* Smooth scrolling */
-html {
+/* Smooth scrolling
+   NOTE: disabled global smooth scroll to allow natural browser
+   back/forward behavior to restore the exact previous scroll position,
+   especially when returning from policy pages on mobile. */
+/* html {
   scroll-behavior: smooth;
-}
+} */
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
@@ -175,6 +178,12 @@ html {
 
 .product-description li {
   margin-bottom: 0.25rem;
+}
+
+/* Add extra space before bold subheadings inside product description (e.g. "The advanced Lean X formulation") */
+.product-description p + p strong {
+  display: inline-block;
+  margin-top: 0.75rem;
 }
 
 /* Charcoal color utility */

@@ -23,15 +23,17 @@ export default function ImageTextSection() {
               Patent Pending Formula
             </p>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-light tracking-tight w-full">
-              LEAN-X<sup className="text-lg">®️</sup>
+              <span className="inline-flex items-start">
+                LEAN-X<sup className="text-[0.45em] ml-0.5 leading-none self-start -translate-y-0.5">®</sup>
+              </span>
             </h1>
             <p className="text-lg md:text-xl lg:text-2xl font-medium text-gray-700 tracking-tight leading-snug">
               A New Class of Metabolic Intelligence
             </p>
             <p className="text-sm md:text-base text-gray-600 leading-[2] max-w-2xl">
-              LEAN-X<sup className="text-sm">®️</sup> is not an ingredient.
+              LEAN-X<sup className="text-xs">®</sup> is not an ingredient.
               It is a breakthrough architecture — engineered at the intersection of metabolic science, neuro-energy regulation, and gut intelligence.
-              Built on years of clinical research and advanced formulation science, LEAN-X<sup className="text-sm">®️</sup> represents a category-defining evolution in weight and energy management—one that has never existed before.
+              Built on years of clinical research and advanced formulation science, LEAN-X<sup className="text-xs">®</sup> represents a category-defining evolution in weight and energy management—one that has never existed before.
             </p>
             <div className="pt-2 md:pt-4">
               <Link

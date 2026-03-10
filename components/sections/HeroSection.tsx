@@ -10,21 +10,21 @@ export default function HeroSection() {
     <>
       {/* ── MOBILE layout: full-screen image, then text below on scroll ── */}
       <section className="md:hidden w-full">
-        {/* Full-screen image */}
-        <div className="relative w-full overflow-hidden" style={{ height: '75svh' }}>
+        {/* Full-screen image — anchored to top so upper part of image is visible */}
+        <div className="relative w-full overflow-hidden" style={{ height: '85svh' }}>
           <Image
             src={MOBILE_IMAGE}
             alt="Fyber wellness"
             fill
-            className="object-cover"
-            style={{ objectPosition: 'center top' }}
+            className="object-cover object-bottom"
+            style={{ objectPosition: 'center 85%' }}
             priority
           />
         </div>
 
         {/* Text section — appears on scroll */}
         <div className="bg-white px-5 pt-8 pb-10">
-          <p className="text-[12px] uppercase tracking-widest mb-3 font-medium text-[#1a1a1a]/60 whitespace-nowrap">
+          <p className="text-[12px] uppercase tracking-widest mb-3 font-medium text-[#1a1a1a]/60 whitespace-nowrap leading-loose">
             SCIENCE BACKED NATURAL <br />
              WEIGHT-MANAGEMENT SOLUTION
           </p>

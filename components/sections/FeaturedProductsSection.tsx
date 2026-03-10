@@ -170,15 +170,17 @@ Control Appetite. Refine Weight          </p>
                     </Link>
                     {(() => {
                       const t = product.title?.toLowerCase() ?? ''
-                      const servings =
+                      const subtitle =
                         t.includes('starter pack')
                           ? 'Servings : 30 Sachets'
                           : t.includes('transformation pack')
                           ? 'Servings : 90 Sachets'
                           : t.includes('ultimate pack')
                           ? 'Servings : 120 Sachets'
+                          : t.includes('lyte')
+                          ? 'Fitness band'
                           : product.servings
-                      return servings ? <p className="text-xs text-gray-500">{servings}</p> : null
+                      return subtitle ? <p className="text-xs text-gray-500">{subtitle}</p> : null
                     })()}
                     <p className="text-xl font-normal pt-1">
                       {(product.comparePrice ?? (product.maxPrice != null && product.maxPrice > product.price ? product.maxPrice : null)) != null &&

@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { useCartStore } from '@/store/cartStore'
 import { Plus, Minus, Star, Zap, Moon, Heart, Activity, Shield, Battery } from 'lucide-react'
 import PaymentIcons from '@/components/PaymentIcons'
+import ProductReviewsSection from '@/components/sections/ProductReviewsSection'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -434,12 +435,6 @@ export default function LyteProductPage({ slug }: LyteProductPageProps) {
                 <div className="text-sm text-gray-600 mt-4 space-y-1">
                   <p>Free shipping Pan India</p>
                   <p className="text-xs text-gray-500">Free delivery · Easy returns</p>
-                  <a
-                    href="#reviews"
-                    className="inline-block text-xs font-medium text-black underline underline-offset-2 hover:no-underline mt-2"
-                  >
-                    See ratings &amp; reviews →
-                  </a>
                 </div>
 
                 {/* Payment Icons */}
@@ -608,6 +603,9 @@ export default function LyteProductPage({ slug }: LyteProductPageProps) {
           </div>
         </div>
       </div>
+
+      {/* Ratings & Reviews — user can add a review (shared across products) */}
+      <ProductReviewsSection productSlug={product.slug || product.handle} productTitle={product.title} />
 
       {/* ── Bottom CTA ──────────────────────────────────────────────────────── */}
       <div className="bg-gray-50 border-t border-gray-100 py-16 text-center">

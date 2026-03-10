@@ -45,40 +45,17 @@ function AmexIcon({ className = iconClass }: { className?: string }) {
   )
 }
 
-/** Diners Club - blue with DC style */
-function DinersIcon({ className = iconClass }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 48 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Diners Club">
-      <rect width="48" height="24" rx="4" fill="#0079BE" />
-      <circle cx="24" cy="12" r="5" fill="none" stroke="white" strokeWidth="1.5" />
-      <text x="24" y="14" textAnchor="middle" fill="white" fontSize="7" fontWeight="bold" fontFamily="Arial, sans-serif">DC</text>
-    </svg>
-  )
-}
-
-/** PayPal - blue wordmark */
-function PayPalIcon({ className = iconClass }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 48 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="PayPal">
-      <rect width="48" height="24" rx="3" fill="#003087" />
-      <text x="24" y="15" textAnchor="middle" fill="white" fontSize="9" fontWeight="bold" fontFamily="Arial, sans-serif">PayPal</text>
-    </svg>
-  )
-}
-
 const icons = {
   upi: UpiIcon,
   visa: VisaIcon,
   mc: MastercardIcon,
   amex: AmexIcon,
-  diners: DinersIcon,
-  pp: PayPalIcon,
 } as const
 
 export type PaymentIconKey = keyof typeof icons
 
 export interface PaymentIconsProps {
-  /** Order: UPI first, then others. Default: upi, visa, mc, amex, diners, pp */
+  /** Order: UPI first, then others. Default: upi, visa, mc, amex */
   order?: PaymentIconKey[]
   /** Optional class for the container */
   className?: string
@@ -86,7 +63,7 @@ export interface PaymentIconsProps {
   iconClassName?: string
 }
 
-const defaultOrder: PaymentIconKey[] = ['upi', 'visa', 'mc', 'amex', 'diners', 'pp']
+const defaultOrder: PaymentIconKey[] = ['upi', 'visa', 'mc', 'amex']
 
 export function PaymentIcons({ order = defaultOrder, className = '', iconClassName }: PaymentIconsProps) {
   const list = useMemo(() => order.filter((k) => k in icons), [order])

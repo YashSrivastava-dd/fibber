@@ -48,7 +48,7 @@ export default function Header() {
         <div className="flex animate-marquee-text whitespace-nowrap">
           {[...Array(20)].map((_, i) => (
             <span key={i} className="text-xs md:text-sm text-white mx-8 tracking-wider flex-shrink-0">
-              Same Day Delivery Across Major Metros &nbsp;&nbsp;•&nbsp;&nbsp; Free Shipping Pan India
+              Free Shipping Pan India &nbsp;&nbsp;•&nbsp;&nbsp; Introductory Pricing Upto 25% Off
             </span>
           ))}
         </div>
@@ -63,22 +63,43 @@ export default function Header() {
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="relative flex items-center justify-between h-16">
-            {/* Mobile Menu Button */}
-            <button
-              className="lg:hidden p-2 transition-colors z-10 text-[#1a1a1a]"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              aria-label="Toggle menu"
-            >
-              {isMobileMenuOpen ? (
-                <X className="w-6 h-6" />
-              ) : (
-                <Menu className="w-6 h-6" />
-              )}
-            </button>
+          <div className="relative flex items-center h-16">
+            {/* Mobile: left column same width as right so logo is centered */}
+            <div className="lg:hidden w-10 flex-shrink-0 flex items-center justify-start">
+              <button
+                className="p-2 transition-colors text-[#1a1a1a]"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                aria-label="Toggle menu"
+              >
+                {isMobileMenuOpen ? (
+                  <X className="w-6 h-6" />
+                ) : (
+                  <Menu className="w-6 h-6" />
+                )}
+              </button>
+            </div>
 
-            {/* Logo - Left side */}
-            <Link href="/" className="flex-shrink-0 relative h-6 w-24 md:h-7 md:w-28 lg:h-8 lg:w-32">
+            {/* Mobile logo - center, in flow so it's clickable */}
+            <Link
+              href="/"
+              className="lg:hidden flex-1 flex justify-center items-center min-w-0"
+              aria-label="Fiberise - Go to home"
+            >
+              <Image
+                src="/fiberisefit dark logo.png"
+                alt="Fiberise Logo"
+                width={96}
+                height={24}
+                className="object-contain object-center w-24 h-6"
+                priority
+              />
+            </Link>
+
+            {/* Logo - desktop only */}
+            <Link
+              href="/"
+              className="hidden lg:block flex-shrink-0 relative h-8 w-32"
+            >
               <Image
                 src="/fiberisefit dark logo.png"
                 alt="Fiberise Logo"
@@ -146,8 +167,8 @@ export default function Header() {
               </NavigationMenuList>
             </NavigationMenu>
 
-            {/* Right Side Actions */}
-            <div className="flex items-center space-x-4">
+            {/* Right Side Actions - same width as left on mobile so logo stays centered */}
+            <div className="flex items-center justify-end flex-shrink-0 w-10 space-x-4 lg:w-auto lg:flex-1 lg:justify-end">
               {/* User Profile / Login */}
               {!authLoading && (
                 <button
@@ -163,25 +184,6 @@ export default function Header() {
                 >
                   <User className="w-5 h-5" />
                   <span>{isAuthenticated ? 'My Account' : 'Login'}</span>
-                </button>
-              )}
-
-              {/* Mobile Login Button */}
-              {!authLoading && (
-                <button
-                  onClick={() => {
-                    if (isAuthenticated) {
-                      router.push('/account')
-                      setIsMobileMenuOpen(false)
-                    } else {
-                      router.push('/account/login')
-                      setIsMobileMenuOpen(false)
-                    }
-                  }}
-                  className="lg:hidden p-2 transition-colors text-[#1a1a1a] hover:opacity-70"
-                  aria-label={isAuthenticated ? 'My Account' : 'Login'}
-                >
-                  <User className="w-5 h-5" />
                 </button>
               )}
 

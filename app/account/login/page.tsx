@@ -121,7 +121,7 @@ export default function AccountLoginPage() {
       {/* Split card container */}
       <div className="w-full max-w-5xl bg-white rounded-2xl sm:rounded-3xl shadow-xl overflow-hidden flex flex-col lg:flex-row min-h-[560px]">
         {/* Left: Promo panel - Midnight Obsidian */}
-        <div className="lg:w-[44%] bg-[#1a1a1a] p-8 sm:p-10 lg:p-12 flex flex-col justify-between text-white rounded-t-2xl sm:rounded-t-3xl lg:rounded-tr-none lg:rounded-l-2xl lg:rounded-l-3xl">
+        <div className="lg:w-[44%] bg-[#1a1a1a] p-8 sm:p-10 lg:p-12 flex flex-col justify-between items-center text-center lg:items-start lg:text-left text-white rounded-t-2xl sm:rounded-t-3xl lg:rounded-tr-none lg:rounded-l-2xl lg:rounded-l-3xl">
           <div>
             <h2 className="text-2xl sm:text-3xl font-bold leading-tight mb-3">
               Simplify your wellness journey.

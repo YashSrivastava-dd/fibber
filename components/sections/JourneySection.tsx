@@ -5,13 +5,13 @@ export default function JourneySection() {
     <section className="w-full bg-white pt-16 md:pt-24 lg:pt-32 pb-16 md:pb-24 lg:pb-32 relative overflow-visible">
       <div className="max-w-[96rem] mx-auto px-6 sm:px-8 lg:px-12 relative">
         {/* Main Heading - Left Aligned */}
-        <div className="mb-0">
+        <div className="mb-0 pb-6 md:pb-8">
           <h2 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-serif font-medium text-[#868B7A] leading-relaxed max-w-5xl">
-            {/* Mobile view - 4 lines */}
-            <span className="block lg:hidden">Noticeable Results In</span>
-            <span className="block mt-4 md:mt-6 lg:hidden">30 Minutes</span>
-            <span className="block mt-4 md:mt-6 lg:hidden">Refined Body In</span>
-            <span className="block mt-4 md:mt-6 lg:hidden">90 Days</span>
+            {/* Mobile view - 4 lines only */}
+            <span className="block text-4xl md:text-5xl whitespace-nowrap lg:hidden">Noticeable Results In</span>
+            <span className="block text-4xl md:text-5xl mt-4 md:mt-6 whitespace-nowrap lg:hidden">30 Minutes</span>
+            <span className="block text-4xl md:text-5xl mt-4 md:mt-6 whitespace-nowrap lg:hidden">Refined Body In</span>
+            <span className="block text-4xl md:text-5xl mt-4 md:mt-6 whitespace-nowrap lg:hidden">90 Days</span>
             
             {/* Desktop view - 2 lines */}
             <span className="hidden lg:block whitespace-nowrap">Noticeable results in 30 minutes</span>

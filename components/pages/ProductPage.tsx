@@ -249,14 +249,14 @@ export default function ProductPage({ slug }: ProductPageProps) {
     : null
   const isAvailable = selectedVariant?.available ?? product.available
   const displayImages = product.images && product.images.length > 0 ? product.images : [product.image]
-  const ingredients = ['Unflavoured', 'Watermelon', 'Lemon']
+  const ingredients = ['Unflavoured', 'Watermelon', 'Lemon' , 'Assorted']
   
   // Extract product type/category from title or use default
   const productType = product.title.toUpperCase().includes('PLANT-BASED') 
     ? 'PLANT-BASED' 
     : product.title.toUpperCase().includes('VEGAN')
     ? 'VEGAN'
-    : 'SUPPLEMENT'
+    : 'WEIGHT MANAGEMENT SUPPLEMENT'
 
   // Servings: Starter Pack = 30, Transformation Pack = 90, Ultimate Pack = 120
   const getServings = (label: string) => {
@@ -640,15 +640,9 @@ export default function ProductPage({ slug }: ProductPageProps) {
               <div className="text-sm text-gray-600 mt-4 space-y-1">
                 <p>Free shipping Pan India</p>
                 <p className="text-xs text-gray-500">Free delivery · Easy returns</p>
-                <a
-                  href="#reviews"
-                  className="inline-block text-xs font-medium text-black underline underline-offset-2 hover:no-underline mt-2"
-                >
-                  See ratings &amp; reviews →
-                </a>
               </div>
 
-              {/* Payment Icons - UPI first, then Visa, MC, Amex, Diners, PayPal */}
+              {/* Payment Icons - UPI first, then Visa, MC, Amex */}
               <div className="flex items-center gap-3 mt-4">
                 <span className="text-xs text-gray-600 font-medium">We accept:</span>
                 <PaymentIcons iconClassName="w-9 h-6 object-contain flex-shrink-0" />
@@ -749,10 +743,10 @@ export default function ProductPage({ slug }: ProductPageProps) {
                 </h2>
                 <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-2 -mx-2 px-2">
                   {[
-                    '/product page routine images/FIBERISE A+-12.png',
-                    '/product page routine images/FIBERISE A+-13.png',
-                    '/product page routine images/FIBERISE A+-14.png',
-                    '/product page routine images/FIBERISE A+-15.png',
+                    '/product page routine images/Group 64977.png',
+                    '/product page routine images/Group 64978.png',
+                    '/product page routine images/Group 64979.png',
+                    '/product page routine images/Group 64980.png',
                   ].map((imagePath, index) => (
                     <div
                       key={index}
@@ -848,14 +842,13 @@ export default function ProductPage({ slug }: ProductPageProps) {
       </div> */}
 
       {/* Calm, intelligent, effortless well-being banner with marquee text */}
-      <div className="w-full relative mt-8">
+      <div className="w-full relative mt-8 aspect-[9/16] sm:aspect-square md:aspect-auto md:h-[70vh]">
         <Image
           src="/product page routine images/FIBERISE A+-16.png"
           alt="Calm and effortless well-being"
-          width={1920}
-          height={1080}
-          className="w-full h-auto object-cover"
-          sizes="100vw"
+          fill
+          className="object-cover"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 100vw"
         />
         <div className="absolute inset-0 flex items-center pointer-events-none overflow-hidden">
           <div
@@ -918,39 +911,46 @@ export default function ProductPage({ slug }: ProductPageProps) {
             {[
               {
                 id: 'faq-1',
-                question: 'Can I lose weight just by taking FYBER?',
+                question: 'CAN I LOSE WEIGHT JUST BY TAKING FYBER?',
                 answer:
-                  'Not by itself. FYBER can support weight management by helping control cravings and making you feel fuller, but sustainable weight loss also needs balanced eating and activity. Think of FYBER as an assistant, not a standalone solution.',
+                  'Yes. When taken 30–60 minutes before meals, FYBER helps calm hunger signals so you naturally eat less. Eating less creates a calorie deficit, which is the primary driver of weight loss. The fiber also slows gastric emptying, helping reduce sugar and insulin spikes. This keeps you fuller for longer and lowers cravings, so you snack less. Over time, these effects help you stay in a calorie deficit and support sustainable weight loss.',
               },
               {
                 id: 'faq-2',
-                question: 'Is FYBER like Ozempic?',
+                question: 'IS FYBER LIKE OZEMPIC?',
                 answer:
-                  'No. Ozempic is a prescription medication that affects insulin and appetite signals. Fyber is a dietary fiber supplement, not a drug. It works by supporting digestion and appetite control, not by altering hormones the way medications do.',
+                  'No. Ozempic is a prescription medication, while FYBER is a natural weight-management supplement. FYBER works by using a specialized fiber blend that naturally increases satiety and fullness, helping you eat less and manage cravings. Unlike prescription drugs, it does not interfere with hormones pharmacologically and is designed to be safe for regular, long-term use.',
               },
               {
                 id: 'faq-3',
-                question: 'Does FYBER have any side effects?',
+                question: 'DOES FYBER HAVE ANY SIDE EFFECTS?',
                 answer:
-                  'Most people tolerate fiber well, but when you start or increase fiber quickly, you might experience mild effects like gas, bloating, and mild stomach discomfort. These usually ease as your body adjusts. Drinking enough water can help reduce these side effects.',
+                  'As long as FYBER is used as recommended, it does not have any known short-term or long-term side effects. The ingredients used in FYBER are widely used in nutrition and dietary supplements and are recognized as safe by regulatory bodies such as the U.S. FDA (GRAS) and the European Food Safety Authority (EFSA). Like any fiber-based supplement, it should be taken with adequate water and according to the suggested usage for the best experience.',
               },
               {
                 id: 'faq-4',
-                question: 'What happens if I stop taking FYBER?',
+                question: 'WILL I GAIN WEIGHT AFTER I STOP TAKING FYBER?',
                 answer:
-                  'Nothing dramatic. You may notice your cravings slowly returning to previous patterns with less support for digestion and satiety. It doesn’t cause sudden weight gain; you simply lose the extra support it was providing.',
+                  'No, as long as you continue to eat mindfully. When used consistently for a period of time, FYBER helps improve gut health and support better appetite regulation, which can naturally reduce cravings even after you stop taking it. The satiety effect also helps your body adapt to smaller portion sizes, so you tend to eat less naturally. Maintaining balanced eating habits will help you sustain your results.',
               },
               {
                 id: 'faq-5',
-                question: 'Is FYBER safe during PMS when cravings are high?',
+                question: 'IS FYBER SAFE FOR WOMEN AND THEIR HORMONES?',
                 answer:
-                  'Generally, yes. Fiber supplements are normally safe and can help with feelings of fullness when cravings spike. However, if you have specific health conditions like IBS or stomach sensitivity, check with your doctor.',
+                  'Yes, FYBER is safe for women. Ingredients like dietary fiber have been shown to support overall metabolic and hormonal balance. By helping reduce sugar spikes and improving metabolic stability, FYBER can indirectly support better hormonal regulation and thyroid function, while also supporting appetite control, gut health, and overall nutritional balance.',
               },
               {
                 id: 'faq-6',
-                question: 'Does FYBER cause deficiencies?',
+                question:
+                  'CAN A PERSON SUFFERING FROM DIABETES, PCOS, PCOD, HYPERTENSION, HIGH CHOLESTEROL, OR FATTY LIVER CONSUME FYBER?',
                 answer:
-                  'No. Dietary fiber does not block nutrients or cause deficiencies when taken as directed. In fact, it is part of a healthy diet. Just make sure you’re also eating nutrient-rich foods and staying hydrated.',
+                  'Yes, FYBER is generally safe for individuals with conditions such as diabetes, PCOS/PCOD, hypertension, high cholesterol, or fatty liver. The ingredients used are widely consumed in nutritional supplements and are not known to interfere with medications commonly used to manage these conditions. However, if you are under medical treatment or on prescription medication, always consult your doctor before starting any new supplement.',
+              },
+              {
+                id: 'faq-7',
+                question: 'WILL I HAVE LOW ENERGY LEVELS WHILE CONSUMING FYBER?',
+                answer:
+                  'No, you will not experience low energy while consuming FYBER. It contains L-Carnitine L-Tartrate (LCLT) and L-Tyrosine, two non-stimulant amino acids that support energy metabolism, focus, and mental clarity, especially during a calorie deficit. Instead of causing fatigue, FYBER is designed to help you stay sharp, active, and productive, so you can comfortably maintain your daily routine and demanding lifestyle while managing your weight.',
               },
             ].map((faq) => (
               <div key={faq.id} className="border-b border-gray-200 py-6 md:py-8 first:pt-0">

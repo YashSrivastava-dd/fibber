@@ -111,29 +111,29 @@ export default function ProductReviewsSection({ productSlug, productTitle }: Pro
     try {
       const res = await fetch(`/api/products/${encodeURIComponent(productSlug)}/reviews`, { cache: 'no-store' })
       const data = await res.json()
-      if (Array.isArray(data.reviews) && data.reviews.length > 0) {
-        // Real user reviews exist – show them and use their stats
-        setReviews(data.reviews)
-        if (typeof data.averageRating === 'number') setAverageRating(data.averageRating)
-        if (typeof data.totalCount === 'number') setTotalCount(data.totalCount)
-      } else {
-        // No real reviews yet – show seeded testimonials as defaults
-        const seededReviews: ProductReview[] = SEEDED_TESTIMONIALS.map((t, idx) => ({
-          id: `seed-${idx}`,
-          productSlug,
-          rating: t.rating,
-          comment: t.comment,
-          authorName: t.authorName,
-          authorId: null,
-          createdAt: '',
-        }))
-        setReviews(seededReviews)
-        // Use a friendly default average and count for seeded testimonials
-        const sum = seededReviews.reduce((acc, r) => acc + r.rating, 0)
-        const avg = Math.round((sum / seededReviews.length) * 10) / 10
-        setAverageRating(avg)
-        setTotalCount(seededReviews.length)
-      }
+
+      // Always include seeded testimonials so every product page shows a rich set of reviews
+      const seededReviews: ProductReview[] = SEEDED_TESTIMONIALS.map((t, idx) => ({
+        id: `seed-${idx}`,
+        productSlug,
+        rating: t.rating,
+        comment: t.comment,
+        authorName: t.authorName,
+        authorId: null,
+        createdAt: '',
+      }))
+
+      const realReviews: ProductReview[] =
+        Array.isArray(data.reviews) && data.reviews.length > 0 ? data.reviews : []
+
+      const combinedReviews = [...realReviews, ...seededReviews]
+
+      setReviews(combinedReviews)
+
+      const sum = combinedReviews.reduce((acc, r) => acc + r.rating, 0)
+      const avg = combinedReviews.length > 0 ? Math.round((sum / combinedReviews.length) * 10) / 10 : 0
+      setAverageRating(avg)
+      setTotalCount(combinedReviews.length)
     } catch {
       setReviews([])
     } finally {
@@ -226,7 +226,7 @@ export default function ProductReviewsSection({ productSlug, productTitle }: Pro
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10 md:mb-12">
           <p className="text-sm md:text-base text-gray-500 font-medium mb-1">
-            {productTitle ? `Reviews for ${productTitle}` : 'Customer Reviews'}
+            Customer Reviews
           </p>
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-black uppercase tracking-wide">
             Ratings &amp; Reviews
