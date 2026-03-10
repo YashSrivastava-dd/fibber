@@ -364,30 +364,32 @@ export default function ProductReviewsSection({ productSlug, productTitle }: Pro
             ) : reviews.length === 0 ? (
               <p className="text-gray-500 py-8">No reviews yet. Be the first to share your experience!</p>
             ) : (
-              <ul className="space-y-6">
-                {reviews.map((r) => (
-                  <li
-                    key={r.id}
-                    className="border-b border-gray-100 pb-6 last:border-0 last:pb-0"
-                  >
-                    <div className="flex gap-2 mb-2">
-                      {[1, 2, 3, 4, 5].map((i) => (
-                        <Star
-                          key={i}
-                          className={`w-4 h-4 ${
-                            i <= r.rating ? 'text-amber-400 fill-amber-400' : 'text-gray-300'
-                          }`}
-                        />
-                      ))}
-                    </div>
-                    <p className="text-gray-900 leading-relaxed mb-2">{r.comment}</p>
-                    <p className="text-sm text-gray-500">
-                      — {displayAuthorName(r.authorName)}
-                      {formatDate(r.createdAt) ? ` · ${formatDate(r.createdAt)}` : ''}
-                    </p>
-                  </li>
-                ))}
-              </ul>
+              <div className="max-h-[26rem] overflow-y-auto pr-1 scrollbar-hide">
+                <ul className="space-y-6">
+                  {reviews.map((r) => (
+                    <li
+                      key={r.id}
+                      className="border-b border-gray-100 pb-6 last:border-0 last:pb-0"
+                    >
+                      <div className="flex gap-2 mb-2">
+                        {[1, 2, 3, 4, 5].map((i) => (
+                          <Star
+                            key={i}
+                            className={`w-4 h-4 ${
+                              i <= r.rating ? 'text-amber-400 fill-amber-400' : 'text-gray-300'
+                            }`}
+                          />
+                        ))}
+                      </div>
+                      <p className="text-gray-900 leading-relaxed mb-2">{r.comment}</p>
+                      <p className="text-sm text-gray-500">
+                        — {displayAuthorName(r.authorName)}
+                        {formatDate(r.createdAt) ? ` · ${formatDate(r.createdAt)}` : ''}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             )}
           </div>
         </div>

@@ -170,7 +170,14 @@ Control Appetite. Refine Weight          </p>
                     </Link>
                     {(() => {
                       const t = product.title?.toLowerCase() ?? ''
-                      const servings = t.includes('starter pack') ? 'Servings : 30 Sachets' : t.includes('transformation pack') ? 'Servings : 90 Sachets' : product.servings
+                      const servings =
+                        t.includes('starter pack')
+                          ? 'Servings : 30 Sachets'
+                          : t.includes('transformation pack')
+                          ? 'Servings : 90 Sachets'
+                          : t.includes('ultimate pack')
+                          ? 'Servings : 120 Sachets'
+                          : product.servings
                       return servings ? <p className="text-xs text-gray-500">{servings}</p> : null
                     })()}
                     <p className="text-xl font-normal pt-1">

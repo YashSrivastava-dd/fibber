@@ -6,6 +6,8 @@ import Link from 'next/link'
 import { useCartStore } from '@/store/cartStore'
 import { ChevronRight, ChevronLeft, Plus, Minus, Star } from 'lucide-react'
 import VideoSection from '@/components/sections/VideoSection'
+import MetabolismSection from '@/components/sections/science/MetabolismSection'
+import BenefitsGrid from '@/components/sections/science/BenefitsGrid'
 import ProductReviewsSection from '@/components/sections/ProductReviewsSection'
 import PaymentIcons from '@/components/PaymentIcons'
 
@@ -256,11 +258,12 @@ export default function ProductPage({ slug }: ProductPageProps) {
     ? 'VEGAN'
     : 'SUPPLEMENT'
 
-  // Servings: Starter Pack = 30, Transformation Pack = 90
+  // Servings: Starter Pack = 30, Transformation Pack = 90, Ultimate Pack = 120
   const getServings = (label: string) => {
     const l = label.toLowerCase()
     if (l.includes('starter')) return 30
     if (l.includes('transformation')) return 90
+    if (l.includes('ultimate')) return 120
     return 90
   }
   // Base servings on product title (Starter Pack = 30, Transformation Pack = 90), not variant name
@@ -771,6 +774,11 @@ export default function ProductPage({ slug }: ProductPageProps) {
       </div>
       </div>
 
+      {/* Science / feature video + metabolic explanation + benefits grid directly below hero */}
+      <VideoSection />
+      <MetabolismSection />
+      <BenefitsGrid />
+
       {/* Full-width image below hero with marquee
       <div className="w-full relative">
         <Image
@@ -792,7 +800,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
         </div>
       </div> */}
 
-      <div className="w-full relative mt-10">
+      {/* <div className="w-full relative mt-10">
         <Image
           src="/product page routine images/FIBERISE A+-09.png"
           alt="Lean-X advanced fiber nutrition"
@@ -801,10 +809,10 @@ export default function ProductPage({ slug }: ProductPageProps) {
           className="w-full h-auto object-cover"
           sizes="100vw"
         />
-      </div>
+      </div> */}
 
       {/* Traditional dieting vs Fyber banner */}
-      <div className="w-full relative mt-8">
+      {/* <div className="w-full relative mt-8">
         <Image
           src="/product page routine images/FIBERISE A+-10.png"
           alt="Traditional dieting vs Fyber comparison"
@@ -813,10 +821,10 @@ export default function ProductPage({ slug }: ProductPageProps) {
           className="w-full h-auto object-cover"
           sizes="100vw"
         />
-      </div>
+      </div> */}
 
       {/* From first sip to long-term shift banner */}
-      <div className="w-full relative mt-8">
+      {/* <div className="w-full relative mt-8">
         <Image
           src="/product page routine images/FIBERISE A+-11.png"
           alt="From first sip to long-term shift"
@@ -825,10 +833,10 @@ export default function ProductPage({ slug }: ProductPageProps) {
           className="w-full h-auto object-cover"
           sizes="100vw"
         />
-      </div>
+      </div> */}
 
       {/* Revolutionary science behind Fyber banner */}
-      <div className="w-full relative mt-8">
+      {/* <div className="w-full relative mt-8">
         <Image
           src="/product page routine images/FIBERISE A+-08.png"
           alt="The revolutionary science behind Fyber"
@@ -837,7 +845,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
           className="w-full h-auto object-cover"
           sizes="100vw"
         />
-      </div>
+      </div> */}
 
       {/* Calm, intelligent, effortless well-being banner with marquee text */}
       <div className="w-full relative mt-8">
@@ -1018,12 +1026,12 @@ export default function ProductPage({ slug }: ProductPageProps) {
       </section>
 
       {/* 3. Join Our Circle & Save */}
-      <section className="w-full bg-[#FFE4E9] py-12 md:py-16">
+      <section className="w-full bg-[#168B6A] py-12 md:py-16">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-black uppercase tracking-wide mb-3">
+          <h2 className="text-2xl md:text-3xl font-bold text-white uppercase tracking-wide mb-3">
             Join Our Circle & Save!
           </h2>
-          <p className="text-base text-black mb-8">
+          <p className="text-base text-white mb-8">
             Sign up now for 10% off your first order — because you deserve it!
           </p>
           <form
@@ -1041,11 +1049,11 @@ export default function ProductPage({ slug }: ProductPageProps) {
               onChange={(e) => setJoinEmail(e.target.value)}
               placeholder="Email"
               required
-              className="flex-1 min-w-0 px-5 py-3 bg-white border border-black rounded-lg text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black/20"
+              className="flex-1 min-w-0 px-5 py-3 bg-white border border-white/80 rounded-lg text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/40"
             />
             <button
               type="submit"
-              className="px-8 py-3 rounded-lg font-semibold text-sm uppercase tracking-wider bg-black text-white hover:bg-gray-800 transition-colors whitespace-nowrap"
+              className="px-8 py-3 rounded-lg font-semibold text-sm uppercase tracking-wider bg-white text-black hover:bg-gray-100 transition-colors whitespace-nowrap"
             >
               {joinSubmitted ? 'Subscribed!' : 'Subscribe'}
             </button>

@@ -6,7 +6,7 @@ export default function RitualSection() {
   return (
     <section className="w-full relative bg-[#f6f2ec] overflow-hidden">
       {/* Mobile view */}
-      <div className="relative w-full min-h-[70vh] md:hidden">
+      <div className="relative w-full h-[70vh] md:hidden">
         <Image
           src="/Frame 626636.png"
           alt="Ritual - Simple ritual. Powerful change."

@@ -6,10 +6,10 @@ import PaymentIcons from '@/components/PaymentIcons'
 export default function Footer() {
   const footerLinks = {
     products: [
-      { name: '7 Day Pack ', href: '/products/collagen' },
-      { name: '30 Day Pack', href: '/products/hair-skin-nails' },
-      { name: '90 Day Pack', href: '/products/immunity' },
-      { name: "LYTE", href: '/products/mens-multi' },
+      { name: 'Starter Pack ', href: '/products/30-days-servings' },
+      { name: 'Transformation Pack', href: '/products/30-servings-copy' },
+      { name: 'Ultimate Pack', href: '/products/test-pack' },
+      { name: 'LYTE', href: '/products/lyte' },
     ],
     social: [
       { name: 'Instagram', href: 'https://www.instagram.com/fiberisefit?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==' },

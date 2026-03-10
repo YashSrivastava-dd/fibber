@@ -28,7 +28,7 @@ export default function ImageTextSection() {
             <p className="text-lg md:text-xl lg:text-2xl font-medium text-gray-700 tracking-tight leading-snug">
               A New Class of Metabolic Intelligence
             </p>
-            <p className="text-sm md:text-base text-gray-600 leading-relaxed max-w-2xl">
+            <p className="text-sm md:text-base text-gray-600 leading-[2] max-w-2xl">
               LEAN-X<sup className="text-sm">®️</sup> is not an ingredient.
               It is a breakthrough architecture — engineered at the intersection of metabolic science, neuro-energy regulation, and gut intelligence.
               Built on years of clinical research and advanced formulation science, LEAN-X<sup className="text-sm">®️</sup> represents a category-defining evolution in weight and energy management—one that has never existed before.

@@ -135,9 +135,10 @@ html {
 }
 
 .animate-doctors-marquee {
-  animation: doctors-marquee 30s linear infinite;
+  animation: doctors-marquee 16s linear infinite;
   display: flex;
   will-change: transform;
+  min-width: max-content;
 }
 
 .animate-doctors-marquee:hover {

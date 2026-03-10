@@ -147,7 +147,7 @@ export default function JourneySection() {
             </div>
           </div>
                   {/* 3rd Section - Images Left, Text Right */}
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-16 lg:gap-20 mb-0 mt-8 md:mt-12 lg:mt-16 items-center">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 md:gap-6 lg:gap-8 mb-0 mt-8 md:mt-12 lg:mt-16 items-center">
             {/* Images Left - Side by Side - Order 1 on mobile, 1 on desktop */}
             <div className="flex flex-row w-full -ml-8 sm:-ml-12 lg:-ml-16 pl-8 md:pl-12 lg:pl-16 order-1">
               {/* Larger image on left */}
@@ -161,12 +161,12 @@ export default function JourneySection() {
                 />
               </div>
               {/* Smaller image on right */}
-              <div className="relative flex-[2] h-[320px] md:h-[400px] lg:h-[480px]">
+              <div className="relative flex-[2] h-[240px] md:h-[300px] lg:h-[360px]">
                 <Image src="/ritual/Group 64928.png" alt="Wellness product" fill className="object-contain object-top rounded-lg" sizes="(max-width: 768px) 40vw, (max-width: 1024px) 20vw, 16vw" />
               </div>
             </div>
             {/* Text Right - Order 2 on mobile, 2 on desktop */}
-            <div className="max-w-lg ml-12 md:ml-16 lg:ml-20 xl:ml-24 2xl:ml-28 order-2 text-left">
+            <div className="max-w-lg ml-4 md:ml-6 lg:ml-8 xl:ml-10 2xl:ml-12 order-2 text-left">
               {/* Small Heading */}
               <div className="mb-4 md:mb-6">
                 <h3 className="text-2xl md:text-3xl lg:text-4xl font-serif font-medium text-[#868B7A]">
