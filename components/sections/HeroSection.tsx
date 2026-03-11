@@ -2,8 +2,8 @@
 
 import Image from 'next/image'
 
-const DESKTOP_IMAGE = '/hf_20260309_074427_78be0f7d-1033-4d8c-b79f-c59e967ab26f.jpeg'
-const MOBILE_IMAGE = '/Screenshot 2026-03-09 162742.jpg'
+const DESKTOP_IMAGE = '/hf_20260310_113908_cf31733e-1ff2-4aa3-a9bb-c7759417104c.jpeg'
+const MOBILE_IMAGE = '/hf_20260310_114430_afbe1b53-071a-400e-8206-aa625755a570.jpeg'
 
 export default function HeroSection() {
   return (
@@ -11,7 +11,7 @@ export default function HeroSection() {
       {/* ── MOBILE layout: full-screen image, then text below on scroll ── */}
       <section className="md:hidden w-full">
         {/* Full-screen image — anchored to top so upper part of image is visible */}
-        <div className="relative w-full overflow-hidden" style={{ height: '85svh' }}>
+        <div className="relative w-full overflow-hidden" style={{ height: '65svh' }}>
           <Image
             src={MOBILE_IMAGE}
             alt="Fyber wellness"

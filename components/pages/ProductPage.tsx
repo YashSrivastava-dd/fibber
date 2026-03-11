@@ -866,7 +866,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
       </div>
 
       {/* Reels Section */}
-      <section className="w-full bg-[#F5F3EF] py-12 md:py-16">
+      {/* <section className="w-full bg-[#F5F3EF] py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8 md:mb-10">
             <p className="text-sm md:text-base text-gray-600 font-medium mb-1">
@@ -894,7 +894,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* FAQ Section */}
       <section className="w-full bg-white py-12 md:py-16" style={{ fontFamily: 'Montserrat, sans-serif' }}>
