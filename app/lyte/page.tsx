@@ -79,10 +79,7 @@ export default function LytePage() {
                 <li>• Care, warranty, and safety information</li>
               </ul>
               <a
-                href="/manual/LYTE-3.pdf"
-                download
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/manual/lyte.pdf"
                 className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-white text-black text-xs sm:text-sm font-semibold tracking-[0.2em] uppercase hover:bg-gray-200 transition-colors"
               >
                 <span>Download user manual</span>
@@ -93,22 +90,22 @@ export default function LytePage() {
               </p>
             </div>
 
-            {/* Right: live PDF preview with native viewer controls */}
-            <div className="w-full">
-              <div className="relative rounded-2xl border border-white/10 bg-black/40 overflow-hidden">
-                <div className="flex items-center justify-between px-4 py-2 border-b border-white/10 bg-white/5">
-                  <p className="text-xs text-gray-300 tracking-[0.18em] uppercase">
-                    Live preview
-                  </p>
-                  <p className="text-[11px] text-gray-400">LYTE-3.pdf</p>
-                </div>
-                <div className="aspect-[3/4] bg-black">
-                  <iframe
-                    src="/manual/LYTE-3.pdf#view=fitH"
-                    title="LYTE User Manual Preview"
-                    className="w-full h-full"
+            {/* Right: QR code for quick download */}
+            <div className="w-full flex justify-center lg:justify-end">
+              <div className="rounded-2xl border border-white/10 bg-black/40 px-6 py-5 sm:px-8 sm:py-7 flex flex-col items-center gap-3">
+                <p className="text-xs text-gray-300 tracking-[0.18em] uppercase mb-1">
+                  Scan to download
+                </p>
+                <div className="bg-white rounded-xl p-3">
+                  <img
+                    src="https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=https%3A%2F%2Ffiberisefit.com%2Fmanual%2Flyte.pdf"
+                    alt="QR code to download the LYTE user manual"
+                    className="h-48 w-48 object-contain"
                   />
                 </div>
+                <p className="text-[11px] text-gray-400 text-center max-w-[220px]">
+                  Point your phone camera at the QR to open and download the LYTE band user manual directly.
+                </p>
               </div>
             </div>
           </div>
