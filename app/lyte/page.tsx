@@ -52,6 +52,68 @@ export default function LytePage() {
       <NutritionTrackingSection />
       <CalorieLeisureSection />
       <ComparisonSection />
+
+      {/* LYTE User Manual download section */}
+      <section
+        id="lyte-user-manual"
+        className="border-t border-white/10 py-16 px-4 sm:px-6 lg:px-8"
+      >
+        <div className="max-w-6xl mx-auto">
+          <div className="grid gap-10 lg:grid-cols-[1.4fr_minmax(0,1fr)] items-center">
+            {/* Left: copy */}
+            <div>
+              <p className="text-[11px] tracking-[0.3em] uppercase text-gray-400 mb-3">
+                LYTE USER MANUAL
+              </p>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold mb-4">
+                Everything you need to know, in one PDF.
+              </h2>
+              <p className="text-sm sm:text-base text-gray-300 leading-relaxed mb-4 max-w-xl">
+                Learn how to wear your band correctly, pair it with the app, understand every metric, and get the most
+                out of LYTE. This step‑by‑step guide covers setup, daily use, charging, and troubleshooting.
+              </p>
+              <ul className="text-xs sm:text-sm text-gray-400 space-y-1.5 mb-6">
+                <li>• Quick start guide for first‑time setup</li>
+                <li>• Detailed overview of sensors and features</li>
+                <li>• App pairing, data sync, and notification settings</li>
+                <li>• Care, warranty, and safety information</li>
+              </ul>
+              <a
+                href="/manual/LYTE-3.pdf"
+                download
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-white text-black text-xs sm:text-sm font-semibold tracking-[0.2em] uppercase hover:bg-gray-200 transition-colors"
+              >
+                <span>Download user manual</span>
+                <span className="text-[11px] text-gray-700">(PDF)</span>
+              </a>
+              <p className="mt-3 text-[11px] text-gray-500">
+                Opens in a new tab · You can save it for offline reference.
+              </p>
+            </div>
+
+            {/* Right: live PDF preview with native viewer controls */}
+            <div className="w-full">
+              <div className="relative rounded-2xl border border-white/10 bg-black/40 overflow-hidden">
+                <div className="flex items-center justify-between px-4 py-2 border-b border-white/10 bg-white/5">
+                  <p className="text-xs text-gray-300 tracking-[0.18em] uppercase">
+                    Live preview
+                  </p>
+                  <p className="text-[11px] text-gray-400">LYTE-3.pdf</p>
+                </div>
+                <div className="aspect-[3/4] bg-black">
+                  <iframe
+                    src="/manual/LYTE-3.pdf#view=fitH"
+                    title="LYTE User Manual Preview"
+                    className="w-full h-full"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   )
 }
