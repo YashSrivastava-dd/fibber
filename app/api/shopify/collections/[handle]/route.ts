@@ -6,10 +6,10 @@ export const dynamic = 'force-dynamic'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { handle: string } }
+  { params }: { params: Promise<{ handle: string }> }
 ) {
   try {
-    const { handle } = params
+    const { handle } = await params
     const searchParams = request.nextUrl.searchParams
     const first = parseInt(searchParams.get('first') || '50')
     const after = searchParams.get('after') || undefined

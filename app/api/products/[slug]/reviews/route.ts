@@ -43,10 +43,10 @@ function serializeReview(doc: DocumentSnapshot): ProductReview {
 
 export async function GET(
   _request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const slug = params?.slug
+    const { slug } = await params
     if (!slug || typeof slug !== 'string') {
       return NextResponse.json(
         { error: 'Product slug is required.' },
@@ -91,10 +91,10 @@ export async function GET(
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const slug = params?.slug
+    const { slug } = await params
     if (!slug || typeof slug !== 'string') {
       return NextResponse.json(
         { error: 'Product slug is required.' },

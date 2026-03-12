@@ -6,10 +6,10 @@ export const dynamic = 'force-dynamic'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { handle: string } }
+  { params }: { params: Promise<{ handle: string }> }
 ) {
   try {
-    const { handle } = params
+    const { handle } = await params
     
     console.log('Fetching product with handle:', handle)
 
@@ -50,11 +50,6 @@ export async function GET(
     )
   } catch (error: any) {
     console.error('Error fetching product:', error)
-    console.error('Error details:', {
-      message: error.message,
-      stack: error.stack,
-      handle: params.handle,
-    })
     return NextResponse.json(
       { error: error.message || 'Failed to fetch product' },
       { status: 500 }
