@@ -5,7 +5,7 @@
 
 export interface ProductBadge {
   label: string
-  variant: 'primary' | 'secondary'
+  variant: 'primary' | 'secondary' | 'danger'
 }
 
 interface ProductForBadges {
@@ -23,8 +23,11 @@ export function getProductBadges(
 
   // USP / category badge from title or fallback by position
   const title = (product.title ?? '').toUpperCase()
-  if (title.includes('LYTE') || title.includes('CRAVING')) {
-    // No badge for LYTE
+  if (title === 'LYTE' || title === 'LYTE BAND' || title === 'LYTE HEALTH BAND') {
+    // Explicit sold-out tag for LYTE band (standalone only, not combo packs)
+    badges.push({ label: 'OUT OF STOCK', variant: 'danger' })
+  } else if (title.includes('CRAVING')) {
+    // No badge for craving-specific products
   } else if (title.includes('WEIGHT') || title.includes('MANAGEMENT')) {
     badges.push({ label: 'WEIGHT MANAGEMENT', variant: 'secondary' })
   } else if (title.includes('GUT') || title.includes('FIBER')) {

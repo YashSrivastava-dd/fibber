@@ -85,6 +85,9 @@ export default function LyteProductPage({ slug }: LyteProductPageProps) {
   const bannerRefs = useRef<(HTMLDivElement | null)[]>([])
   const addItem = useCartStore((state) => state.addItem)
 
+  // Treat all LYTE band product slugs as sold out (do not allow add to cart)
+  const isLyteBandSoldOut = ['lyte', 'lyte-band', 'lyte-health-band'].includes(slug)
+
   const toggleAccordion = (id: string) => {
     setExpandedAccordion((prev) => (prev === id ? null : id))
   }
@@ -151,7 +154,7 @@ export default function LyteProductPage({ slug }: LyteProductPageProps) {
   // ─── Handlers ──────────────────────────────────────────────────────────────
 
   function handleAddToCart() {
-    if (!product) return
+    if (!product || isLyteBandSoldOut) return
     const id = selectedVariant?.id ?? product.id
     const price = selectedVariant?.price ?? product.price
 
@@ -168,7 +171,8 @@ export default function LyteProductPage({ slug }: LyteProductPageProps) {
   const discountPercent = displayCompareAt != null && displayCompareAt > displayPrice && displayPrice > 0
     ? Math.round((1 - displayPrice / displayCompareAt) * 100)
     : null
-  const isAvailable = selectedVariant?.available ?? product?.available ?? false
+  const baseAvailable = selectedVariant?.available ?? product?.available ?? false
+  const isAvailable = baseAvailable && !isLyteBandSoldOut
   const displayImages = product?.images?.length ? product.images : product?.image ? [product.image] : []
   const productType = 'SMART HEALTH BAND'
   const displayServings = '1 Device'
@@ -234,7 +238,14 @@ export default function LyteProductPage({ slug }: LyteProductPageProps) {
           <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 items-start">
 
             {/* Left: Images */}
-            <div className="w-full lg:w-1/2 flex gap-4">
+            <div className="w-full lg:w-1/2 flex gap-4 relative">
+              {isLyteBandSoldOut && (
+                <div className="absolute top-3 left-3 z-20">
+                  <span className="inline-flex items-center px-3 py-1 text-xs font-semibold uppercase tracking-wide rounded-full bg-red-600 text-white shadow-sm">
+                    OUT OF STOCK
+                  </span>
+                </div>
+              )}
               {/* Thumbnails */}
               {displayImages.length > 1 && (
                 <div className="hidden lg:flex flex-col gap-3 flex-shrink-0">
@@ -295,6 +306,11 @@ export default function LyteProductPage({ slug }: LyteProductPageProps) {
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black uppercase leading-[1.1] mb-1 break-words">
                   {product.title}
                 </h1>
+                {isLyteBandSoldOut && (
+                  <span className="inline-flex items-center px-3 py-1 mt-2 text-xs font-semibold uppercase tracking-wide rounded-full bg-red-50 text-red-700 border border-red-200">
+                    Sold Out
+                  </span>
+                )}
                 <p className="text-sm text-gray-600 mb-4">Servings : {displayServings}</p>
 
                 {/* Ingredient / Feature Tags */}

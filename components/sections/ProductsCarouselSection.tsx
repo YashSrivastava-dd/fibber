@@ -132,6 +132,8 @@ export default function ProductsCarouselSection() {
                             className={`inline-block px-2.5 py-1 text-[10px] sm:text-xs font-semibold uppercase tracking-wider rounded ${
                               badge.variant === 'primary'
                                 ? 'bg-black text-white'
+                                : badge.variant === 'danger'
+                                ? 'bg-red-600 text-white'
                                 : 'bg-white/95 border border-gray-300 text-gray-900'
                             }`}
                           >
@@ -187,22 +189,35 @@ export default function ProductsCarouselSection() {
                       <span className="text-sm font-medium text-gray-800">4.8</span>
                     </div>
                     <div className="pt-1">
-                    <button
-                      onClick={() => addItem({
-                        id: product.id,
-                        title: product.title,
-                        price: product.price,
-                        image: product.image,
-                      })}
-                      disabled={!product.available}
-                      className={`w-full py-3 px-6 rounded-lg font-normal text-sm transition-colors ${
-                        product.available
-                          ? 'bg-white border-2 border-black text-black hover:bg-black hover:text-white'
-                          : 'bg-gray-200 text-gray-500 cursor-not-allowed border-2 border-gray-300'
-                      }`}
-                    >
-                      {product.available ? 'ADD TO CART' : 'OUT OF STOCK'}
-                    </button>
+                      {(() => {
+                        const slug = product.slug?.toLowerCase() ?? ''
+                        const isLyteBand =
+                          slug === 'lyte' ||
+                          slug === 'lyte-band' ||
+                          slug === 'lyte-health-band'
+                        const isAvailable = product.available && !isLyteBand
+                        return (
+                          <button
+                            onClick={() =>
+                              isAvailable &&
+                              addItem({
+                                id: product.id,
+                                title: product.title,
+                                price: product.price,
+                                image: product.image,
+                              })
+                            }
+                            disabled={!isAvailable}
+                            className={`w-full py-3 px-6 rounded-lg font-normal text-sm transition-colors ${
+                              isAvailable
+                                ? 'bg-white border-2 border-black text-black hover:bg-black hover:text-white'
+                                : 'bg-gray-200 text-gray-500 cursor-not-allowed border-2 border-gray-300'
+                            }`}
+                          >
+                            {isAvailable ? 'ADD TO CART' : 'OUT OF STOCK'}
+                          </button>
+                        )
+                      })()}
                     </div>
                   </div>
                 </div>

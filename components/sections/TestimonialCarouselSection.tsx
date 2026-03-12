@@ -5,20 +5,20 @@ import { useState, useCallback } from 'react'
 const testimonials = [
   {
     id: 1,
-    name: 'Martin B.',
-    quote: '"Finally, a product that delivers on its promises. My skin glows, and I feel amazing inside and out!"',
+    name: 'Divya',
+    quote: '"The bloating is just gone! I was able to notice the changes faster than I expected."',
     rating: 5,
   },
   {
     id: 2,
-    name: 'Sarah L.',
-    quote: '"I\'ve tried countless supplements, but nothing compares to this. My energy levels have never been better!"',
+    name: 'Juhi',
+    quote: '"Overeating problem has gone away immediately."',
     rating: 5,
   },
   {
     id: 3,
-    name: 'James K.',
-    quote: '"The quality is exceptional. I noticed improvements in my wellness within the first week of use."',
+    name: 'Yash',
+    quote: '"I thought my energy will get low but I am able to continue with my daily tasks."',
     rating: 5,
   },
 ]
@@ -71,7 +71,10 @@ export default function TestimonialCarouselSection() {
           </div>
 
           {/* Quote */}
-          <blockquote className="text-xl md:text-2xl lg:text-3xl font-normal leading-relaxed mb-8 text-gray-900">
+          <blockquote
+            className="text-xl md:text-2xl lg:text-3xl font-normal leading-relaxed mb-8 text-gray-900"
+            suppressHydrationWarning
+          >
             {testimonial.quote}
           </blockquote>
 

@@ -38,8 +38,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${montserrat.variable} ${playfair.variable}`}>
-      <body className={montserrat.className}>
+    <html lang="en" className={`${montserrat.variable} ${playfair.variable}`} suppressHydrationWarning>
+      <body className={montserrat.className} suppressHydrationWarning>
         <AuthProvider>
           <Header />
           <main className="min-h-screen">{children}</main>
