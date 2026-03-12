@@ -2,8 +2,8 @@
 
 import Image from 'next/image'
 
-const DESKTOP_IMAGE = '/videos/hero-1600.webp'
-const MOBILE_IMAGE = '/videos/mobile-800.webp'
+const DESKTOP_IMAGE = '/hf_20260310_113908_cf31733e-1ff2-4aa3-a9bb-c7759417104c.jpeg'
+const MOBILE_IMAGE = '/hf_20260310_114430_afbe1b53-071a-400e-8206-aa625755a570.jpeg'
 
 export default function HeroSection() {
   return (
@@ -18,8 +18,6 @@ export default function HeroSection() {
             fill
             className="object-cover object-bottom"
             style={{ objectPosition: 'center 85%' }}
-            sizes="100vw"
-            quality={90}
             priority
           />
         </div>
@@ -56,8 +54,6 @@ export default function HeroSection() {
           fill
           className="object-cover"
           style={{ objectPosition: 'right center' }}
-          sizes="100vw"
-          quality={90}
           priority
         />
         <div className="absolute inset-0 bg-gradient-to-r from-white/30 via-transparent to-transparent" />
