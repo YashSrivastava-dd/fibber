@@ -87,7 +87,7 @@ export default function VideoSection() {
                 playsInline
                 className="w-full h-full object-cover border-0 outline-none"
               >
-                <source src="/videos/f087c0f71002463594892e68000dfe75.HD-720p-4.5Mbps-40573155.mp4" type="video/mp4" />
+                <source src="/videos/conversion.webm" type="video/webm" />
               </video>
             </div>
           </div>

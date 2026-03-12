@@ -60,8 +60,8 @@ export default function RootLayout({
           `}
         </Script>
         {/* Zoho SalesIQ chat widget */}
-        <Script
-          id="zoho-salesiq-ready"
+        {/* <Script
+          id="zoho-salesiq-ready"e
           strategy="beforeInteractive"
         >
           {`window.$zoho=window.$zoho||{};$zoho.salesiq=$zoho.salesiq||{ready:function(){}};`}
@@ -70,7 +70,7 @@ export default function RootLayout({
           id="zsiqscript"
           src={`https://salesiq.zohopublic.in/widget?wc=${ZOHO_SALESIQ_WIDGET_CODE}`}
           strategy="afterInteractive"
-        />
+        /> */}
       </body>
     </html>
   )
