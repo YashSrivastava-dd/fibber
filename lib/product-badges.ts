@@ -13,6 +13,8 @@ interface ProductForBadges {
   price?: number
   maxPrice?: number | null
   comparePrice?: number | null
+  // Optional availability flag from product payload
+  available?: boolean
 }
 
 export function getProductBadges(
@@ -21,12 +23,15 @@ export function getProductBadges(
 ): ProductBadge[] {
   const badges: ProductBadge[] = []
 
+  // If product is explicitly unavailable, show a global OUT OF STOCK tag
+  if (product.available === false) {
+    badges.push({ label: 'OUT OF STOCK', variant: 'danger' })
+    return badges
+  }
+
   // USP / category badge from title or fallback by position
   const title = (product.title ?? '').toUpperCase()
-  if (title === 'LYTE' || title === 'LYTE BAND' || title === 'LYTE HEALTH BAND') {
-    // Explicit sold-out tag for LYTE band (standalone only, not combo packs)
-    badges.push({ label: 'OUT OF STOCK', variant: 'danger' })
-  } else if (title.includes('CRAVING')) {
+  if (title.includes('CRAVING')) {
     // No badge for craving-specific products
   } else if (title.includes('WEIGHT') || title.includes('MANAGEMENT')) {
     badges.push({ label: 'WEIGHT MANAGEMENT', variant: 'secondary' })
