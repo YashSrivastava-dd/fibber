@@ -430,13 +430,6 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
             {/* Main Image Display */}
             <div className="flex-1 relative bg-transparent rounded-lg overflow-hidden group">
-              {!isAvailable && (
-                <div className="absolute top-3 left-3 z-20">
-                  <span className="inline-flex items-center px-3 py-1 text-xs font-semibold uppercase tracking-wide rounded-full bg-red-600 text-white shadow-sm">
-                    OUT OF STOCK
-                  </span>
-                </div>
-              )}
               <div className="relative w-full aspect-square">
                 <Image
                   src={displayImages[selectedImageIndex] || product.image || '/placeholder-product.png'}
@@ -507,11 +500,6 @@ export default function ProductPage({ slug }: ProductPageProps) {
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black uppercase leading-[1.1] mb-1 break-words">
                 {product.title}
               </h1>
-              {!isAvailable && (
-                <span className="inline-flex items-center px-3 py-1 mt-2 text-xs font-semibold uppercase tracking-wide rounded-full bg-red-50 text-red-700 border border-red-200">
-                  Out of Stock
-                </span>
-              )}
               <p className="text-sm text-gray-600 mb-4">Servings : {displayServings}</p>
 
               {/* Ingredient Tags */}
@@ -1082,7 +1070,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
               disabled={!isAvailable}
               className="py-3 px-10 rounded-lg font-semibold text-sm uppercase tracking-wider border-2 border-black text-black bg-white hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isAvailable ? 'Add to Cart' : 'Out of Stock'}
+              Add to Cart
             </button>
           </div>
         </div>

@@ -74,9 +74,10 @@ export function formatProduct(product: any) {
   // Get the first available variant GID (for cart/checkout)
   const variantGID = variant?.id || product.variants?.edges?.[0]?.node?.id || ''
 
-  // For now, treat all products as out of stock globally
-  const hasAvailableVariant = false
-  const isAvailable = false
+  // Check availability - only mark as available if explicitly true
+  // Check if at least one variant is available
+  const hasAvailableVariant = product.variants?.edges?.some((edge: any) => edge.node.availableForSale === true)
+  const isAvailable = variant?.availableForSale === true || hasAvailableVariant === true
   
   // Extract metafields - filter out null values first
   const metafields = (product.metafields || []).filter((m: any) => m !== null && m !== undefined)
@@ -103,8 +104,7 @@ export function formatProduct(product: any) {
       name: edge.node.title || '',
       price: vPrice,
       compareAtPrice: vCompareAt != null && vCompareAt > vPrice ? vCompareAt : null,
-      // Force all variants to be unavailable
-      available: false,
+      available: edge.node.availableForSale === true,
       selectedOptions: edge.node.selectedOptions || [],
     }
   }) || []) as Array<{ id: string; gid: string; name: string; price: number; compareAtPrice: number | null; available: boolean; selectedOptions: any[] }>

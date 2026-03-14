@@ -24,11 +24,28 @@ const playfair = Playfair_Display({
   display: 'swap',
 })
 
+const SITE_URL = 'https://fiberisefit.com'
+const OG_IMAGE = `${SITE_URL}/icons/I%20Mark%20-%20BC%2001.png`
+
 export const metadata: Metadata = {
-  title: 'FIberiseFit Store - The Future of FIberiseFit',
-  description: 'Gear up for great health with premium FIberiseFit products',
+  title: 'Fiberise Fit',
+  description: 'Smart health ecosystem powered by AI & innovation.',
   icons: {
     icon: '/icons/I Mark - BC 01.png',
+  },
+  openGraph: {
+    title: 'Fiberise Fit',
+    description: 'Smart health ecosystem powered by AI & innovation.',
+    url: SITE_URL,
+    siteName: 'Fiberise Fit',
+    type: 'website',
+    images: [{ url: OG_IMAGE, alt: 'Fiberise Fit' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Fiberise Fit',
+    description: 'Smart health ecosystem powered by AI & innovation.',
+    images: [OG_IMAGE],
   },
 }
 
