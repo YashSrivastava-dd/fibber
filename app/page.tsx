@@ -10,6 +10,7 @@ import RitualSection from '@/components/sections/RitualSection'
 import EmpoweringSection from '@/components/sections/EmpoweringSection'
 import FullWidthVideoSection from '@/components/sections/FullWidthVideoSection'
 import TestimonialCarouselSection from '@/components/sections/TestimonialCarouselSection'
+import PressMarqueeSection from '@/components/sections/PressMarqueeSection'
 
 export default function Home() {
   return (
@@ -17,6 +18,7 @@ export default function Home() {
       {/* Homepage Sections */}
       <HeroSection />
       <FeaturedProductsSection />
+      <PressMarqueeSection />
       <MeditationImageSection />
       <VideoSection />
       {/* <ProductShowcaseSection /> */}
