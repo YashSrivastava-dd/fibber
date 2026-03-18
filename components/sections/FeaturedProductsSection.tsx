@@ -212,10 +212,7 @@ Control Appetite. Refine Weight          </p>
                     <div className="pt-1">
                       {(() => {
                         const slug = product.slug?.toLowerCase() ?? ''
-                        const isLyteBand =
-                          slug === 'lyte' ||
-                          slug === 'lyte-band' ||
-                          slug === 'lyte-health-band'
+                        const isLyteBand = slug === 'lyte'
                         const isAvailable = product.available && !isLyteBand
                         return (
                           <button

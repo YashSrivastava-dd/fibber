@@ -2,7 +2,7 @@ import ProductPage from '@/components/pages/ProductPage'
 import LyteProductPage from '@/components/pages/LyteProductPage'
 
 // Slugs that are LYTE (wearable) — use the premium dark product page
-const LYTE_SLUGS = ['mens-multi', 'lyte', 'lyte-band', 'lyte-health-band']
+const LYTE_SLUGS = ['lyte']
 
 type ProductProps = {
   params: Promise<{ slug: string }>

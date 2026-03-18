@@ -86,7 +86,7 @@ export default function LyteProductPage({ slug }: LyteProductPageProps) {
   const addItem = useCartStore((state) => state.addItem)
 
   // Treat all LYTE band product slugs as sold out (do not allow add to cart)
-  const isLyteBandSoldOut = ['lyte', 'lyte-band', 'lyte-health-band'].includes(slug)
+  const isLyteBandSoldOut = ['lyte'].includes(slug)
 
   const toggleAccordion = (id: string) => {
     setExpandedAccordion((prev) => (prev === id ? null : id))
@@ -239,13 +239,6 @@ export default function LyteProductPage({ slug }: LyteProductPageProps) {
 
             {/* Left: Images */}
             <div className="w-full lg:w-1/2 flex gap-4 relative">
-              {isLyteBandSoldOut && (
-                <div className="absolute top-3 left-3 z-20">
-                  <span className="inline-flex items-center px-3 py-1 text-xs font-semibold uppercase tracking-wide rounded-full bg-red-600 text-white shadow-sm">
-                    OUT OF STOCK
-                  </span>
-                </div>
-              )}
               {/* Thumbnails */}
               {displayImages.length > 1 && (
                 <div className="hidden lg:flex flex-col gap-3 flex-shrink-0">
@@ -311,7 +304,7 @@ export default function LyteProductPage({ slug }: LyteProductPageProps) {
                     Sold Out
                   </span>
                 )}
-                <p className="text-sm text-gray-600 mb-4">Servings : {displayServings}</p>
+                {/* Removed "Servings : 1 Device" for LYTE */}
 
                 {/* Ingredient / Feature Tags */}
                 <div className="flex flex-wrap gap-2 mb-4">

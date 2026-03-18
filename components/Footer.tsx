@@ -6,9 +6,9 @@ import PaymentIcons from '@/components/PaymentIcons'
 export default function Footer() {
   const footerLinks = {
     products: [
-      { name: 'Starter Pack ', href: '/products/30-days-servings' },
-      { name: 'Transformation Pack', href: '/products/30-servings-copy' },
-      { name: 'Ultimate Pack', href: '/products/test-pack' },
+      { name: 'Starter Pack', href: '/products/starter-pack' },
+      { name: 'Ultimate Pack', href: '/products/ultimate-pack' },
+      { name: 'Transformation Pack + LYTE Band', href: '/products/transformation-pack-lyte-band' },
       { name: 'LYTE', href: '/products/lyte' },
     ],
     social: [
@@ -131,6 +131,14 @@ export default function Footer() {
                   className="text-sm text-gray-400 hover:text-white transition-colors"
                 >
                   Contact Us
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/sitemap.xml"
+                  className="text-sm text-gray-400 hover:text-white transition-colors"
+                >
+                  Sitemap
                 </Link>
               </li>
             </ul>
