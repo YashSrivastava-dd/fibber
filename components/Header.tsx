@@ -170,7 +170,7 @@ export default function Header() {
                 <button
                   onClick={() => {
                     if (isAuthenticated) {
-                      router.push('/account')
+                      router.push('/account/orders')
                     } else {
                       router.push('/account/login')
                     }
@@ -220,7 +220,7 @@ export default function Header() {
                 <button
                   onClick={() => {
                     if (isAuthenticated) {
-                      router.push('/account')
+                      router.push('/account/orders')
                     } else {
                       router.push('/account/login')
                     }

@@ -7,7 +7,6 @@ import { AccountSidebar } from '@/components/account/AccountSidebar'
 import { AccountBreadcrumb } from '@/components/account/AccountBreadcrumb'
 
 const BREADCRUMB_LABELS: Record<string, string> = {
-  '/account': 'Dashboard',
   '/account/orders': 'Orders',
   '/account/addresses': 'Addresses',
   '/account/details': 'Account details',
@@ -16,7 +15,7 @@ const BREADCRUMB_LABELS: Record<string, string> = {
 function getBreadcrumbItems(pathname: string): { label: string; href?: string }[] {
   const items: { label: string; href?: string }[] = [
     { label: 'Home', href: '/' },
-    { label: 'My Account', href: '/account' },
+    { label: 'My Account', href: '/account/orders' },
   ]
   if (pathname === '/account') return items
   if (pathname.match(/^\/account\/orders\/[^/]+$/)) {

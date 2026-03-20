@@ -106,7 +106,7 @@ export default function AccountLoginPage() {
       if (!res.ok) {
         throw new Error('Something went wrong. Please try again.')
       }
-      router.push('/account')
+      router.push('/account/orders')
     } catch (err: any) {
       setError(err.message || 'Invalid OTP. Please check and try again.')
     } finally {

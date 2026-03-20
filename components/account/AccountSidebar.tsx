@@ -2,19 +2,12 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import {
-  LayoutDashboard,
-  ShoppingCart,
-  User,
-  LogOut,
-  MapPin,
-} from 'lucide-react'
+import { ShoppingCart, User, LogOut, MapPin } from 'lucide-react'
 import { signOut } from 'firebase/auth'
 import { auth } from '@/lib/firebase/config'
 import { useRouter } from 'next/navigation'
 
 const navItems = [
-  { href: '/account', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/account/orders', label: 'Orders', icon: ShoppingCart },
   { href: '/account/addresses', label: 'Addresses', icon: MapPin },
   { href: '/account/details', label: 'Account details', icon: User },
@@ -38,8 +31,8 @@ export function AccountSidebar() {
       <nav className="border border-gray-200 rounded-lg bg-white overflow-hidden">
         {navItems.map((item) => {
           const isActive =
-            item.href === '/account'
-              ? pathname === '/account'
+            item.href === '/account/orders'
+              ? pathname === '/account/orders' || pathname.startsWith('/account/orders/')
               : pathname.startsWith(item.href)
           const Icon = item.icon
           return (
