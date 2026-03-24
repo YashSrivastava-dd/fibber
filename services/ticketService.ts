@@ -9,13 +9,12 @@
  */
 
 import {
+  addDoc,
   collection,
   doc,
   getDoc,
-  setDoc,
-  updateDoc,
-  increment,
   serverTimestamp,
+  updateDoc,
 } from 'firebase/firestore'
 import {
   ref,
@@ -39,26 +38,23 @@ export interface TicketResult {
   docId: string
 }
 
-// ─── Ticket Number ────────────────────────────────────────────────────────────
+export class ActiveTicketExistsError extends Error {
+  activeTicketId: string | null
+  activeTicketDocId: string | null
 
-/**
- * Get next ticket number using atomic increment.
- * Uses FieldValue.increment(1) — no transaction needed.
- */
-async function getNextTicketNumber(): Promise<number> {
-  const counterRef = doc(db, 'counters', 'ticket_counter')
-  const snap = await getDoc(counterRef)
-
-  if (!snap.exists()) {
-    // First ever ticket — initialise counter at 101
-    await setDoc(counterRef, { last_ticket_number: 101 })
-    return 101
+  constructor(message: string, activeTicketId?: string | null, activeTicketDocId?: string | null) {
+    super(message)
+    this.name = 'ActiveTicketExistsError'
+    this.activeTicketId = activeTicketId ?? null
+    this.activeTicketDocId = activeTicketDocId ?? null
   }
+}
 
-  // Atomically increment
-  await updateDoc(counterRef, { last_ticket_number: increment(1) })
-  const updated = await getDoc(counterRef)
-  return updated.data()?.last_ticket_number ?? 101
+export interface TicketCommentInput {
+  ticketDocId: string
+  message: string
+  authorName?: string
+  authorType?: 'user' | 'agent' | 'system'
 }
 
 // ─── Image Upload ─────────────────────────────────────────────────────────────
@@ -82,41 +78,90 @@ async function uploadTicketImage(file: File, ticketNumber: number): Promise<stri
 export async function createSupportTicket(input: TicketInput): Promise<TicketResult> {
   console.log('[ticketService] Starting ticket creation...')
 
-  // Step 1: Get ticket number
-  const ticketNumber = await getNextTicketNumber()
-  const ticketId = `#FF${ticketNumber}`
-  console.log('[ticketService] Ticket ID:', ticketId)
-
-  // Step 2: Upload image (non-blocking on failure)
+  // Step 1: Upload image (non-blocking on failure)
   let imageUrl: string | null = null
   if (input.imageFile) {
     try {
       console.log('[ticketService] Uploading image...')
-      imageUrl = await uploadTicketImage(input.imageFile, ticketNumber)
+      imageUrl = await uploadTicketImage(input.imageFile, Date.now())
       console.log('[ticketService] Image uploaded:', imageUrl)
     } catch (err) {
       console.error('[ticketService] Image upload failed (continuing without image):', err)
     }
   }
 
-  // Step 3: Write ticket to Firestore
-  const ticketsRef = collection(db, 'customer_service')
-  const newDocRef = doc(ticketsRef)
+  // Step 2: Create ticket via server API (enforces one-active-ticket rule)
+  const response = await fetch('/api/support/tickets', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name: input.name.trim(),
+      phone: input.phone.trim(),
+      orderId: input.orderId?.trim() || null,
+      description: input.description.trim(),
+      imageUrl,
+    }),
+  })
 
-  const ticketData = {
-    ticket_id: ticketId,
-    name: input.name.trim(),
-    phone: input.phone.trim(),
-    order_id: input.orderId?.trim() || null,
-    description: input.description.trim(),
-    image_url: imageUrl,
-    status: 'open',
-    created_at: serverTimestamp(),
+  const payload = (await response.json().catch(() => ({}))) as {
+    success?: boolean
+    code?: string
+    message?: string
+    ticketId?: string
+    docId?: string
+    activeTicket?: {
+      id?: string
+      ticketId?: string | null
+      status?: string
+    }
   }
 
-  console.log('[ticketService] Writing to Firestore...')
-  await setDoc(newDocRef, ticketData)
-  console.log('[ticketService] Ticket created successfully:', newDocRef.id)
+  if (response.status === 409 && payload.code === 'ACTIVE_TICKET_EXISTS') {
+    throw new ActiveTicketExistsError(
+      payload.message || 'You already have an active ticket. Please continue updates on that ticket.',
+      payload.activeTicket?.ticketId ?? null,
+      payload.activeTicket?.id ?? null
+    )
+  }
 
-  return { ticketId, docId: newDocRef.id }
+  if (!response.ok || !payload.success || !payload.ticketId || !payload.docId) {
+    throw new Error(payload.message || 'Failed to create ticket')
+  }
+
+  return { ticketId: payload.ticketId, docId: payload.docId }
+}
+
+export async function addTicketComment(input: TicketCommentInput): Promise<{ commentId: string }> {
+  const ticketDocId = input.ticketDocId.trim()
+  const message = input.message.trim()
+  const authorType = input.authorType || 'user'
+  const authorName = input.authorName?.trim() || null
+
+  if (!ticketDocId) {
+    throw new Error('Ticket id is required')
+  }
+  if (!message) {
+    throw new Error('Comment message is required')
+  }
+
+  const ticketRef = doc(db, 'customer_service', ticketDocId)
+  const ticketSnap = await getDoc(ticketRef)
+  if (!ticketSnap.exists()) {
+    throw new Error('Ticket not found')
+  }
+
+  const commentsRef = collection(db, 'customer_service', ticketDocId, 'comments')
+  const commentDoc = await addDoc(commentsRef, {
+    message,
+    author_name: authorName,
+    author_type: authorType,
+    created_at: serverTimestamp(),
+  })
+
+  await updateDoc(ticketRef, {
+    updated_at: serverTimestamp(),
+    last_comment_at: serverTimestamp(),
+  })
+
+  return { commentId: commentDoc.id }
 }

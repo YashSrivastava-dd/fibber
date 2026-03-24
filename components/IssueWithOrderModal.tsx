@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { X, Upload, ImageIcon, CheckCircle, Loader2, AlertCircle } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
-import { createSupportTicket } from '@/services/ticketService'
+import { ActiveTicketExistsError, createSupportTicket } from '@/services/ticketService'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -63,6 +63,7 @@ export default function IssueWithOrderModal({
   const [submitState, setSubmitState] = useState<SubmitState>('idle')
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [generatedTicketId, setGeneratedTicketId] = useState<string | null>(null)
+  const [existingTicketId, setExistingTicketId] = useState<string | null>(null)
 
   const fileInputRef = useRef<HTMLInputElement>(null)
   const modalRef = useRef<HTMLDivElement>(null)
@@ -131,6 +132,7 @@ export default function IssueWithOrderModal({
         setSubmitState('idle')
         setSubmitError(null)
         setGeneratedTicketId(null)
+        setExistingTicketId(null)
       }, 300)
     }
   }, [isOpen, prefillOrderId])
@@ -204,6 +206,7 @@ export default function IssueWithOrderModal({
 
     setSubmitState('uploading')
     setSubmitError(null)
+    setExistingTicketId(null)
 
     try {
       const result = await createSupportTicket({
@@ -217,6 +220,18 @@ export default function IssueWithOrderModal({
       setGeneratedTicketId(result.ticketId)
       setSubmitState('success')
     } catch (err: unknown) {
+      if (err instanceof ActiveTicketExistsError) {
+        const ticketRef = err.activeTicketId || err.activeTicketDocId || null
+        setExistingTicketId(ticketRef)
+        setSubmitError(
+          ticketRef
+            ? `You already have an active ticket (${ticketRef}). Please continue updates on that ticket.`
+            : 'You already have an active ticket. Please continue updates on that ticket.'
+        )
+        setSubmitState('error')
+        return
+      }
+
       const msg = err instanceof Error ? err.message : String(err)
       console.error('[IssueWithOrderModal] Submit error:', msg, err)
       setSubmitError(`Submission failed: ${msg}`)
@@ -447,7 +462,14 @@ export default function IssueWithOrderModal({
               {submitError && (
                 <div className="flex items-center gap-2 rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
                   <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                  {submitError}
+                  <div>
+                    <p>{submitError}</p>
+                    {existingTicketId && (
+                      <p className="mt-1 text-xs text-red-600">
+                        Existing ticket reference: {existingTicketId}
+                      </p>
+                    )}
+                  </div>
                 </div>
               )}
 
