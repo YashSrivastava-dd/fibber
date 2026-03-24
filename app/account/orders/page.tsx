@@ -94,17 +94,18 @@ export default function AccountOrdersPage() {
   }, [authPhone])
 
   useEffect(() => {
-    if (!activeTicket?.id) {
+    if (!activeTicket) {
       setComments([])
       return
     }
+    const ticketId = activeTicket.id
 
     let cancelled = false
     async function fetchComments() {
       setLoadingComments(true)
       setCommentError(null)
       try {
-        const res = await fetch(`/api/support/tickets/${encodeURIComponent(activeTicket.id)}/comments`)
+        const res = await fetch(`/api/support/tickets/${encodeURIComponent(ticketId)}/comments`)
         if (!res.ok) throw new Error('Failed to load ticket comments')
         const data = (await res.json()) as { comments?: TicketComment[] }
         if (!cancelled) setComments(data.comments || [])
@@ -167,12 +168,13 @@ export default function AccountOrdersPage() {
   }
 
   const submitComment = async () => {
-    if (!activeTicket?.id || !commentInput.trim()) return
+    const ticketId = activeTicket?.id
+    if (!ticketId || !commentInput.trim()) return
 
     setCommentSubmitting(true)
     setCommentError(null)
     try {
-      const res = await fetch(`/api/support/tickets/${encodeURIComponent(activeTicket.id)}/comments`, {
+      const res = await fetch(`/api/support/tickets/${encodeURIComponent(ticketId)}/comments`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -186,7 +188,7 @@ export default function AccountOrdersPage() {
       }
 
       setCommentInput('')
-      const commentsRes = await fetch(`/api/support/tickets/${encodeURIComponent(activeTicket.id)}/comments`)
+      const commentsRes = await fetch(`/api/support/tickets/${encodeURIComponent(ticketId)}/comments`)
       if (commentsRes.ok) {
         const commentsData = (await commentsRes.json()) as { comments?: TicketComment[] }
         setComments(commentsData.comments || [])
