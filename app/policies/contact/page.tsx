@@ -1,8 +1,33 @@
 import Link from 'next/link'
 
+const LOCAL_BUSINESS_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: 'Fiberise Fit',
+  image: 'https://fiberisefit.com/_next/image?url=%2Ffiberisefit%20dark%20logo.png&w=1920&q=75',
+  '@id': '',
+  url: 'https://fiberisefit.com/policies/contact',
+  telephone: '7070705026',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: '731/508 S/F, PLOT NO.7 BLOCK 56 DB GUPTA ROAD Karol Bagh Central Delhi',
+    addressLocality: 'New Delhi',
+    postalCode: '110005',
+    addressCountry: 'IN',
+  },
+  sameAs: [
+    'https://www.instagram.com/fiberisefit',
+    'https://www.linkedin.com/company/fiberise-fit/',
+  ],
+}
+
 export default function ContactPolicyPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#eef1f4] to-slate-50 pt-28">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(LOCAL_BUSINESS_SCHEMA) }}
+      />
       <div className="max-w-4xl mx-auto px-6 py-12">
         {/* Hero Section */}
         <div className="text-white p-10 rounded-2xl shadow-2xl mb-7" style={{ backgroundColor: '#102333' }}>

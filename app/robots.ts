@@ -26,6 +26,17 @@ export default function robots(): MetadataRoute.Robots {
           '/_next/',
         ],
       },
+      {
+        userAgent: [
+          'Google-Extended',
+          'GPTBot',
+          'ChatGPT-User',
+          'CCBot',
+          'anthropic-ai',
+          'PerplexityBot',
+        ],
+        allow: '/',
+      },
     ],
     sitemap: `${BASE_URL}/sitemap.xml`,
     host: BASE_URL,

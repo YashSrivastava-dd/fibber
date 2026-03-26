@@ -27,10 +27,38 @@ const playfair = Playfair_Display({
 const SITE_URL = 'https://fiberisefit.com'
 const OG_IMAGE = `${SITE_URL}/icons/I%20Mark%20-%20BC%2001.png`
 const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || '1494405295572983'
+const GTM_ID = 'GTM-W8MBF3JG'
+const ORGANIZATION_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Fiberise Fit',
+  alternateName: 'fiberisefit',
+  url: 'https://fiberisefit.com/',
+  logo: 'https://fiberisefit.com/_next/image?url=%2Ffiberisefit%20dark%20logo.png&w=1920&q=75',
+  sameAs: [
+    'https://www.instagram.com/fiberisefit',
+    'https://www.linkedin.com/company/fiberise-fit/',
+  ],
+}
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: 'Fiberise Fit',
   description: 'Smart health ecosystem powered by AI & innovation.',
+  alternates: {
+    canonical: './',
+    languages: {
+      'en-IN': './',
+    },
+  },
+  authors: [{ name: 'Fiberise Fit' }],
+  publisher: 'Fiberise Fit',
+  verification: {
+    google: '_611OG553fYDgD9ySG0n8u91QLMwxt2q9ZgaFr-TdEg',
+  },
+  other: {
+    robots: 'index, follow, archive',
+  },
   icons: {
     icon: '/icons/I Mark - BC 01.png',
   },
@@ -58,6 +86,25 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${montserrat.variable} ${playfair.variable}`} suppressHydrationWarning>
       <body className={montserrat.className} suppressHydrationWarning>
+        {/* Google Tag Manager (head script via beforeInteractive) */}
+        <Script id="gtm-base" strategy="beforeInteractive">
+          {`
+            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','${GTM_ID}');
+          `}
+        </Script>
+        {/* Google Tag Manager (noscript) */}
+        <noscript>
+          <iframe
+            src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+            height="0"
+            width="0"
+            style={{ display: 'none', visibility: 'hidden' }}
+          />
+        </noscript>
         <AuthProvider>
           <Header />
           <main className="min-h-screen">{children}</main>
@@ -101,6 +148,12 @@ export default function RootLayout({
             alt=""
           />
         </noscript>
+        <Script
+          id="organization-schema"
+          type="application/ld+json"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(ORGANIZATION_SCHEMA) }}
+        />
         {/* Zoho SalesIQ chat widget */}
         {/* <Script
           id="zoho-salesiq-ready"e
