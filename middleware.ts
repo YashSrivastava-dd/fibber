@@ -3,9 +3,11 @@ import type { NextRequest } from 'next/server'
 
 export function middleware(request: NextRequest) {
   const host = request.headers.get('host') || ''
-  if (host.toLowerCase().startsWith('www.fiberisefit.com')) {
-    const url = request.nextUrl.clone()
-    url.host = 'fiberisefit.com'
+  if (/^www\.fiberisefit\.com(?::\d+)?$/i.test(host)) {
+    const url = new URL(
+      `${request.nextUrl.pathname}${request.nextUrl.search}`,
+      'https://fiberisefit.com'
+    )
     return NextResponse.redirect(url, 301)
   }
 
