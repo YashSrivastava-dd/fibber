@@ -160,7 +160,13 @@ export default function ProductsCarouselSection() {
                     </Link>
                     {(() => {
                       const t = product.title?.toLowerCase() ?? ''
-                      const servings = t.includes('starter pack') ? 'Servings : 30 Sachets' : t.includes('transformation pack') ? 'Servings : 90 Sachets' : null
+                      const servings = t.includes('starter pack')
+                        ? 'Servings : 7 Sachets'
+                        : t.includes('transformation pack')
+                        ? 'Servings : 30 Sachets'
+                        : t.includes('ultimate pack')
+                        ? 'Servings : 90 Sachets'
+                        : null
                       return servings ? <p className="text-xs text-gray-500">{servings}</p> : null
                     })()}
                     <p className="text-xl font-normal pt-1">

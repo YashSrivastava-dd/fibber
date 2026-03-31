@@ -258,15 +258,15 @@ export default function ProductPage({ slug }: ProductPageProps) {
     ? 'VEGAN'
     : 'WEIGHT MANAGEMENT SUPPLEMENT'
 
-  // Servings: Starter Pack = 30, Transformation Pack = 90, Ultimate Pack = 120
+  // Servings: Starter Pack = 7, Transformation Pack = 30, Ultimate Pack = 90
   const getServings = (label: string) => {
     const l = label.toLowerCase()
-    if (l.includes('starter')) return 30
-    if (l.includes('transformation')) return 90
-    if (l.includes('ultimate')) return 120
-    return 90
+    if (l.includes('starter')) return 7
+    if (l.includes('transformation')) return 30
+    if (l.includes('ultimate')) return 90
+    return 30
   }
-  // Base servings on product title (Starter Pack = 30, Transformation Pack = 90), not variant name
+  // Base servings on product title, not variant name
   const displayServings = getServings(product.title)
 
   return (

@@ -174,11 +174,11 @@ Control Appetite. Refine Weight          </p>
                       const t = product.title?.toLowerCase() ?? ''
                       const subtitle =
                         t.includes('starter pack')
-                          ? 'Servings : 30 Sachets'
+                          ? 'Servings : 7 Sachets'
                           : t.includes('transformation pack')
-                          ? 'Servings : 90 Sachets'
+                          ? 'Servings : 30 Sachets'
                           : t.includes('ultimate pack')
-                          ? 'Servings : 120 Sachets'
+                          ? 'Servings : 90 Sachets'
                           : t.includes('lyte')
                           ? 'Fitness band'
                           : product.servings
