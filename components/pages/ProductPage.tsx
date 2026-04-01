@@ -10,6 +10,7 @@ import MetabolismSection from '@/components/sections/science/MetabolismSection'
 import BenefitsGrid from '@/components/sections/science/BenefitsGrid'
 import ProductReviewsSection from '@/components/sections/ProductReviewsSection'
 import PaymentIcons from '@/components/PaymentIcons'
+import { getProductRatingBySlug } from '@/lib/product-ratings'
 
 interface ProductVariant {
   id: string
@@ -54,7 +55,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const heroRef = useRef<HTMLDivElement>(null)
   const addItem = useCartStore((state) => state.addItem)
 
-  const DEFAULT_RATING = 4.8
+  const DEFAULT_RATING = getProductRatingBySlug(slug)
   const displayRating = reviewRating && reviewRating.totalCount > 0
     ? reviewRating.averageRating
     : DEFAULT_RATING
@@ -320,7 +321,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
                       </div>
                       <div className="p-4 text-center">
                         <p className="text-sm font-semibold text-gray-900">{variant.name}</p>
-                        <p className="text-xs text-gray-500 mt-0.5">Servings : {getServings(variant.name)}</p>
+                        <p className="text-base text-gray-500 mt-0.5">Servings : {getServings(variant.name)}</p>
                         <div className="mt-1">
                           {variant.compareAtPrice != null && variant.compareAtPrice > variant.price ? (
                             <>
@@ -500,7 +501,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black uppercase leading-[1.1] mb-1 break-words">
                 {product.title}
               </h1>
-              <p className="text-sm text-gray-600 mb-4">Servings : {displayServings}</p>
+              <p className="text-lg md:text-xl text-gray-600 mb-4">Servings : {displayServings}</p>
 
               {/* Ingredient Tags */}
               <div className="flex flex-wrap gap-2 mb-4">

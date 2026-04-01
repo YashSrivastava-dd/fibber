@@ -8,7 +8,7 @@ export default function Footer() {
     products: [
       { name: 'Starter Pack', href: '/products/starter-pack' },
       { name: 'Ultimate Pack', href: '/products/ultimate-pack' },
-      { name: 'Transformation Pack + LYTE Band', href: '/products/transformation-pack-lyte-band' },
+      { name: 'Ultimate pack', href: '/products/transformation-pack-lyte-band' },
       { name: 'LYTE', href: '/products/lyte' },
     ],
     social: [

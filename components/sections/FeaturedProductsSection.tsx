@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { ChevronLeft, ChevronRight, Star } from 'lucide-react'
 import { useCartStore } from '@/store/cartStore'
 import { getProductBadges } from '@/lib/product-badges'
+import { getProductRatingBySlug } from '@/lib/product-ratings'
 
 interface Product {
   id: string
@@ -29,6 +30,7 @@ interface Product {
 export default function FeaturedProductsSection() {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
+  const [isMobile, setIsMobile] = useState(false)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const addItem = useCartStore((state) => state.addItem)
 
@@ -71,6 +73,14 @@ export default function FeaturedProductsSection() {
     fetchProducts()
   }, [])
 
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 767px)')
+    const sync = () => setIsMobile(mediaQuery.matches)
+    sync()
+    mediaQuery.addEventListener('change', sync)
+    return () => mediaQuery.removeEventListener('change', sync)
+  }, [])
+
   const scroll = (direction: 'left' | 'right') => {
     if (scrollContainerRef.current) {
       const scrollAmount = 400
@@ -80,6 +90,23 @@ export default function FeaturedProductsSection() {
       })
     }
   }
+
+  const orderedProducts = [...products].sort((a, b) => {
+    const rank = (title: string) => {
+      const t = title.toLowerCase()
+      if (isMobile) {
+        if (t.includes('starter pack')) return 1
+        if (t.includes('transformation pack')) return 2
+        if (t.includes('ultimate pack')) return 3
+      } else {
+        if (t.includes('transformation pack')) return 1
+        if (t.includes('starter pack')) return 2
+        if (t.includes('ultimate pack')) return 3
+      }
+      return 4
+    }
+    return rank(a.title) - rank(b.title)
+  })
 
   return (
     <section id="products" className="py-8 md:py-16 bg-white">
@@ -126,8 +153,9 @@ Control Appetite. Refine Weight          </p>
               ref={scrollContainerRef}
               className="flex gap-6 md:gap-8 overflow-x-auto scrollbar-hide scroll-smooth pb-4 px-4 -mx-4 md:mx-0 md:px-12 md:justify-center"
             >
-              {products.map((product, index) => {
+              {orderedProducts.map((product, index) => {
                 const badges = getProductBadges(product, index)
+                const rating = getProductRatingBySlug(product.slug)
                 return (
                 <div
                   key={product.id}
@@ -164,9 +192,9 @@ Control Appetite. Refine Weight          </p>
                   </Link>
 
                   {/* Product Info */}
-                  <div className="text-center relative space-y-2">
+                  <div className="text-center relative space-y-2 min-h-[250px] flex flex-col">
                     <Link href={`/products/${product.slug}`} className="block">
-                      <h3 className="text-lg font-normal hover:underline">
+                      <h3 className="text-lg font-normal hover:underline min-h-[56px] flex items-center justify-center">
                         {product.title}
                       </h3>
                     </Link>
@@ -182,7 +210,7 @@ Control Appetite. Refine Weight          </p>
                           : t.includes('lyte')
                           ? 'Fitness band'
                           : product.servings
-                      return subtitle ? <p className="text-xs text-gray-500">{subtitle}</p> : null
+                      return subtitle ? <p className="text-base md:text-lg text-gray-500">{subtitle}</p> : null
                     })()}
                     <p className="text-xl font-normal pt-1">
                       {(product.comparePrice ?? (product.maxPrice != null && product.maxPrice > product.price ? product.maxPrice : null)) != null &&
@@ -192,7 +220,7 @@ Control Appetite. Refine Weight          </p>
                             ₹{(product.comparePrice ?? product.maxPrice)!.toFixed(2)}
                           </span>
                           <span>₹{product.price.toFixed(2)}</span>
-                          <span className="ml-1 text-sm font-semibold text-red-600">
+                          <span className="ml-1 text-sm font-semibold text-red-600 hidden md:inline">
                             ({Math.round((1 - product.price / (product.comparePrice ?? product.maxPrice)!) * 100)}% OFF)
                           </span>
                         </>
@@ -201,15 +229,31 @@ Control Appetite. Refine Weight          </p>
                       )}
                     </p>
                     <p className="text-xs text-gray-500">MRP (incl. of all taxes)</p>
+                    {(product.comparePrice ?? (product.maxPrice != null && product.maxPrice > product.price ? product.maxPrice : null)) != null &&
+                      (product.comparePrice ?? product.maxPrice)! > product.price && (
+                      <p className="text-xs font-semibold text-red-600 md:hidden">
+                        ({Math.round((1 - product.price / (product.comparePrice ?? product.maxPrice)!) * 100)}% OFF)
+                      </p>
+                    )}
                     <div className="flex items-center justify-center gap-1.5 py-1">
                       <div className="flex items-center gap-0.5">
                         {[1, 2, 3, 4, 5].map((i) => (
-                          <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" aria-hidden />
+                          <Star
+                            key={i}
+                            className={`w-3.5 h-3.5 ${
+                              i <= rating
+                                ? 'fill-amber-400 text-amber-400'
+                                : i - 1 < rating && rating < i
+                                ? 'fill-amber-400/60 text-amber-400'
+                                : 'text-gray-300'
+                            }`}
+                            aria-hidden
+                          />
                         ))}
                       </div>
-                      <span className="text-sm font-medium text-gray-800">4.8</span>
+                      <span className="text-sm font-medium text-gray-800">{rating.toFixed(1)}</span>
                     </div>
-                    <div className="pt-1">
+                    <div className="pt-1 mt-auto">
                       {(() => {
                         const slug = product.slug?.toLowerCase() ?? ''
                         const isLyteBand = slug === 'lyte'
