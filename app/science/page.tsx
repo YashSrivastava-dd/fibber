@@ -9,6 +9,15 @@ import BenefitsGrid from '@/components/sections/science/BenefitsGrid'
 import FeaturedProductsSection from '@/components/sections/FeaturedProductsSection'
 import CTASection from '@/components/sections/science/CTASection'
 
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'The Science Behind Weight Loss & Gut Health Supplements | Fiberise',
+  description:
+    'Explore the science behind weight management, gut health supplements & metabolism. Learn how fiber, microbiome & blood sugar control support smarter wellness.',
+  keywords: 'Blood sugar control, Gut Health supplements',
+}
+
 export default function SciencePage() {
   return (
     <div className="bg-white min-h-screen overflow-x-hidden">

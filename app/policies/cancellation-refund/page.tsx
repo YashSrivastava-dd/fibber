@@ -1,3 +1,11 @@
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Cancellation & Refund Policy | Fiberise Fit',
+  description:
+    'Learn about Fiberise Fit cancellation, return and refund policies including eligibility, timelines and process for hassle-free refunds.',
+}
+
 export default function CancellationRefundPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#eef1f4] to-slate-50 pt-28">

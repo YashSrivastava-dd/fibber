@@ -1,3 +1,11 @@
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Privacy Policy | Fiberise Fit',
+  description:
+    'Understand how Fiberise Fit collects, stores and protects your personal information. Your privacy and data security are our priority.',
+}
+
 export default function PrivacyPolicyPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#eef1f4] to-slate-50 pt-28">

@@ -12,6 +12,16 @@ import FullWidthVideoSection from '@/components/sections/FullWidthVideoSection'
 import TestimonialCarouselSection from '@/components/sections/TestimonialCarouselSection'
 import PressMarqueeSection from '@/components/sections/PressMarqueeSection'
 
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Fiber Supplement for Weight Loss | Fat Burner | Ozempic Alternative',
+  description:
+    "Smart health ecosystem powered by AI & innovation. Fiberise is India's science-backed fiber supplement for weight control. A natural fat burning supplement with prebiotic + probiotic support from trusted by doctors. No stimulants. Free shipping.",
+  keywords:
+    'ozempic, fat burner, fiber supplement, weight control supplements, weight lose supplement, fat burning supplements',
+}
+
 export default function Home() {
   return (
     <div className="w-full">

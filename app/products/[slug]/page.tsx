@@ -1,8 +1,45 @@
 import ProductPage from '@/components/pages/ProductPage'
 import LyteProductPage from '@/components/pages/LyteProductPage'
+import type { Metadata } from 'next'
 
 // Slugs that are LYTE (wearable) — use the premium dark product page
 const LYTE_SLUGS = ['lyte']
+
+const PRODUCT_META_BY_SLUG: Record<
+  string,
+  { title: string; description: string; keywords: string }
+> = {
+  'starter-pack': {
+    title: 'Fyber Starter Pack - Natural Fiber Weight Management Sachet | Fiberise',
+    description:
+      'Fyber is a natural fiber weight management solution in easy sachet form. Control cravings, support fat metabolism & improve gut health. Free shipping pan India.',
+    keywords: 'natural fiber, weight management',
+  },
+  'transformation-pack-lyte-band': {
+    title: 'Fyber Transformation Pack with lyte band - Weight Management & Fat Burner for Women',
+    description:
+      'Control cravings & manage weight naturally with the best fiber supplement with lyte band. Supports fat burning & gut health - smart alternative to Ozempic for weight loss.',
+    keywords: 'ozempic for weight loss, weight management supplements, fat burner for women, best fiber supplement',
+  },
+  'transformation-pack': {
+    title: 'Fyber Transformation Pack with lyte band - Weight Management & Fat Burner for Women',
+    description:
+      'Control cravings & manage weight naturally with the best fiber supplement with lyte band. Supports fat burning & gut health - smart alternative to Ozempic for weight loss.',
+    keywords: 'ozempic for weight loss, weight management supplements, fat burner for women, best fiber supplement',
+  },
+  'ultimate-pack': {
+    title: 'Fyber Fit Pack - Best Weight Loss Sachet & Natural Fat Loss Medicine',
+    description:
+      'Fyber - a natural alternative to Ozempic medicine for fat loss. The best weight loss sachet to control cravings, boost metabolism & support gut health. Free shipping pan India.',
+    keywords: 'fat loss medicine, best weight loss, ozempic medicine',
+  },
+  lyte: {
+    title: 'Lyte Band - Intelligent Health & Fitness Tracker | Fiberise Fit',
+    description:
+      'Monitor your health in real time with the Lyte fitness band. This advanced health tracker and fitness monitoring device helps track vital stats, activity, and daily wellness insights.',
+    keywords: 'fitness band, health tracker, fitness monitoring device',
+  },
+}
 const PRODUCT_SCHEMA_BY_SLUG: Record<string, Record<string, unknown>> = {
   'starter-pack': {
     '@context': 'https://schema.org/',
@@ -38,6 +75,33 @@ const PRODUCT_SCHEMA_BY_SLUG: Record<string, Record<string, unknown>> = {
     offers: {
       '@type': 'Offer',
       url: 'https://fiberisefit.com/products/transformation-pack-lyte-band',
+      priceCurrency: 'INR',
+      price: '5999',
+      availability: 'https://schema.org/InStock',
+      itemCondition: 'https://schema.org/NewCondition',
+    },
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.8',
+      bestRating: '5',
+      worstRating: '1',
+      ratingCount: '7',
+    },
+  },
+  'transformation-pack': {
+    '@context': 'https://schema.org/',
+    '@type': 'Product',
+    name: 'Transformation Pack + Lyte Band',
+    image: 'https://cdn.shopify.com/s/files/1/0959/3680/7187/files/kh.jpg?v=1773315591',
+    description:
+      'A clinically tested weight-management solution. Fyber is intelligently formulated to help manage everyday hunger cravings while supporting balanced metabolism and sustained energy.By helping you feel fuller for longer, it naturally reduces frequent calorie intake and supports healthy weight management.',
+    brand: {
+      '@type': 'Brand',
+      name: 'Fiberise Fit',
+    },
+    offers: {
+      '@type': 'Offer',
+      url: 'https://fiberisefit.com/products/transformation-pack',
       priceCurrency: 'INR',
       price: '5999',
       availability: 'https://schema.org/InStock',
@@ -109,6 +173,18 @@ const PRODUCT_SCHEMA_BY_SLUG: Record<string, Record<string, unknown>> = {
 
 type ProductProps = {
   params: Promise<{ slug: string }>
+}
+
+export async function generateMetadata({ params }: ProductProps): Promise<Metadata> {
+  const { slug } = await params
+  const key = (slug || '').toLowerCase()
+  const meta = PRODUCT_META_BY_SLUG[key] ?? PRODUCT_META_BY_SLUG[key.replace(/^\//, '')]
+
+  return {
+    title: meta?.title ?? 'Fiberise Fit',
+    description: meta?.description ?? 'Smart health ecosystem powered by AI & innovation.',
+    keywords: meta?.keywords,
+  }
 }
 
 export default async function Product({ params }: ProductProps) {

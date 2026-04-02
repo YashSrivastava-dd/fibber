@@ -3,6 +3,7 @@ export function getProductRatingBySlug(slug?: string): number {
 
   const map: Record<string, number> = {
     'starter-pack': 4.6,
+    'transformation-pack': 4.9,
     'transformation-pack-lyte-band': 4.9,
     'ultimate-pack': 4.8,
     lyte: 4.7,

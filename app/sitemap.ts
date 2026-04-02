@@ -49,7 +49,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
-      url: `${BASE_URL}/products/transformation-pack-lyte-band`,
+      url: `${BASE_URL}/products/transformation-pack`,
       lastModified: LAST_MODIFIED,
       changeFrequency: 'weekly',
       priority: 0.9,

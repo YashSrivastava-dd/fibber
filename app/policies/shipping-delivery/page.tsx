@@ -1,3 +1,11 @@
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Shipping & Delivery Policy | Fiberise Fit',
+  description:
+    'Get details on Fiberise Fit shipping timelines, delivery process and order tracking for a smooth and reliable shopping experience.',
+}
+
 export default function ShippingDeliveryPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#eef1f4] to-slate-50 pt-28">

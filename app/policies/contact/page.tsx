@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import type { Metadata } from 'next'
 
 const LOCAL_BUSINESS_SCHEMA = {
   '@context': 'https://schema.org',
@@ -19,6 +20,12 @@ const LOCAL_BUSINESS_SCHEMA = {
     'https://www.instagram.com/fiberisefit',
     'https://www.linkedin.com/company/fiberise-fit/',
   ],
+}
+
+export const metadata: Metadata = {
+  title: 'Contact Us | Fiberise Fit Support & Help',
+  description:
+    'Get in touch with Fiberise Fit for support, queries or assistance. Contact our team for quick help with products, orders or services.',
 }
 
 export default function ContactPolicyPage() {

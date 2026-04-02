@@ -1,3 +1,11 @@
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Terms & Conditions | Fiberise Fit',
+  description:
+    'Read Fiberise Fit terms & conditions covering website usage, purchases, policies and legal agreements for a safe and transparent experience.',
+}
+
 export default function TermsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#eef1f4] to-slate-50 pt-28">

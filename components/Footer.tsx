@@ -7,8 +7,8 @@ export default function Footer() {
   const footerLinks = {
     products: [
       { name: 'Starter Pack', href: '/products/starter-pack' },
-      { name: 'Ultimate Pack', href: '/products/ultimate-pack' },
-      { name: 'Ultimate pack', href: '/products/transformation-pack-lyte-band' },
+      { name: 'Transformation Pack', href: '/products/transformation-pack' },
+      { name: 'Ultimate pack', href: '/products/ultimate-pack' },
       { name: 'LYTE', href: '/products/lyte' },
     ],
     social: [

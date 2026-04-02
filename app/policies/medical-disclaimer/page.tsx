@@ -1,3 +1,11 @@
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Medical Disclaimer | Fiberise Fit',
+  description:
+    'Read our medical disclaimer. Information on this site is for general guidance and not a substitute for professional medical advice.',
+}
+
 export default function MedicalDisclaimerPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#eef1f4] to-slate-50 pt-28">

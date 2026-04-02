@@ -1,3 +1,11 @@
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Lyte Privacy Policy | Data Protection & User Privacy',
+  description:
+    'Learn how Lyte collects, uses and protects your personal data. Read our privacy policy for secure and transparent data handling practices.',
+}
+
 export default function PrivacyPolicy() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#eef1f4] to-slate-50 pt-28">
