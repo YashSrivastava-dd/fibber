@@ -48,7 +48,7 @@ export default function Header() {
         <div className="flex animate-marquee-text whitespace-nowrap">
           {[...Array(20)].map((_, i) => (
             <span key={i} className="text-xs md:text-sm text-white mx-8 tracking-wider flex-shrink-0">
-              Free Shipping Pan India &nbsp;&nbsp;•&nbsp;&nbsp; Introductory Pricing Upto 25% Off
+              Introductory 50% OFF &nbsp;&nbsp;•&nbsp;&nbsp; India’s first Craving Control Supplement &nbsp;&nbsp;•&nbsp;&nbsp; Sustainable Weight Management &nbsp;&nbsp;•&nbsp;&nbsp; Free Shipping Pan India &nbsp;&nbsp;•&nbsp;&nbsp; 7 Days No Questions asked money back guarantee.
             </span>
           ))}
         </div>

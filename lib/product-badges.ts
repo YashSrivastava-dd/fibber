@@ -34,6 +34,10 @@ export function getProductBadges(
     badges.push({ label: 'GUT SUPPORT', variant: 'secondary' })
   } else if (title.includes('IMMUN') || title.includes('MULTI')) {
     badges.push({ label: 'DAILY NUTRITION', variant: 'secondary' })
+  } else if (title.includes('STARTER')) {
+    badges.push({ label: 'BEST SELLER', variant: 'primary' })
+  } else if (title.includes('TRANSFORMATION') || title.includes('ULTIMATE')) {
+    // No badge for transformation or ultimate pack
   } else if (index === 0) {
     badges.push({ label: 'BEST SELLER', variant: 'primary' })
   } else if (index === 1) {
