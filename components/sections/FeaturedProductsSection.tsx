@@ -1,12 +1,10 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ChevronLeft, ChevronRight, Star } from 'lucide-react'
+import { Star } from 'lucide-react'
 import { useCartStore } from '@/store/cartStore'
-import { getProductBadges } from '@/lib/product-badges'
-import { getProductRatingBySlug } from '@/lib/product-ratings'
 
 interface Product {
   id: string
@@ -18,54 +16,137 @@ interface Product {
   slug: string
   available: boolean
   servings?: string
-  description?: string
-  variants?: Array<{
-    id: string
-    name: string
-    price: number
-    available: boolean
-  }>
+}
+
+interface CardConfig {
+  hasBadge: boolean
+  badgeText: string
+  badgeBg: string
+  badgeTextColor: string
+  isTopBanner: boolean
+  title: string
+  subtitle: string
+  subtitle2: string
+  comparePrice: number
+  save: number
+  perSachet: number
+  buttonText: string
+  buttonClass: string
+  rating: string
+  ratingScore: number
+  reviews: string
+  wrapperClass: string
+  isPopular: boolean
+}
+
+function getCardConfig(title: string, price: number): CardConfig {
+  const t = title.toLowerCase()
+
+  if (t.includes('ultimate')) {
+    return {
+      hasBadge: false,
+      badgeText: '',
+      badgeBg: '',
+      badgeTextColor: '',
+      isTopBanner: false,
+      title: 'Ultimate Pack',
+      subtitle: 'Lowest cost per sachet',
+      subtitle2: '90 Sachets',
+      comparePrice: 7999,
+      save: 2000,
+      perSachet: 67,
+      buttonText: 'Get Best Value',
+      buttonClass: 'bg-[#1c1c1e] text-white hover:bg-black',
+      rating: '4.8',
+      ratingScore: 4.8,
+      reviews: 'from 981 reviews',
+      wrapperClass: 'border border-[#e2dcd5] bg-[#faf8f5]',
+      isPopular: false,
+    }
+  } else if (t.includes('transformation')) {
+    return {
+      hasBadge: false,
+      badgeText: '',
+      badgeBg: '',
+      badgeTextColor: '',
+      isTopBanner: false,
+      title: 'Transformation Pack',
+      subtitle: 'Best for daily cravings control',
+      subtitle2: '30 Sachets',
+      comparePrice: 2999,
+      save: 750,
+      perSachet: 75,
+      buttonText: 'Start Now',
+      buttonClass: 'bg-[#e8ddd0] text-[#3d352b] hover:bg-[#d9cfc2]',
+      rating: '4.9',
+      ratingScore: 4.9,
+      reviews: 'from 2,184 customers',
+      wrapperClass: 'border border-[#e2dcd5] bg-[#faf8f5]',
+      isPopular: false,
+    }
+  } else {
+    // Starter Pack (Center & Most Popular)
+    return {
+      hasBadge: true,
+      badgeText: 'MOST POPULAR',
+      badgeBg: 'linear-gradient(90deg, #f0cf82, #d9a84e)',
+      badgeTextColor: '#3b2a0e',
+      isTopBanner: true,
+      title: 'Starter Pack',
+      subtitle: 'Best for first-time users',
+      subtitle2: '7 Sachets',
+      comparePrice: 1200,
+      save: 601,
+      perSachet: 86,
+      buttonText: 'Try FYBER',
+      buttonClass: 'bg-gradient-to-r from-[#f0cf82] to-[#d9a84e] text-[#3b2a0e] hover:brightness-95',
+      rating: '4.6',
+      ratingScore: 4.6,
+      reviews: '378 reviews',
+      wrapperClass: 'border-2 border-[#d9a84e] bg-[#faf8f5] shadow-[0_0_20px_rgba(217,168,78,0.15)]',
+      isPopular: true,
+    }
+  }
+}
+
+function StarRow({ score }: { score: number }) {
+  return (
+    <div className="flex items-center gap-px">
+      {[1, 2, 3, 4, 5].map((i) => {
+        const filled = i <= Math.floor(score)
+        const half = !filled && i - 0.5 <= score
+        return (
+          <Star
+            key={i}
+            className={`w-3.5 h-3.5 ${
+              filled
+                ? 'fill-amber-400 text-amber-400'
+                : half
+                ? 'fill-amber-400/50 text-amber-400'
+                : 'text-gray-300'
+            }`}
+            aria-hidden
+          />
+        )
+      })}
+    </div>
+  )
 }
 
 export default function FeaturedProductsSection() {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
-  const [isMobile, setIsMobile] = useState(false)
-  const scrollContainerRef = useRef<HTMLDivElement>(null)
   const addItem = useCartStore((state) => state.addItem)
 
   useEffect(() => {
     async function fetchProducts() {
       try {
-        console.log('FeaturedProductsSection: Fetching products...')
-        const response = await fetch('/api/shopify/products?all=true', { cache: 'no-store' })
-        
-        if (!response.ok) {
-          console.error('FeaturedProductsSection: API response not OK:', response.status)
-          throw new Error(`Failed to fetch products: ${response.status}`)
-        }
-        
-        const data = await response.json()
-        console.log('FeaturedProductsSection: Raw API data:', data)
-        
-        if (data.products) {
-          console.log('FeaturedProductsSection: Total products received:', data.products.length)
-          console.log('FeaturedProductsSection: All products:', data.products.map((p: Product) => ({
-            title: p.title,
-            price: p.price,
-            available: p.available,
-            servings: p.servings,
-            id: p.id
-          })))
-          
-          // Show all products (remove availability filter to show all products)
-          setProducts(data.products)
-          console.log('FeaturedProductsSection: Displaying all products:', data.products.length)
-        } else {
-          console.error('FeaturedProductsSection: No products in response:', data)
-        }
-      } catch (error) {
-        console.error('FeaturedProductsSection: Error fetching products:', error)
+        const res = await fetch('/api/shopify/products?all=true', { cache: 'no-store' })
+        if (!res.ok) throw new Error(`Failed: ${res.status}`)
+        const data = await res.json()
+        if (data.products) setProducts(data.products)
+      } catch (err) {
+        console.error('FeaturedProductsSection fetch error:', err)
       } finally {
         setLoading(false)
       }
@@ -73,238 +154,170 @@ export default function FeaturedProductsSection() {
     fetchProducts()
   }, [])
 
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(max-width: 767px)')
-    const sync = () => setIsMobile(mediaQuery.matches)
-    sync()
-    mediaQuery.addEventListener('change', sync)
-    return () => mediaQuery.removeEventListener('change', sync)
-  }, [])
-
-  const scroll = (direction: 'left' | 'right') => {
-    if (scrollContainerRef.current) {
-      const scrollAmount = 400
-      scrollContainerRef.current.scrollBy({
-        left: direction === 'left' ? -scrollAmount : scrollAmount,
-        behavior: 'smooth',
-      })
-    }
-  }
-
-  const orderedProducts = [...products].sort((a, b) => {
-    const rank = (title: string) => {
-      const t = title.toLowerCase()
-      if (isMobile) {
-        if (t.includes('starter pack')) return 1
-        if (t.includes('transformation pack')) return 2
-        if (t.includes('ultimate pack')) return 3
-      } else {
+  const orderedProducts = [...products]
+    .filter((p) => {
+      const t = p.title.toLowerCase()
+      return t.includes('starter pack') || t.includes('transformation pack') || t.includes('ultimate pack')
+    })
+    .sort((a, b) => {
+      const rank = (title: string) => {
+        const t = title.toLowerCase()
         if (t.includes('transformation pack')) return 1
         if (t.includes('starter pack')) return 2
         if (t.includes('ultimate pack')) return 3
+        return 4
       }
-      return 4
-    }
-    return rank(a.title) - rank(b.title)
-  })
+      return rank(a.title) - rank(b.title)
+    })
 
   return (
-    <section id="products" className="py-8 md:py-16 bg-white">
+    <section id="products" className="py-10 md:py-20 bg-[#f5f0eb]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Intro Text */}
-        <div className="text-center mb-12 md:mb-16">
-          <p 
-            className="text-xl md:text-2xl lg:text-3xl text-black leading-relaxed font-normal mb-4"
-          >
-Control Appetite. Refine Weight          </p>
-          <p 
-            className="text-base md:text-lg lg:text-xl text-black/70 leading-relaxed font-normal"
-          >
-       A science-driven approach to feeling full, lighter, and in control.
+        {/* Header */}
+        <div className="text-center mb-10 md:mb-14">
+          <p className="text-2xl md:text-3xl text-gray-900 font-normal leading-snug mb-2">
+            Control Appetite. Refine Weight
+          </p>
+          <p className="text-base md:text-lg text-gray-500 font-normal">
+            A science-driven approach to feeling full, lighter, and in control.
           </p>
         </div>
 
         {loading ? (
-          <div className="flex gap-8 overflow-hidden">
+          <div className="flex gap-6 justify-center flex-wrap">
             {[...Array(3)].map((_, i) => (
-              <div key={i} className="flex-shrink-0 w-[300px] md:w-[350px] animate-pulse">
-                <div className="bg-gray-200 rounded-lg aspect-square mb-4" />
-                <div className="text-center">
-                  <div className="h-5 bg-gray-200 rounded w-3/4 mx-auto mb-2" />
-                  <div className="h-6 bg-gray-200 rounded w-1/2 mx-auto mb-4" />
-                  <div className="h-12 bg-gray-200 rounded w-full" />
-                </div>
-              </div>
+              <div key={i} className="w-[320px] h-[640px] rounded-2xl bg-[#ede8e2] animate-pulse" />
             ))}
           </div>
-        ) : products.length > 0 ? (
-          <div className="relative">
-            {/* Left Arrow */}
-            <button
-              onClick={() => scroll('left')}
-              className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white border border-gray-200 rounded-full p-2 shadow-lg hover:bg-gray-50 transition-colors"
-              aria-label="Scroll left"
-            >
-              <ChevronLeft className="w-6 h-6 text-black" />
-            </button>
+        ) : orderedProducts.length > 0 ? (
+          <div className="flex flex-col md:flex-row gap-6 justify-center items-stretch">
+            {orderedProducts.map((product) => {
+              const cfg = getCardConfig(product.title, product.price)
+              const displayPrice = product.price
+              const isAvailable = product.available
 
-            {/* Products Container */}
-            <div
-              ref={scrollContainerRef}
-              className="flex gap-6 md:gap-8 overflow-x-auto scrollbar-hide scroll-smooth pb-4 px-4 -mx-4 md:mx-0 md:px-12 md:justify-center"
-            >
-              {orderedProducts.map((product, index) => {
-                const badges = getProductBadges(product, index)
-                const rating = getProductRatingBySlug(product.slug)
-                return (
+              return (
                 <div
                   key={product.id}
-                  className="flex-shrink-0 w-[260px] sm:w-[280px] md:w-[350px] group"
+                  className={`relative flex flex-col rounded-2xl overflow-hidden w-full md:w-[330px] lg:w-[355px] ${cfg.wrapperClass}`}
                 >
-                  {/* Product Image + top-left tags */}
-                  <Link href={`/products/${product.slug}`}>
-                    <div className="relative aspect-square bg-white rounded-lg overflow-hidden mb-4">
-                      {/* Tags on top left */}
-                      <div className="absolute top-2 left-2 z-10 flex flex-col gap-1.5 max-w-[70%]">
-                        {badges.map((badge) => (
-                          <span
-                            key={badge.label}
-                            className={`inline-block px-2.5 py-1 text-[10px] sm:text-xs font-semibold uppercase tracking-wider rounded ${
-                              badge.variant === 'primary'
-                                ? 'bg-black text-white'
-                                : badge.variant === 'danger'
-                                ? 'bg-red-600 text-white'
-                                : 'bg-white/95 border border-gray-300 text-gray-900'
-                            }`}
-                          >
-                            {badge.label}
-                          </span>
-                        ))}
+                  {/* Badge */}
+                  {cfg.hasBadge ? (
+                    cfg.isTopBanner ? (
+                      <div
+                        className="text-center py-2 text-[11px] font-bold tracking-[0.2em] uppercase"
+                        style={{ background: cfg.badgeBg, color: cfg.badgeTextColor }}
+                      >
+                        {cfg.badgeText}
                       </div>
+                    ) : (
+                      <div className="flex justify-center pt-5 pb-1">
+                        <span
+                          className="px-4 py-1 rounded-md text-[10px] font-bold tracking-[0.15em] uppercase"
+                          style={{ background: cfg.badgeBg, color: cfg.badgeTextColor }}
+                        >
+                          {cfg.badgeText}
+                        </span>
+                      </div>
+                    )
+                  ) : (
+                    <div className="pt-10" />
+                  )}
+
+                  {/* Title block */}
+                  <div className={`text-center px-6 ${cfg.isTopBanner ? 'pt-5' : 'pt-2'}`}>
+                    <Link href={`/products/${product.slug}`}>
+                      <h3 className="text-[28px] md:text-[30px] font-serif font-normal text-gray-900 leading-snug tracking-wide hover:opacity-75 transition-opacity">
+                        {cfg.title}
+                      </h3>
+                    </Link>
+                    <p className="text-sm text-gray-500 mt-1">{cfg.subtitle}</p>
+                  </div>
+
+                  {/* Image */}
+                  <Link href={`/products/${product.slug}`} className="block px-6 mt-5 mb-1">
+                    <div className="relative w-full aspect-[4/3] group">
                       <Image
                         src={product.image || '/placeholder-product.png'}
                         alt={product.title}
                         fill
-                        className="object-contain group-hover:scale-105 transition-transform duration-300"
+                        className="object-contain group-hover:scale-105 transition-transform duration-500"
                         unoptimized
                       />
                     </div>
                   </Link>
 
-                  {/* Product Info */}
-                  <div className="text-center relative space-y-2 min-h-[250px] flex flex-col">
-                    <Link href={`/products/${product.slug}`} className="block">
-                      <h3 className="text-lg font-normal hover:underline min-h-[56px] flex items-center justify-center">
-                        {product.title}
-                      </h3>
+                  {/* Divider */}
+                  <div className="mx-6 border-t border-[#e2dcd5] my-3" />
+
+                  {/* Bottom info */}
+                  <div className="px-6 pb-6 flex flex-col flex-grow text-center">
+                    <Link href={`/products/${product.slug}`}>
+                      <h4 className="text-[22px] font-serif font-normal text-gray-900 hover:opacity-75 transition-opacity tracking-wide">
+                        {cfg.title}
+                      </h4>
                     </Link>
-                    {(() => {
-                      const t = product.title?.toLowerCase() ?? ''
-                      const subtitle =
-                        t.includes('starter pack')
-                          ? 'Servings : 7 Sachets'
-                          : t.includes('transformation pack')
-                          ? 'Servings : 30 Sachets'
-                          : t.includes('ultimate pack')
-                          ? 'Servings : 90 Sachets'
-                          : t.includes('lyte')
-                          ? 'Fitness band'
-                          : product.servings
-                      return subtitle ? <p className="text-base md:text-lg text-gray-500">{subtitle}</p> : null
-                    })()}
-                    <p className="text-xl font-normal pt-1">
-                      {(product.comparePrice ?? (product.maxPrice != null && product.maxPrice > product.price ? product.maxPrice : null)) != null &&
-                      (product.comparePrice ?? product.maxPrice)! > product.price ? (
-                        <>
-                          <span className="line-through text-gray-400 mr-2">
-                            ₹{(product.comparePrice ?? product.maxPrice)!.toFixed(2)}
-                          </span>
-                          <span>₹{product.price.toFixed(2)}</span>
-                          <span className="ml-1 text-sm font-semibold text-red-600 hidden md:inline">
-                            ({Math.round((1 - product.price / (product.comparePrice ?? product.maxPrice)!) * 100)}% OFF)
-                          </span>
-                        </>
-                      ) : (
-                        `₹${product.price.toFixed(2)}`
-                      )}
+                    <p className="text-sm text-gray-500 mt-1">{cfg.subtitle2}</p>
+
+                    {/* Pricing row */}
+                    <div className="mt-4 flex items-end justify-center gap-2 flex-wrap">
+                      <span className="text-lg text-gray-400 line-through font-light">
+                        ₹{cfg.comparePrice}
+                      </span>
+                      <span className="text-4xl font-medium text-gray-900 leading-none">
+                        ₹{displayPrice}
+                      </span>
+                    </div>
+
+                    {/* Save row */}
+                    <p className="mt-2 text-sm text-gray-500 flex justify-center gap-1 items-center flex-wrap">
+                      <span>Save ₹{cfg.save}</span>
                     </p>
-                    <p className="text-xs text-gray-500">MRP (incl. of all taxes)</p>
-                    {(product.comparePrice ?? (product.maxPrice != null && product.maxPrice > product.price ? product.maxPrice : null)) != null &&
-                      (product.comparePrice ?? product.maxPrice)! > product.price && (
-                      <p className="text-xs font-semibold text-red-600 md:hidden">
-                        ({Math.round((1 - product.price / (product.comparePrice ?? product.maxPrice)!) * 100)}% OFF)
-                      </p>
-                    )}
-                    <div className="flex items-center justify-center gap-1.5 py-1">
-                      <div className="flex items-center gap-0.5">
-                        {[1, 2, 3, 4, 5].map((i) => (
-                          <Star
-                            key={i}
-                            className={`w-3.5 h-3.5 ${
-                              i <= rating
-                                ? 'fill-amber-400 text-amber-400'
-                                : i - 1 < rating && rating < i
-                                ? 'fill-amber-400/60 text-amber-400'
-                                : 'text-gray-300'
-                            }`}
-                            aria-hidden
-                          />
-                        ))}
-                      </div>
-                      <span className="text-sm font-medium text-gray-800">{rating.toFixed(1)}</span>
+
+                    {/* CTA button */}
+                    <div className="mt-6">
+                      <button
+                        onClick={() =>
+                          isAvailable &&
+                          addItem({
+                            id: product.id,
+                            title: product.title,
+                            price: product.price,
+                            image: product.image,
+                          })
+                        }
+                        disabled={!isAvailable}
+                        className={`w-full py-3.5 rounded-lg text-base font-semibold transition-all ${
+                          isAvailable
+                            ? cfg.buttonClass
+                            : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                        }`}
+                      >
+                        {isAvailable ? cfg.buttonText : 'OUT OF STOCK'}
+                      </button>
                     </div>
-                    <div className="pt-1 mt-auto">
-                      {(() => {
-                        const slug = product.slug?.toLowerCase() ?? ''
-                        const isLyteBand = slug === 'lyte'
-                        const isAvailable = product.available && !isLyteBand
-                        return (
-                          <button
-                            onClick={() =>
-                              isAvailable &&
-                              addItem({
-                                id: product.id,
-                                title: product.title,
-                                price: product.price,
-                                image: product.image,
-                              })
-                            }
-                            disabled={!isAvailable}
-                            className={`w-full py-3 px-6 rounded-lg font-normal text-sm transition-all duration-300 ${
-                              isAvailable
-                                ? 'bg-white border-2 border-black text-black hover:bg-black hover:text-white md:opacity-0 md:group-hover:opacity-100 md:group-hover:translate-y-0 md:translate-y-2'
-                                : 'bg-gray-200 text-gray-500 cursor-not-allowed border-2 border-gray-300 md:opacity-0 md:group-hover:opacity-100'
-                            }`}
-                          >
-                            {isAvailable ? 'ADD TO CART' : 'OUT OF STOCK'}
-                          </button>
-                        )
-                      })()}
+
+                    {/* Rating row */}
+                    <div className="mt-4 flex items-center justify-center gap-1.5">
+                      <StarRow score={cfg.ratingScore} />
+                      <span className="text-[13px] font-semibold text-gray-800">
+                        {cfg.rating}/5
+                      </span>
                     </div>
+
+                    {/* Trust badges */}
+                    <p className="mt-4 text-[11px] text-gray-400 tracking-wide">
+                      Free shipping · Secure checkout · No added sugar
+                    </p>
                   </div>
                 </div>
               )
-              })}
-            </div>
-
-            {/* Right Arrow */}
-            <button
-              onClick={() => scroll('right')}
-              className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white border border-gray-200 rounded-full p-2 shadow-lg hover:bg-gray-50 transition-colors"
-              aria-label="Scroll right"
-            >
-              <ChevronRight className="w-6 h-6 text-black" />
-            </button>
+            })}
           </div>
         ) : (
-          <div className="text-center py-12">
-            <p className="text-gray-500">
-              No products found.
-            </p>
-          </div>
+          <div className="text-center py-16 text-gray-400">No products found.</div>
         )}
       </div>
     </section>
   )
 }
-
