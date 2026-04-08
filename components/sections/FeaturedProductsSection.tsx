@@ -26,7 +26,9 @@ interface CardConfig {
   isTopBanner: boolean
   title: string
   subtitle: string
-  subtitle2: string
+  bottomTextBig: string
+  bottomTextMid: string
+  bottomTextSmall: string
   comparePrice: number
   save: number
   perSachet: number
@@ -37,6 +39,7 @@ interface CardConfig {
   reviews: string
   wrapperClass: string
   isPopular: boolean
+  priceColorClass?: string
 }
 
 function getCardConfig(title: string, price: number): CardConfig {
@@ -50,18 +53,21 @@ function getCardConfig(title: string, price: number): CardConfig {
       badgeTextColor: '',
       isTopBanner: false,
       title: 'Ultimate Pack',
-      subtitle: 'Lowest cost per sachet',
-      subtitle2: '90 Sachets',
+      subtitle: '90 Sachets + Free Lyte Band',
+      bottomTextBig: '',
+      bottomTextMid: '',
+      bottomTextSmall: '90 Sachets',
       comparePrice: 7999,
       save: 2000,
       perSachet: 67,
-      buttonText: 'Get Best Value',
-      buttonClass: 'bg-[#1c1c1e] text-white hover:bg-black',
+      buttonText: 'Add to cart',
+      buttonClass: 'bg-[#e8ddd0] text-[#3d352b] hover:bg-[#d9cfc2]',
       rating: '4.8',
       ratingScore: 4.8,
       reviews: 'from 981 reviews',
       wrapperClass: 'border border-[#e2dcd5] bg-[#faf8f5]',
       isPopular: false,
+      priceColorClass: 'text-gray-900 font-normal',
     }
   } else if (t.includes('transformation')) {
     return {
@@ -72,29 +78,34 @@ function getCardConfig(title: string, price: number): CardConfig {
       isTopBanner: false,
       title: 'Transformation Pack',
       subtitle: 'Best for daily cravings control',
-      subtitle2: '30 Sachets',
+      bottomTextBig: '',
+      bottomTextMid: '',
+      bottomTextSmall: '30 Sachets',
       comparePrice: 2999,
       save: 750,
       perSachet: 75,
-      buttonText: 'Start Now',
+      buttonText: 'Add to cart',
       buttonClass: 'bg-[#e8ddd0] text-[#3d352b] hover:bg-[#d9cfc2]',
       rating: '4.9',
       ratingScore: 4.9,
       reviews: 'from 2,184 customers',
       wrapperClass: 'border border-[#e2dcd5] bg-[#faf8f5]',
       isPopular: false,
+      priceColorClass: 'text-gray-900 font-normal',
     }
   } else {
     // Starter Pack (Center & Most Popular)
     return {
       hasBadge: true,
-      badgeText: 'MOST POPULAR',
+      badgeText: 'MONEY BACK GUARANTEE',
       badgeBg: 'linear-gradient(90deg, #f0cf82, #d9a84e)',
       badgeTextColor: '#3b2a0e',
       isTopBanner: true,
       title: 'Starter Pack',
       subtitle: 'Best for first-time users',
-      subtitle2: '7 Sachets',
+      bottomTextBig: '',
+      bottomTextMid: '',
+      bottomTextSmall: '7 Sachets',
       comparePrice: 1200,
       save: 601,
       perSachet: 86,
@@ -105,6 +116,7 @@ function getCardConfig(title: string, price: number): CardConfig {
       reviews: '378 reviews',
       wrapperClass: 'border-2 border-[#d9a84e] bg-[#faf8f5] shadow-[0_0_20px_rgba(217,168,78,0.15)]',
       isPopular: true,
+      priceColorClass: 'text-[#a67517] font-normal drop-shadow-sm',
     }
   }
 }
@@ -118,13 +130,12 @@ function StarRow({ score }: { score: number }) {
         return (
           <Star
             key={i}
-            className={`w-3.5 h-3.5 ${
-              filled
+            className={`w-3.5 h-3.5 ${filled
                 ? 'fill-amber-400 text-amber-400'
                 : half
-                ? 'fill-amber-400/50 text-amber-400'
-                : 'text-gray-300'
-            }`}
+                  ? 'fill-amber-400/50 text-amber-400'
+                  : 'text-gray-300'
+              }`}
             aria-hidden
           />
         )
@@ -205,7 +216,7 @@ export default function FeaturedProductsSection() {
                   {cfg.hasBadge ? (
                     cfg.isTopBanner ? (
                       <div
-                        className="text-center py-2 text-[11px] font-bold tracking-[0.2em] uppercase"
+                        className="text-center py-2.5 text-[13px] font-black tracking-widest uppercase shadow-sm"
                         style={{ background: cfg.badgeBg, color: cfg.badgeTextColor }}
                       >
                         {cfg.badgeText}
@@ -227,7 +238,7 @@ export default function FeaturedProductsSection() {
                   {/* Title block */}
                   <div className={`text-center px-6 ${cfg.isTopBanner ? 'pt-5' : 'pt-2'}`}>
                     <Link href={`/products/${product.slug}`}>
-                      <h3 className="text-[28px] md:text-[30px] font-serif font-normal text-gray-900 leading-snug tracking-wide hover:opacity-75 transition-opacity">
+                      <h3 className="text-[24px] md:text-[26px] font-normal text-gray-900 leading-snug tracking-wide hover:opacity-75 transition-opacity">
                         {cfg.title}
                       </h3>
                     </Link>
@@ -235,43 +246,53 @@ export default function FeaturedProductsSection() {
                   </div>
 
                   {/* Image */}
-                  <Link href={`/products/${product.slug}`} className="block px-6 mt-5 mb-1">
+                  <Link href={`/products/${product.slug}`} className="block mt-5 mb-1">
                     <div className="relative w-full aspect-[4/3] group">
                       <Image
                         src={product.image || '/placeholder-product.png'}
                         alt={product.title}
                         fill
-                        className="object-contain group-hover:scale-105 transition-transform duration-500"
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
                         unoptimized
                       />
                     </div>
                   </Link>
 
-                  {/* Divider */}
-                  <div className="mx-6 border-t border-[#e2dcd5] my-3" />
-
                   {/* Bottom info */}
-                  <div className="px-6 pb-6 flex flex-col flex-grow text-center">
-                    <Link href={`/products/${product.slug}`}>
-                      <h4 className="text-[22px] font-serif font-normal text-gray-900 hover:opacity-75 transition-opacity tracking-wide">
-                        {cfg.title}
-                      </h4>
-                    </Link>
-                    <p className="text-sm text-gray-500 mt-1">{cfg.subtitle2}</p>
+                  <div className="px-6 pb-6 mt-3 flex flex-col flex-grow text-center">
+                    {cfg.bottomTextBig && (
+                      <p className="text-[24px] font-medium text-gray-900 leading-snug">
+                        {cfg.bottomTextBig}
+                      </p>
+                    )}
+                    {cfg.bottomTextMid && (
+                      <p className="text-[13px] text-gray-500 mt-1 mb-1">
+                        {cfg.bottomTextMid}
+                      </p>
+                    )}
+                    {cfg.bottomTextSmall && (
+                      <p className="text-sm text-gray-500 mt-1">
+                        {cfg.bottomTextSmall}
+                      </p>
+                    )}
 
                     {/* Pricing row */}
                     <div className="mt-4 flex items-end justify-center gap-2 flex-wrap">
                       <span className="text-lg text-gray-400 line-through font-light">
                         ₹{cfg.comparePrice}
                       </span>
-                      <span className="text-4xl font-medium text-gray-900 leading-none">
+                      <span className={`text-4xl leading-none ${cfg.priceColorClass || 'font-normal text-gray-900'}`}>
                         ₹{displayPrice}
                       </span>
                     </div>
 
                     {/* Save row */}
-                    <p className="mt-2 text-sm text-gray-500 flex justify-center gap-1 items-center flex-wrap">
-                      <span>Save ₹{cfg.save}</span>
+                    <p className="mt-2 text-sm text-gray-500 flex justify-center items-center">
+                      {cfg.comparePrice > displayPrice && (
+                        <span>
+                          Save <span className="text-red-500 font-bold ml-0.5">{Math.round(((cfg.comparePrice - displayPrice) / cfg.comparePrice) * 100)}%</span>
+                        </span>
+                      )}
                     </p>
 
                     {/* CTA button */}
@@ -287,11 +308,10 @@ export default function FeaturedProductsSection() {
                           })
                         }
                         disabled={!isAvailable}
-                        className={`w-full py-3.5 rounded-lg text-base font-semibold transition-all ${
-                          isAvailable
+                        className={`w-full py-3.5 rounded-lg text-base font-semibold transition-all ${isAvailable
                             ? cfg.buttonClass
                             : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                        }`}
+                          }`}
                       >
                         {isAvailable ? cfg.buttonText : 'OUT OF STOCK'}
                       </button>

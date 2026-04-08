@@ -45,11 +45,15 @@ export default function Header() {
     <>
       {/* Announcement Bar - Single Marquee */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-black py-2 overflow-hidden">
-        <div className="flex animate-marquee-text whitespace-nowrap">
+        <div className="flex w-max animate-marquee-text whitespace-nowrap">
           {[...Array(20)].map((_, i) => (
-            <span key={i} className="text-xs md:text-sm text-white mx-8 tracking-wider flex-shrink-0">
-              Introductory 50% OFF &nbsp;&nbsp;•&nbsp;&nbsp; India’s first Craving Control Supplement &nbsp;&nbsp;•&nbsp;&nbsp; Sustainable Weight Management &nbsp;&nbsp;•&nbsp;&nbsp; Free Shipping Pan India &nbsp;&nbsp;•&nbsp;&nbsp; 7 Days No Questions asked money back guarantee.
-            </span>
+            <div key={i} className="flex gap-12 flex-shrink-0 pr-12 items-center">
+              <span className="text-xs md:text-sm text-white tracking-wider">Introductory 50% OFF</span>
+              <span className="text-xs md:text-sm text-white tracking-wider">India’s first Craving Control Supplement</span>
+              <span className="text-xs md:text-sm text-white tracking-wider">Sustainable Weight Management</span>
+              <span className="text-xs md:text-sm text-white tracking-wider">Free Shipping Pan India</span>
+              <span className="text-xs md:text-sm text-white tracking-wider">7 Days No Questions asked money back guarantee</span>
+            </div>
           ))}
         </div>
       </div>

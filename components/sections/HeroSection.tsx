@@ -24,11 +24,11 @@ export default function HeroSection() {
 
         {/* Text section — appears on scroll */}
         <div className="bg-white px-5 pt-8 pb-10">
-          <p className="text-[12px] uppercase tracking-widest mb-3 font-medium text-[#1a1a1a]/60 whitespace-nowrap leading-loose">
+          <p className="text-[12px] uppercase tracking-widest mb-3 font-medium text-[#1a1a1a]/80 whitespace-nowrap leading-loose">
             SCIENCE BACKED NATURAL <br />
              WEIGHT-MANAGEMENT SOLUTION
           </p>
-          <h1 className="font-bold tracking-tight mb-4 text-[#102333]">
+          <h1 className="w-fit font-bold tracking-tight mb-4 bg-gradient-to-b from-[#cf9c31] to-[#9c6d16] bg-clip-text text-transparent drop-shadow-sm">
             <span className="block text-[1.9rem] leading-tight whitespace-nowrap">
               CONTROL CRAVINGS
             </span>
@@ -36,7 +36,7 @@ export default function HeroSection() {
               MANAGE WEIGHT
             </span>
           </h1>
-          <p className="text-sm leading-relaxed text-[#1a1a1a]/70">
+          <p className="text-sm leading-relaxed text-[#1a1a1a]/80">
             <span className="block">A smarter, science-backed approach to</span>
             <span className="block">appetite control and sustainable weight management.</span>
           </p>
@@ -60,10 +60,10 @@ export default function HeroSection() {
 
         {/* Desktop text */}
         <div className="relative z-10 flex flex-col justify-center h-full px-10 lg:px-20 max-w-2xl">
-          <p className="text-xs md:text-sm uppercase tracking-widest mb-3 font-medium text-gray-500 whitespace-nowrap">
+          <p className="text-xs md:text-sm uppercase tracking-widest mb-3 font-medium text-gray-800 whitespace-nowrap">
             SCIENCE BACKED | NATURAL WEIGHT-MANAGEMENT SOLUTION
           </p>
-          <h1 className="font-bold tracking-tight mb-6 text-gray-900">
+          <h1 className="w-fit font-bold tracking-tight mb-6 bg-gradient-to-b from-[#cf9c31] to-[#9c6d16] bg-clip-text text-transparent drop-shadow-sm">
             <span className="block text-4xl lg:text-5xl xl:text-6xl leading-tight whitespace-nowrap">
               CONTROL CRAVINGS
             </span>
@@ -71,7 +71,7 @@ export default function HeroSection() {
               MANAGE WEIGHT
             </span>
           </h1>
-          <p className="text-base leading-relaxed max-w-sm text-gray-500">
+          <p className="text-base leading-relaxed max-w-sm text-gray-600">
             <span className="block whitespace-nowrap">A smarter, science-backed approach to</span>
             <span className="block whitespace-nowrap">appetite control and sustainable weight management.</span>
           </p>
