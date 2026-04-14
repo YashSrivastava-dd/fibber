@@ -432,7 +432,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
                     src={displayImages[selectedImageIndex] || product.image || '/placeholder-product.png'}
                     alt={product.title}
                     fill
-                    className="object-contain p-2 sm:p-8"
+                    className="object-contain sm:p-8"
                     priority
                     unoptimized
                   />
@@ -659,11 +659,10 @@ export default function ProductPage({ slug }: ProductPageProps) {
                 )}
 
                 {/* Additional Trust Graphic */}
-                <div className={`mt-4 flex justify-center bg-[#FAF9F6] py-1 ${
-                  product.title.toLowerCase().includes('starter') 
-                    ? 'hidden md:flex' 
-                    : '-mx-4 sm:-mx-6 lg:mx-0'
-                }`}>
+                <div className={`mt-4 flex justify-center bg-[#FAF9F6] py-1 ${product.title.toLowerCase().includes('starter')
+                  ? 'hidden md:flex'
+                  : '-mx-4 sm:-mx-6 lg:mx-0'
+                  }`}>
                   <Image
                     src="/Group 65003.png"
                     alt="Trust and Features Guarantee"
@@ -781,7 +780,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
       {/* Science / feature video + metabolic explanation + benefits grid directly below hero */}
       <VideoSection />
       <MetabolismSection />
-      <BenefitsGrid />
+      {/* <BenefitsGrid /> */}
 
       {/* Full-width image below hero with marquee
       <div className="w-full relative">
@@ -852,7 +851,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
       </div> */}
 
       {/* Calm, intelligent, effortless well-being banner with marquee text */}
-      <div className="w-full relative mt-8 aspect-[9/16] sm:aspect-square md:aspect-auto md:h-[70vh]">
+      {/* <div className="w-full relative mt-8 aspect-[9/16] sm:aspect-square md:aspect-auto md:h-[70vh]">
         <Image
           src="/product page routine images/FIBERISE A+-16.png"
           alt="Calm and effortless well-being"
@@ -873,7 +872,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
             </span>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Reels Section */}
       {/* <section className="w-full bg-[#F5F3EF] py-12 md:py-16">
