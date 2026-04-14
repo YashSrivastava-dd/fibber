@@ -654,6 +654,14 @@ export default function ProductPage({ slug }: ProductPageProps) {
                         className="w-full h-auto object-contain block"
                         priority
                       />
+                      <Image
+                        src="/safe and natural - mobile.png"
+                        alt="Safe and Natural"
+                        width={800}
+                        height={400}
+                        className="w-full h-auto object-contain block"
+                        priority
+                      />
                     </div>
                   </div>
                 )}
