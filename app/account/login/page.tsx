@@ -32,7 +32,7 @@ export default function AccountLoginPage() {
           'recaptcha-container-login',
           {
             size: 'invisible',
-            callback: () => {},
+            callback: () => { },
             'expired-callback': () => {
               setError('Verification expired. Please try again.')
             },
@@ -45,7 +45,7 @@ export default function AccountLoginPage() {
     return () => {
       try {
         recaptchaVerifierRef.current?.clear()
-      } catch {}
+      } catch { }
       recaptchaVerifierRef.current = null
     }
   }, [])
@@ -115,13 +115,13 @@ export default function AccountLoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F5F3EF] pt-24 pb-12 flex items-center justify-center px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-white lg:bg-[#F5F3EF] pt-24 pb-12 flex items-center justify-center lg:px-8">
       <div id="recaptcha-container-login" className="hidden" />
 
       {/* Split card container */}
-      <div className="w-full max-w-5xl bg-white rounded-2xl sm:rounded-3xl shadow-xl overflow-hidden flex flex-col lg:flex-row min-h-[560px]">
+      <div className="w-full max-w-5xl bg-white lg:rounded-3xl shadow-none lg:shadow-xl overflow-hidden flex flex-col lg:flex-row min-h-[560px]">
         {/* Left: Promo panel - Midnight Obsidian */}
-        <div className="lg:w-[44%] bg-[#1a1a1a] p-8 sm:p-10 lg:p-12 flex flex-col justify-between items-center text-center lg:items-start lg:text-left text-white rounded-t-2xl sm:rounded-t-3xl lg:rounded-tr-none lg:rounded-l-2xl lg:rounded-l-3xl">
+        <div className="hidden lg:flex lg:w-[44%] bg-[#1a1a1a] p-8 sm:p-10 lg:p-12 flex-col justify-between items-center text-center lg:items-start lg:text-left text-white rounded-t-2xl sm:rounded-t-3xl lg:rounded-tr-none lg:rounded-l-2xl lg:rounded-l-3xl">
           <div>
             <h2 className="text-2xl sm:text-3xl font-bold leading-tight mb-3">
               Simplify your wellness journey.
@@ -144,7 +144,7 @@ export default function AccountLoginPage() {
         </div>
 
         {/* Right: Form panel */}
-        <div className="lg:w-[56%] p-8 sm:p-10 lg:p-12 flex flex-col justify-center">
+        <div className="w-full lg:w-[56%] p-6 sm:p-10 lg:p-12 flex flex-col justify-center">
           <Link
             href="/"
             className="inline-flex items-center gap-2 text-gray-500 hover:text-[#1a1a1a] text-sm mb-8"
@@ -164,10 +164,10 @@ export default function AccountLoginPage() {
           </div>
 
           <h1 className="text-2xl sm:text-3xl font-bold text-[#1a1a1a] mb-1">
-            Welcome back
+            Let's Begin
           </h1>
           <p className="text-gray-500 text-sm sm:text-base mb-6">
-            Please login with your mobile number.
+            Your journey to better shape starts here
           </p>
 
           {error && (
@@ -200,7 +200,7 @@ export default function AccountLoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-[#1a1a1a] hover:bg-[#0d0d0d] text-white py-3.5 font-semibold rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-[#187254] hover:bg-[#146147] text-white py-3.5 font-semibold rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? 'Sending OTP...' : 'Send OTP'}
               </button>
@@ -228,7 +228,7 @@ export default function AccountLoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-[#1a1a1a] hover:bg-[#0d0d0d] text-white py-3.5 font-semibold rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-[#187254] hover:bg-[#146147] text-white py-3.5 font-semibold rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? 'Verifying...' : 'Verify & login'}
               </button>
