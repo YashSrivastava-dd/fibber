@@ -173,7 +173,7 @@ export default function ProductsCarouselSection() {
                 return (
                   <div
                     key={product.id}
-                    className={`flex-shrink-0 w-[310px] md:w-[350px] flex flex-col rounded-xl relative ${data.borderClass}`}
+                    className={`flex-shrink-0 w-[280px] sm:w-[300px] md:w-[350px] flex flex-col rounded-xl relative ${data.borderClass}`}
                   >
                     {/* Top Badge */}
                     {data.isMiddle ? (

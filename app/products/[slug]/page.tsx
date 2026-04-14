@@ -180,10 +180,28 @@ export async function generateMetadata({ params }: ProductProps): Promise<Metada
   const key = (slug || '').toLowerCase()
   const meta = PRODUCT_META_BY_SLUG[key] ?? PRODUCT_META_BY_SLUG[key.replace(/^\//, '')]
 
+  const title = meta?.title ?? 'Fiberise Fit'
+  const description = meta?.description ?? 'Smart health ecosystem powered by AI & innovation.'
+  const url = `/products/${slug}`
+
   return {
-    title: meta?.title ?? 'Fiberise Fit',
-    description: meta?.description ?? 'Smart health ecosystem powered by AI & innovation.',
+    title,
+    description,
     keywords: meta?.keywords,
+    alternates: {
+      canonical: url,
+    },
+    openGraph: {
+      title,
+      description,
+      url,
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+    },
   }
 }
 

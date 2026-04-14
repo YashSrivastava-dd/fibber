@@ -207,10 +207,18 @@ export default function FeaturedProductsSection() {
               const displayPrice = product.price
               const isAvailable = product.available
 
+              const titleLower = product.title.toLowerCase()
+              let orderClass = 'order-3 md:order-3'
+              if (titleLower.includes('starter pack')) {
+                orderClass = 'order-1 md:order-2'
+              } else if (titleLower.includes('transformation pack')) {
+                orderClass = 'order-2 md:order-1'
+              }
+
               return (
                 <div
                   key={product.id}
-                  className={`relative flex flex-col rounded-2xl overflow-hidden w-full md:w-[330px] lg:w-[355px] ${cfg.wrapperClass}`}
+                  className={`relative flex flex-col rounded-2xl overflow-hidden w-[88%] max-w-[320px] mx-auto md:mx-0 md:w-[330px] lg:w-[355px] ${cfg.wrapperClass} ${orderClass}`}
                 >
                   {/* Badge */}
                   {cfg.hasBadge ? (

@@ -45,12 +45,6 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: 'Fiberise Fit',
   description: 'Smart health ecosystem powered by AI & innovation.',
-  alternates: {
-    canonical: './',
-    languages: {
-      'en-IN': './',
-    },
-  },
   authors: [{ name: 'Fiberise Fit' }],
   publisher: 'Fiberise Fit',
   verification: {

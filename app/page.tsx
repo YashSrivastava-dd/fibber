@@ -20,6 +20,9 @@ export const metadata: Metadata = {
     "Smart health ecosystem powered by AI & innovation. Fiberise is India's science-backed fiber supplement for weight control. A natural fat burning supplement with prebiotic + probiotic support from trusted by doctors. No stimulants. Free shipping.",
   keywords:
     'ozempic, fat burner, fiber supplement, weight control supplements, weight lose supplement, fat burning supplements',
+  alternates: {
+    canonical: '/',
+  },
 }
 
 export default function Home() {
