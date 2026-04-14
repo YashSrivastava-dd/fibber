@@ -681,7 +681,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
                         priority
                       />
                       <Image
-                        src="/diff-mobile1.png"
+                        src="/333diff-mobile.png"
                         alt="Difference"
                         width={800}
                         height={400}
