@@ -11,9 +11,11 @@ import {
 } from 'firebase/auth'
 import { auth } from '@/lib/firebase/config'
 import { Smartphone, ArrowLeft } from 'lucide-react'
+import { useCartStore } from '@/store/cartStore'
 
 export default function AccountLoginPage() {
   const router = useRouter()
+  const openCart = useCartStore((state) => state.openCart)
   const [step, setStep] = useState<'phone' | 'otp'>('phone')
   const [phoneDigits, setPhoneDigits] = useState('')
   const [otp, setOtp] = useState('')
@@ -106,7 +108,10 @@ export default function AccountLoginPage() {
       if (!res.ok) {
         throw new Error('Something went wrong. Please try again.')
       }
-      router.push('/account/orders')
+      
+      // Open cart drawer and redirect to home
+      openCart()
+      router.push('/')
     } catch (err: any) {
       setError(err.message || 'Invalid OTP. Please check and try again.')
     } finally {
