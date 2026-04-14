@@ -78,16 +78,16 @@ export default function ProductPage({ slug }: ProductPageProps) {
         setLoading(true)
         setError(null)
         console.log('Fetching product with slug:', slug)
-        
+
         const response = await fetch(`/api/shopify/product/${slug}`, { cache: 'no-store' })
-        
+
         if (!response.ok) {
           const errorData = await response.json().catch(() => ({ error: 'Unknown error' }))
           console.error('API response error:', response.status, errorData)
           setError(errorData.error || `Failed to load product (${response.status})`)
           return
         }
-        
+
         const data = await response.json()
         console.log('Product data received:', data)
 
@@ -192,7 +192,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const extractIngredients = (title: string, description: string): string[] => {
     const commonIngredients = ['Iron', 'Zinc', 'Folate', 'Vitamin A', 'Vitamin B', 'Vitamin C', 'Vitamin D', 'Vitamin E', 'Calcium', 'Magnesium']
     const found: string[] = []
-    
+
     // Check title and description for ingredient mentions
     const text = `${title} ${description}`.toUpperCase()
     commonIngredients.forEach(ingredient => {
@@ -200,7 +200,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
         found.push(ingredient)
       }
     })
-    
+
     // Return first 4 found ingredients, or default ones if none found
     return found.slice(0, 4).length > 0 ? found.slice(0, 4) : ['Iron', 'Zinc', 'Folate', 'Vitamin A']
   }
@@ -250,14 +250,14 @@ export default function ProductPage({ slug }: ProductPageProps) {
     : null
   const isAvailable = selectedVariant?.available ?? product.available
   const displayImages = product.images && product.images.length > 0 ? product.images : [product.image]
-  const ingredients = ['Unflavoured', 'Watermelon', 'Lemon' , 'Assorted']
-  
+  //const ingredients = ['Unflavoured', 'Watermelon', 'Lemon', 'Assorted']
+
   // Extract product type/category from title or use default
-  const productType = product.title.toUpperCase().includes('PLANT-BASED') 
-    ? 'PLANT-BASED' 
+  const productType = product.title.toUpperCase().includes('PLANT-BASED')
+    ? 'PLANT-BASED'
     : product.title.toUpperCase().includes('VEGAN')
-    ? 'VEGAN'
-    : 'WEIGHT MANAGEMENT SUPPLEMENT'
+      ? 'VEGAN'
+      : 'FYBER'
 
   // Servings: Starter Pack = 7, Transformation Pack = 30, Ultimate Pack = 90
   const getServings = (label: string) => {
@@ -301,13 +301,12 @@ export default function ProductPage({ slug }: ProductPageProps) {
                       type="button"
                       onClick={() => variant.available && setSelectedVariant(variant)}
                       disabled={!variant.available}
-                      className={`flex-shrink-0 w-[180px] sm:w-[200px] snap-center rounded-xl border-2 bg-white overflow-hidden transition-all ${
-                        isSelected
-                          ? 'border-black shadow-lg ring-2 ring-black ring-offset-2'
-                          : variant.available
+                      className={`flex-shrink-0 w-[180px] sm:w-[200px] snap-center rounded-xl border-2 bg-white overflow-hidden transition-all ${isSelected
+                        ? 'border-black shadow-lg ring-2 ring-black ring-offset-2'
+                        : variant.available
                           ? 'border-gray-200 hover:border-gray-400'
                           : 'border-gray-200 opacity-60 cursor-not-allowed'
-                      }`}
+                        }`}
                     >
                       <div className="relative aspect-[3/4] bg-gray-50">
                         <Image
@@ -341,13 +340,12 @@ export default function ProductPage({ slug }: ProductPageProps) {
                             {[1, 2, 3, 4, 5].map((i) => (
                               <Star
                                 key={i}
-                                className={`w-3 h-3 ${
-                                  i <= displayRating
-                                    ? 'fill-amber-400 text-amber-400'
-                                    : i - 1 < displayRating && displayRating < i
+                                className={`w-3 h-3 ${i <= displayRating
+                                  ? 'fill-amber-400 text-amber-400'
+                                  : i - 1 < displayRating && displayRating < i
                                     ? 'fill-amber-400/60 text-amber-400'
                                     : 'text-gray-300'
-                                }`}
+                                  }`}
                                 aria-hidden
                               />
                             ))}
@@ -382,11 +380,10 @@ export default function ProductPage({ slug }: ProductPageProps) {
                 <button
                   onClick={handleAddToCart}
                   disabled={!isAvailable}
-                  className={`w-full sm:w-auto min-w-[200px] py-4 px-8 rounded-lg font-semibold text-sm uppercase tracking-wider border-2 transition-colors ${
-                    isAvailable
-                      ? 'border-black text-black bg-white hover:bg-black hover:text-white'
-                      : 'border-gray-300 bg-gray-100 text-gray-500 cursor-not-allowed'
-                  }`}
+                  className={`w-full sm:w-auto min-w-[200px] py-4 px-8 rounded-lg font-semibold text-sm uppercase tracking-wider border-2 transition-colors ${isAvailable
+                    ? 'border-black text-black bg-white hover:bg-black hover:text-white'
+                    : 'border-gray-300 bg-gray-100 text-gray-500 cursor-not-allowed'
+                    }`}
                 >
                   {isAvailable ? 'ADD TO CART' : 'OUT OF STOCK'}
                 </button>
@@ -400,80 +397,21 @@ export default function ProductPage({ slug }: ProductPageProps) {
         )}
 
         {/* Main Product Content - 50/50 Split */}
-        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-        <div className="flex flex-col lg:flex-row gap-0 lg:items-start">
-          {/* Left Section - Product Images (50%) */}
-          <div className="w-full lg:w-1/2 flex gap-4 lg:pr-6">
-            {/* Thumbnail Column (Vertical) */}
-            {displayImages.length > 1 && (
-              <div className="hidden lg:flex flex-col gap-4 flex-shrink-0">
-                {displayImages.map((image, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setSelectedImageIndex(index)}
-                    className={`relative w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
-                      selectedImageIndex === index
-                        ? 'border-black scale-105'
-                        : 'border-transparent hover:border-gray-400'
-                    }`}
-                    >
-                      <Image
-                        src={image}
-                        alt={`${product.title} - Image ${index + 1}`}
-                        fill
-                        className="object-cover"
-                        unoptimized
-                      />
-                  </button>
-                ))}
-              </div>
-            )}
-
-            {/* Main Image Display */}
-            <div className="flex-1 relative bg-transparent rounded-lg overflow-hidden group">
-              <div className="relative w-full aspect-square">
-                <Image
-                  src={displayImages[selectedImageIndex] || product.image || '/placeholder-product.png'}
-                  alt={product.title}
-                  fill
-                  className="object-contain p-8"
-                  priority
-                  unoptimized
-                />
-              </div>
-
-              {/* Image Navigation Bar - Below image */}
+        <div className="max-w-[1600px] mx-auto lg:px-8 pb-16">
+          <div className="flex flex-col lg:flex-row gap-0 lg:items-start">
+            {/* Left Section - Product Images (50%) */}
+            <div className="w-full lg:w-1/2 flex gap-4 lg:pr-6">
+              {/* Thumbnail Column (Vertical) */}
               {displayImages.length > 1 && (
-                <div className="flex justify-center mt-6">
-                  <div className="flex items-center gap-2 bg-white/95 backdrop-blur-md px-3 py-2.5 rounded-full border border-gray-200/80 shadow-md">
-                    {displayImages.map((_, index) => (
-                      <button
-                        key={index}
-                        onClick={() => setSelectedImageIndex(index)}
-                        className={`rounded-full transition-all duration-200 ${
-                          index === selectedImageIndex
-                            ? 'w-2.5 h-2.5 bg-black ring-2 ring-black/20'
-                            : 'w-2 h-2 bg-gray-300 hover:bg-gray-400'
-                        }`}
-                        aria-label={`Go to image ${index + 1}`}
-                      />
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Mobile Thumbnails */}
-              {displayImages.length > 1 && (
-                <div className="lg:hidden flex gap-2 mt-4 overflow-x-auto pb-2">
+                <div className="hidden lg:flex flex-col gap-4 flex-shrink-0">
                   {displayImages.map((image, index) => (
                     <button
                       key={index}
                       onClick={() => setSelectedImageIndex(index)}
-                      className={`flex-shrink-0 relative w-16 h-16 rounded-lg overflow-hidden border-2 transition-colors ${
-                        selectedImageIndex === index
-                          ? 'border-black'
-                          : 'border-transparent hover:border-gray-300'
-                      }`}
+                      className={`relative w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${selectedImageIndex === index
+                        ? 'border-black scale-105'
+                        : 'border-transparent hover:border-gray-400'
+                        }`}
                     >
                       <Image
                         src={image}
@@ -486,287 +424,358 @@ export default function ProductPage({ slug }: ProductPageProps) {
                   ))}
                 </div>
               )}
-            </div>
-          </div>
 
-          {/* Right Section - Product Details (50%) */}
-          <div className="w-full lg:w-1/2 min-w-0 lg:pl-6 pt-8 lg:pt-0 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto overflow-x-hidden lg:pr-2 scrollbar-hide">
-            <div className="space-y-6 pb-8 min-w-0">
-              {/* Product Type/Category */}
-              <div className="text-xs uppercase tracking-wider text-gray-500 font-medium mb-2">
-                {productType}
-              </div>
-
-              {/* Product Title */}
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black uppercase leading-[1.1] mb-1 break-words">
-                {product.title}
-              </h1>
-              <p className="text-lg md:text-xl text-gray-600 mb-4">Servings : {displayServings}</p>
-
-              {/* Ingredient Tags */}
-              <div className="flex flex-wrap gap-2 mb-4">
-                {ingredients.map((ingredient, index) => (
-                  <span
-                    key={index}
-                    className="px-4 py-2 rounded-full border border-gray-300 text-sm font-medium text-gray-800 bg-transparent"
-                  >
-                    {ingredient}
-                  </span>
-                ))}
-              </div>
-
-              {/* Product Description */}
-              {(product as any).descriptionHtml && (
-                <div className="text-sm text-gray-700 leading-relaxed product-description">
-                  <div
-                    className="prose prose-sm max-w-none prose-gray prose-p:text-sm prose-li:text-sm prose-headings:text-base"
-                    dangerouslySetInnerHTML={{ __html: (product as any).descriptionHtml }}
+              {/* Main Image Display */}
+              <div className="flex-1 relative bg-transparent rounded-none sm:rounded-lg overflow-hidden group">
+                <div className="relative w-full aspect-square">
+                  <Image
+                    src={displayImages[selectedImageIndex] || product.image || '/placeholder-product.png'}
+                    alt={product.title}
+                    fill
+                    className="object-contain p-2 sm:p-8"
+                    priority
+                    unoptimized
                   />
                 </div>
-              )}
 
-              {/* Variant Selection */}
-              {product.variants && product.variants.length > 1 && (
-                <div className="space-y-3">
-                  <label className="block text-sm font-medium text-gray-800">
-                    Choose Supplement:
-                  </label>
-                  <div className="flex flex-wrap gap-3">
-                    {product.variants.map((variant) => (
+                {/* Image Navigation Bar - Below image */}
+                {displayImages.length > 1 && (
+                  <div className="flex justify-center mt-6">
+                    <div className="flex items-center gap-2 bg-white/95 backdrop-blur-md px-3 py-2.5 rounded-full border border-gray-200/80 shadow-md">
+                      {displayImages.map((_, index) => (
+                        <button
+                          key={index}
+                          onClick={() => setSelectedImageIndex(index)}
+                          className={`rounded-full transition-all duration-200 ${index === selectedImageIndex
+                            ? 'w-2.5 h-2.5 bg-black ring-2 ring-black/20'
+                            : 'w-2 h-2 bg-gray-300 hover:bg-gray-400'
+                            }`}
+                          aria-label={`Go to image ${index + 1}`}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Mobile Thumbnails */}
+                {displayImages.length > 1 && (
+                  <div className="lg:hidden flex gap-2 mt-4 overflow-x-auto pb-2 px-4 sm:px-6">
+                    {displayImages.map((image, index) => (
                       <button
-                        key={variant.id}
-                        onClick={() => setSelectedVariant(variant)}
-                        disabled={!variant.available}
-                        className={`w-14 h-14 rounded-full border-2 transition-all flex items-center justify-center ${
-                          selectedVariant?.id === variant.id
-                            ? 'border-[#FFB6C1] bg-[#FFE4E9] scale-110 shadow-md'
-                            : variant.available
-                            ? 'border-gray-300 bg-transparent hover:border-gray-400'
-                            : 'border-gray-400 bg-transparent cursor-not-allowed opacity-50'
-                        }`}
-                        title={variant.name}
+                        key={index}
+                        onClick={() => setSelectedImageIndex(index)}
+                        className={`flex-shrink-0 relative w-16 h-16 rounded-lg overflow-hidden border-2 transition-colors ${selectedImageIndex === index
+                          ? 'border-black'
+                          : 'border-transparent hover:border-gray-300'
+                          }`}
                       >
-                        <span className={`text-sm font-semibold ${
-                          selectedVariant?.id === variant.id ? 'text-black' : 'text-gray-800'
-                        }`}>
-                          {variant.name.charAt(0).toUpperCase()}
-                        </span>
+                        <Image
+                          src={image}
+                          alt={`${product.title} - Image ${index + 1}`}
+                          fill
+                          className="object-cover"
+                          unoptimized
+                        />
                       </button>
                     ))}
                   </div>
-                </div>
-              )}
-
-              {/* Price */}
-              <div className="space-y-1 mt-6">
-                <div className="flex flex-wrap items-baseline gap-2">
-                  {displayCompareAt != null && displayCompareAt > displayPrice ? (
-                    <>
-                      <span className="text-xl md:text-2xl text-gray-400 line-through">₹{displayCompareAt.toFixed(2)}</span>
-                      <span className="text-4xl md:text-5xl font-bold text-black">₹{displayPrice.toFixed(2)}</span>
-                      {discountPercent != null && discountPercent > 0 && (
-                        <span className="text-sm font-semibold text-red-600 bg-red-50 px-2 py-0.5 rounded">
-                          {discountPercent}% OFF
-                        </span>
-                      )}
-                    </>
-                  ) : (
-                    <span className="text-4xl md:text-5xl font-bold text-black">₹{displayPrice.toFixed(2)}</span>
-                  )}
-                </div>
-                <p className="text-sm text-gray-600 font-normal">MRP (incl. of all taxes)</p>
-                <p className="text-sm text-gray-500">Tax included.</p>
-                {/* Rating: from reviews when available, else default 4.8 */}
-                <div className="flex items-center gap-2 mt-2">
-                  <div className="flex items-center gap-0.5">
-                    {[1, 2, 3, 4, 5].map((i) => (
-                      <Star
-                        key={i}
-                        className={`w-4 h-4 ${
-                          i <= displayRating
-                            ? 'fill-amber-400 text-amber-400'
-                            : i - 1 < displayRating && displayRating < i
-                            ? 'fill-amber-400/60 text-amber-400'
-                            : 'text-gray-300'
-                        }`}
-                        aria-hidden
-                      />
-                    ))}
-                  </div>
-                  <span className="text-sm font-medium text-gray-800">{displayRating.toFixed(1)}</span>
-                  {displayReviewCount > 0 && (
-                    <span className="text-xs text-gray-500">({displayReviewCount} {displayReviewCount === 1 ? 'review' : 'reviews'})</span>
-                  )}
-                </div>
+                )}
               </div>
+            </div>
 
-              {/* Quantity Selector and Add to Cart */}
-              <div className="flex gap-3 mt-6">
-                {/* Quantity Selector */}
-                <div className="flex items-center border border-gray-300 rounded-lg">
-                  <button
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="px-4 py-3 hover:bg-gray-100 transition-colors text-gray-800"
-                    aria-label="Decrease quantity"
-                  >
-                    <Minus className="w-4 h-4" />
-                  </button>
-                  <span className="px-6 py-3 font-medium text-gray-900 min-w-[3rem] text-center">
-                    {quantity}
-                  </span>
-                  <button
-                    onClick={() => setQuantity(quantity + 1)}
-                    className="px-4 py-3 hover:bg-gray-100 transition-colors text-gray-800"
-                    aria-label="Increase quantity"
-                  >
-                    <Plus className="w-4 h-4" />
-                  </button>
+            {/* Right Section - Product Details (50%) */}
+            <div className="w-full lg:w-1/2 min-w-0 px-4 sm:px-6 lg:px-0 lg:pl-6 pt-8 lg:pt-0 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto overflow-x-hidden lg:pr-2 scrollbar-hide">
+              <div className="space-y-4 pb-4 min-w-0">
+                {/* Header Section */}
+                <div>
+                  {/* Product Type/Category */}
+                  <div className="text-4xl md:text-2xl uppercase tracking-wider text-[#187254] font-semibold mb-1">
+                    {productType}
+                  </div>
+
+                  {/* Product Title */}
+                  <h1 className="text-l md:text-2xl font-light text-black leading-tight mb-1">
+                    {product.title}
+                  </h1>
+
+                  {/* Rating immediately below Title */}
+                  <div className="flex items-center gap-1.5">
+                    <Star className="w-4 h-4 fill-amber-400 text-amber-400" aria-hidden />
+                    <span className="text-sm font-semibold text-black">{displayRating.toFixed(1)}</span>
+                    {displayReviewCount > 0 && (
+                      <span className="text-sm font-semibold text-black">({displayReviewCount})</span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Variant Selection (Box style) */}
+                {product.variants && product.variants.length > 1 && (
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {product.variants.map((variant) => {
+                      const isSelected = selectedVariant?.id === variant.id;
+                      return (
+                        <button
+                          key={variant.id}
+                          onClick={() => setSelectedVariant(variant)}
+                          disabled={!variant.available}
+                          className={`flex items-center px-3 py-1.5 text-xs md:text-sm transition-colors ${isSelected
+                            ? 'bg-black text-white font-medium'
+                            : variant.available
+                              ? 'bg-gray-100 text-gray-800 hover:bg-gray-200'
+                              : 'bg-gray-100 text-gray-400 cursor-not-allowed opacity-50'
+                            }`}
+                        >
+                          {isSelected && <span className="mr-1.5">✓</span>}
+                          {variant.name}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {/* Price Block AND Quantity Selector Side-by-Side */}
+                <div className="flex justify-between items-end pt-2">
+                  <div className="flex flex-col">
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-2xl font-normal text-black tracking-tight flex items-baseline">
+                        <span className="text-xl mr-0.5">₹</span>
+                        {displayPrice.toFixed(0)}
+                      </span>
+                      {displayCompareAt != null && displayCompareAt > displayPrice && (
+                        <>
+                          <span className="text-base text-gray-400 line-through">₹{displayCompareAt.toFixed(0)}</span>
+                          {discountPercent != null && discountPercent > 0 && (
+                            <span className="text-xs font-semibold text-red-600 bg-red-50 px-1.5 py-0.5 rounded">
+                              {discountPercent}% OFF
+                            </span>
+                          )}
+                        </>
+                      )}
+                    </div>
+                    <p className="text-[10px] text-gray-500 uppercase tracking-widest mt-0.5">INCL. OF ALL TAXES</p>
+                  </div>
+
+                  {/* Quantity Selector */}
+                  <div className="flex items-center border border-gray-200 bg-gray-50/50">
+                    <button
+                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                      className="px-3 py-1.5 hover:bg-gray-100 transition-colors text-black"
+                      aria-label="Decrease quantity"
+                    >
+                      <Minus className="w-4 h-4 pointer-events-none" strokeWidth={1.5} />
+                    </button>
+                    <span className="px-3 py-1.5 font-medium text-black border-x border-gray-200 min-w-[2.5rem] text-center text-sm">
+                      {quantity}
+                    </span>
+                    <button
+                      onClick={() => setQuantity(quantity + 1)}
+                      className="px-3 py-1.5 hover:bg-gray-100 transition-colors text-black"
+                      aria-label="Increase quantity"
+                    >
+                      <Plus className="w-4 h-4 pointer-events-none" strokeWidth={1.5} />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Description Area (Short descriptions/Subtitles) */}
+                <div className="space-y-2 pt-2">
+                  <h3 className="text-base font-medium text-black tracking-tight">
+                    Pack: {displayServings} Sachets | Assorted Flavours
+                  </h3>
+
+                  <div className="text-sm text-gray-800">
+                    {/* {ingredients.join(' | ')} */}
+                  </div>
+
+                  {(product as any).descriptionHtml && (
+                    <div className="text-xs text-gray-700 leading-relaxed product-description">
+                      <div
+                        className="prose prose-sm max-w-none prose-gray prose-p:text-xs prose-li:text-xs prose-headings:text-sm space-y-1"
+                        dangerouslySetInnerHTML={{ __html: (product as any).descriptionHtml }}
+                      />
+                    </div>
+                  )}
                 </div>
 
                 {/* Add to Cart Button */}
                 <button
                   onClick={handleAddToCart}
                   disabled={!isAvailable}
-                  className={`flex-1 py-4 px-6 rounded-lg font-semibold text-sm uppercase tracking-wider transition-colors ${
-                    isAvailable
-                      ? 'bg-black text-white hover:bg-gray-800'
-                      : 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                  }`}
+                  className={`w-full py-3 px-4 font-bold text-base uppercase tracking-wider transition-all ${!isAvailable
+                    ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                    : product.title.toLowerCase().includes('starter')
+                      ? 'bg-gradient-to-r from-[#ecc67d] to-[#d6a958] text-[#3d2f11] hover:opacity-90 shadow-md'
+                      : 'bg-black text-white hover:bg-gray-800'
+                    }`}
                 >
-                  {isAvailable ? 'ADD TO CART' : 'OUT OF STOCK'}
+                  {!isAvailable
+                    ? 'OUT OF STOCK'
+                    : product.title.toLowerCase().includes('starter')
+                      ? `TRY FYBER`
+                      : `ADD TO CART`
+                  }
                 </button>
-              </div>
 
-              {/* Trust strip + social proof */}
-              <div className="text-sm text-gray-600 mt-4 space-y-1">
-                <p>Free shipping Pan India</p>
-                <p className="text-xs text-gray-500">Free delivery · Easy returns</p>
-              </div>
-
-              {/* Payment Icons - UPI first, then Visa, MC, Amex */}
-              <div className="flex items-center gap-3 mt-4">
-                <span className="text-xs text-gray-600 font-medium">We accept:</span>
-                <PaymentIcons iconClassName="w-9 h-6 object-contain flex-shrink-0" />
-              </div>
-
-              {/* Accordion Sections */}
-              <div className="mt-6 space-y-2">
-                {/* BENEFITS Accordion */}
-                <div className="border-b border-gray-200">
-                  <button
-                    onClick={() => toggleAccordion('benefits')}
-                    className="w-full flex items-center justify-between py-4 text-left"
-                  >
-                    <span className="text-sm font-semibold uppercase tracking-wider text-gray-900">
-                      BENEFITS
-                    </span>
-                    <Plus
-                      className={`w-5 h-5 text-gray-700 transition-transform ${
-                        expandedAccordion === 'benefits' ? 'rotate-45' : ''
-                      }`}
+                {/* Money Back Guarantee Image */}
+                {product.title.toLowerCase().includes('starter') && (
+                  <div className="mt-4 -mx-4 sm:-mx-6 lg:mx-0 flex flex-col">
+                    {/* Desktop Image */}
+                    <Image
+                      src="/MONEYBACK DESKTOP.png"
+                      alt="100% Money-Back Guarantee"
+                      width={800}
+                      height={200}
+                      className="w-full h-auto object-contain hidden md:block"
+                      priority
                     />
-                  </button>
-                  {expandedAccordion === 'benefits' && (
-                    <div className="pb-4 text-sm text-gray-700 leading-relaxed">
-                      <ul className="space-y-2">
-                        <li>✓ Smart craving control</li>
-                        <li>✓ Supports weight management</li>
-                        <li>✓ Prebiotic + Probiotic support</li>
-                        <li>✓ Helps prevent glucose spikes &amp; crashes</li>
-                        <li>✓ Encourages healthy fat metabolism</li>
-                        <li>✓ Promotes steady energy</li>
-                      </ul>
-                    </div>
-                  )}
-                </div>
-
-                {/* HOW TO TAKE SUPPLEMENT Accordion */}
-                <div className="border-b border-gray-200">
-                  <button
-                    onClick={() => toggleAccordion('how-to-take')}
-                    className="w-full flex items-center justify-between py-4 text-left"
-                  >
-                    <span className="text-sm font-semibold uppercase tracking-wider text-gray-900">
-                      HOW TO TAKE SUPPLEMENT?
-                    </span>
-                    <Plus
-                      className={`w-5 h-5 text-gray-700 transition-transform ${
-                        expandedAccordion === 'how-to-take' ? 'rotate-45' : ''
-                      }`}
-                    />
-                  </button>
-                  {expandedAccordion === 'how-to-take' && (
-                    <div className="pb-4 text-sm text-gray-700 leading-relaxed">
-                      {/* <p className="mb-2"><strong>How to Take:</strong></p> */}
-                      <ul className="list-disc list-inside space-y-1">
-                        <li>Mix one sachet in 200 ml of water, 30–60 minutes before a meal.</li>
-                    
-                        <li>Consume 1–2 sachets daily.</li>
-                      </ul>
-                    </div>
-                  )}
-                </div>
-
-                {/* INGREDIENTS Accordion */}
-                <div className="border-b border-gray-200">
-                  <button
-                    onClick={() => toggleAccordion('ingredients')}
-                    className="w-full flex items-center justify-between py-4 text-left"
-                  >
-                    <span className="text-sm font-semibold uppercase tracking-wider text-gray-900">
-                      INGREDIENTS
-                    </span>
-                    <Plus
-                      className={`w-5 h-5 text-gray-700 transition-transform ${
-                        expandedAccordion === 'ingredients' ? 'rotate-45' : ''
-                      }`}
-                    />
-                  </button>
-                  {expandedAccordion === 'ingredients' && (
-                    <div className="pb-4 text-sm text-gray-700 leading-relaxed space-y-3">
-                      {/* <p><strong>Ingredients</strong></p> */}
-                      <p>Patented Lean-X blend with:</p>
-                      <ul className="list-disc list-inside space-y-1">
-                        <li>Soluble dietary fiber</li>
-                        <li>Lactobacillus gasseri ( Probiotic )</li>
-                        <li>L-Carnitine &amp; L-tartrate (LCLT)</li>
-                        <li>L-Tyrosine</li>
-                      </ul>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Enhance Your Daily Routine Section */}
-              <div className="mt-8">
-                <h2 className="text-lg font-bold uppercase tracking-wider text-gray-900 mb-4">
-                  ENHANCE YOUR DAILY ROUTINE
-                </h2>
-                <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-2 -mx-2 px-2">
-                  {[
-                    '/product page routine images/Group 64977.png',
-                    '/product page routine images/Group 64978.png',
-                    '/product page routine images/Group 64979.png',
-                    '/product page routine images/Group 64980.png',
-                  ].map((imagePath, index) => (
-                    <div
-                      key={index}
-                      className="flex-shrink-0 w-48 h-64 rounded-lg overflow-hidden relative group"
-                    >
+                    {/* Mobile Images (Zero padding container) */}
+                    <div className="w-full flex-col block md:hidden">
                       <Image
-                        src={imagePath}
-                        alt={`Wellness routine ${index + 1}`}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                        src="/MONEYBACK MOBILE 2.png"
+                        alt="100% Money-Back Guarantee"
+                        width={800}
+                        height={400}
+                        className="w-full h-auto object-contain block"
+                        priority
+                      />
+                      <Image
+                        src="/timeline mobile.png"
+                        alt="Timeline"
+                        width={800}
+                        height={400}
+                        className="w-full h-auto object-contain block"
+                        priority
+                      />
+                      <Image
+                        src="/how to use mobile.png"
+                        alt="How to Use"
+                        width={800}
+                        height={400}
+                        className="w-full h-auto object-contain block"
+                        priority
                       />
                     </div>
-                  ))}
+                  </div>
+                )}
+
+                {/* Additional Trust Graphic */}
+                <div className={`mt-4 flex justify-center bg-[#FAF9F6] py-1 ${
+                  product.title.toLowerCase().includes('starter') 
+                    ? 'hidden md:flex' 
+                    : '-mx-4 sm:-mx-6 lg:mx-0'
+                }`}>
+                  <Image
+                    src="/Group 65003.png"
+                    alt="Trust and Features Guarantee"
+                    width={800}
+                    height={120}
+                    className="w-full h-auto object-contain max-w-[400px]"
+                    priority
+                  />
                 </div>
+
+                {/* Trust strip + social proof */}
+                <div className="text-sm text-gray-600 mt-4 space-y-1">
+                  <p>Free shipping Pan India</p>
+                  <p className="text-xs text-gray-500">Free delivery · Easy returns</p>
+                </div>
+
+                {/* Payment Icons - UPI first, then Visa, MC, Amex */}
+                <div className="flex items-center gap-3 mt-4">
+                  <span className="text-xs text-gray-600 font-medium">We accept:</span>
+                  <PaymentIcons iconClassName="w-9 h-6 object-contain flex-shrink-0" />
+                </div>
+
+                {/* Accordion Sections */}
+                <div className="mt-6 space-y-2">
+                  {/* BENEFITS Accordion */}
+                  <div className="border-b border-gray-200">
+                    <button
+                      onClick={() => toggleAccordion('benefits')}
+                      className="w-full flex items-center justify-between py-4 text-left"
+                    >
+                      <span className="text-sm font-semibold uppercase tracking-wider text-gray-900">
+                        BENEFITS
+                      </span>
+                      <Plus
+                        className={`w-5 h-5 text-gray-700 transition-transform ${expandedAccordion === 'benefits' ? 'rotate-45' : ''
+                          }`}
+                      />
+                    </button>
+                    {expandedAccordion === 'benefits' && (
+                      <div className="pb-4 text-sm text-gray-700 leading-relaxed">
+                        <ul className="space-y-2">
+                          <li>✓ Smart craving control</li>
+                          <li>✓ Supports weight management</li>
+                          <li>✓ Prebiotic + Probiotic support</li>
+                          <li>✓ Helps prevent glucose spikes &amp; crashes</li>
+                          <li>✓ Encourages healthy fat metabolism</li>
+                          <li>✓ Promotes steady energy</li>
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* HOW TO TAKE SUPPLEMENT Accordion */}
+                  <div className="border-b border-gray-200">
+                    <button
+                      onClick={() => toggleAccordion('how-to-take')}
+                      className="w-full flex items-center justify-between py-4 text-left"
+                    >
+                      <span className="text-sm font-semibold uppercase tracking-wider text-gray-900">
+                        HOW TO TAKE SUPPLEMENT?
+                      </span>
+                      <Plus
+                        className={`w-5 h-5 text-gray-700 transition-transform ${expandedAccordion === 'how-to-take' ? 'rotate-45' : ''
+                          }`}
+                      />
+                    </button>
+                    {expandedAccordion === 'how-to-take' && (
+                      <div className="pb-4 text-sm text-gray-700 leading-relaxed">
+                        {/* <p className="mb-2"><strong>How to Take:</strong></p> */}
+                        <ul className="list-disc list-inside space-y-1">
+                          <li>Mix one sachet in 200 ml of water, 30–60 minutes before a meal.</li>
+
+                          <li>Consume 1–2 sachets daily.</li>
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* INGREDIENTS Accordion */}
+                  <div className="border-b border-gray-200">
+                    <button
+                      onClick={() => toggleAccordion('ingredients')}
+                      className="w-full flex items-center justify-between py-4 text-left"
+                    >
+                      <span className="text-sm font-semibold uppercase tracking-wider text-gray-900">
+                        INGREDIENTS
+                      </span>
+                      <Plus
+                        className={`w-5 h-5 text-gray-700 transition-transform ${expandedAccordion === 'ingredients' ? 'rotate-45' : ''
+                          }`}
+                      />
+                    </button>
+                    {expandedAccordion === 'ingredients' && (
+                      <div className="pb-4 text-sm text-gray-700 leading-relaxed space-y-3">
+                        {/* <p><strong>Ingredients</strong></p> */}
+                        <p>Patented Lean-X blend with:</p>
+                        <ul className="list-disc list-inside space-y-1">
+                          <li>Soluble dietary fiber</li>
+                          <li>Lactobacillus gasseri ( Probiotic )</li>
+                          <li>L-Carnitine &amp; L-tartrate (LCLT)</li>
+                          <li>L-Tyrosine</li>
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+
               </div>
             </div>
           </div>
         </div>
-      </div>
       </div>
 
       {/* Science / feature video + metabolic explanation + benefits grid directly below hero */}
@@ -963,9 +972,8 @@ export default function ProductPage({ slug }: ProductPageProps) {
                     {faq.question}
                   </span>
                   <Plus
-                    className={`flex-shrink-0 w-6 h-6 text-black transition-transform ${
-                      expandedFaqId === faq.id ? 'rotate-45' : ''
-                    }`}
+                    className={`flex-shrink-0 w-6 h-6 text-black transition-transform ${expandedFaqId === faq.id ? 'rotate-45' : ''
+                      }`}
                   />
                 </button>
                 {expandedFaqId === faq.id && (
