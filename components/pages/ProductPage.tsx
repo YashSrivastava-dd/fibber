@@ -61,15 +61,32 @@ export default function ProductPage({ slug }: ProductPageProps) {
     : DEFAULT_RATING
   const displayReviewCount = reviewRating?.totalCount ?? 0
 
+  const mainButtonRef = useRef<HTMLButtonElement>(null)
+  const ingredientsRef = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
-    const el = heroRef.current
-    if (!el) return
-    const observer = new IntersectionObserver(
-      ([entry]) => setShowStickyAddToCart(!entry.isIntersecting),
-      { threshold: 0, rootMargin: '-1px 0px 0px 0px' }
-    )
-    observer.observe(el)
-    return () => observer.disconnect()
+    const handleScroll = () => {
+      // Use the existing showStickyAddToCart logic but tailored for the specific button bounds
+      if (!mainButtonRef.current) return
+
+      const buttonRect = mainButtonRef.current.getBoundingClientRect()
+      let isIngredientsInView = false
+
+      if (ingredientsRef.current) {
+        const ingredientsRect = ingredientsRef.current.getBoundingClientRect()
+        isIngredientsInView = ingredientsRect.top < window.innerHeight && ingredientsRect.bottom > 0
+      }
+
+      // Show if we scrolled past the main button but haven't hit ingredients
+      const isPastButton = buttonRect.bottom < 0
+
+      setShowStickyAddToCart(isPastButton && !isIngredientsInView)
+    }
+
+    // Call initially and add listener
+    handleScroll()
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   useEffect(() => {
@@ -599,6 +616,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
                 {/* Add to Cart Button */}
                 <button
+                  ref={mainButtonRef}
                   onClick={handleAddToCart}
                   disabled={!isAvailable}
                   className={`w-full py-3 px-4 font-bold text-base uppercase tracking-wider transition-all ${!isAvailable
@@ -657,6 +675,14 @@ export default function ProductPage({ slug }: ProductPageProps) {
                       <Image
                         src="/safe and natural - mobile.png"
                         alt="Safe and Natural"
+                        width={800}
+                        height={400}
+                        className="w-full h-auto object-contain block"
+                        priority
+                      />
+                      <Image
+                        src="/diff-mobile1.png"
+                        alt="Difference"
                         width={800}
                         height={400}
                         className="w-full h-auto object-contain block"
@@ -750,7 +776,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
                   </div>
 
                   {/* INGREDIENTS Accordion */}
-                  <div className="border-b border-gray-200">
+                  <div className="border-b border-gray-200" ref={ingredientsRef}>
                     <button
                       onClick={() => toggleAccordion('ingredients')}
                       className="w-full flex items-center justify-between py-4 text-left"
@@ -1079,14 +1105,24 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
       {/* Sticky Add to Cart - appears when hero scrolls out of view */}
       {showStickyAddToCart && (
-        <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-black py-4">
+        <div className="fixed bottom-0 left-0 right-0 z-50 bg-white shadow-[0_-4px_10px_rgba(0,0,0,0.05)] py-4 px-4 block md:hidden">
           <div className="flex justify-center">
             <button
               onClick={handleAddToCart}
               disabled={!isAvailable}
-              className="py-3 px-10 rounded-lg font-semibold text-sm uppercase tracking-wider border-2 border-black text-black bg-white hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className={`w-full py-3 px-4 font-bold text-base uppercase tracking-wider transition-all ${!isAvailable
+                  ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                  : product?.title.toLowerCase().includes('starter')
+                    ? 'bg-gradient-to-r from-[#ecc67d] to-[#d6a958] text-[#3d2f11] hover:opacity-90'
+                    : 'bg-black text-white hover:bg-gray-800'
+                }`}
             >
-              Add to Cart
+              {!isAvailable
+                ? 'OUT OF STOCK'
+                : product?.title.toLowerCase().includes('starter')
+                  ? `TRY FYBER`
+                  : `ADD TO CART`
+              }
             </button>
           </div>
         </div>
