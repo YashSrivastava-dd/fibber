@@ -31,43 +31,43 @@ const SEEDED_TESTIMONIALS = [
     rating: 5,
     comment:
       'I didn’t think something this small would make a difference, but I genuinely feel less heavy after meals now. It’s become my quiet little habit.',
-    authorName: 'Priya S., Bengaluru',
+    authorName: 'Priya S.',
   },
   {
     rating: 5,
     comment:
       'By 4 PM every day I used to crash so hard. Since I started Fyber, I just… don’t. I feel steady. That’s the best way to put it.',
-    authorName: 'Aman K., Gurugram',
+    authorName: 'Aman K.',
   },
   {
     rating: 4,
     comment:
       'I was sceptical at first. But after a week, I noticed I wasn’t feeling bloated every evening. That’s when I knew it was working.',
-    authorName: 'Sneha R., Mumbai',
+    authorName: 'Sneha R.',
   },
   {
     rating: 4,
     comment:
       'It’s not some dramatic overnight change. It’s just that my digestion feels smoother, and I don’t think about it as much anymore.',
-    authorName: 'Rohan P., Pune',
+    authorName: 'Rohan P.',
   },
   {
     rating: 5,
     comment:
       'I like that it doesn’t make me feel weird or weak. I just feel normal… but better.',
-    authorName: 'Meera L., Chennai',
+    authorName: 'Meera L.',
   },
   {
     rating: 4,
     comment:
       'My routine’s pretty hectic, and I eat at odd hours. Fyber kind of keeps me balanced, even when my schedule isn’t.',
-    authorName: 'Karthik V., Hyderabad',
+    authorName: 'Karthik V.',
   },
   {
     rating: 4,
     comment:
       'No big weight loss results for me. But my weight certainly didn’t increase… unlike before!',
-    authorName: 'Anjali D., Delhi',
+    authorName: 'Anjali D.',
   },
 ] as const
 
