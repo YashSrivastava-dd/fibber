@@ -637,17 +637,27 @@ export default function ProductPage({ slug }: ProductPageProps) {
                 {/* Money Back Guarantee Image */}
                 {product.title.toLowerCase().includes('starter') && (
                   <div className="mt-4 -mx-4 sm:-mx-6 lg:mx-0 flex flex-col">
-                    {/* Desktop Image */}
-                    <Image
-                      src="/MONEYBACK DESKTOP.png"
-                      alt="100% Money-Back Guarantee"
-                      width={800}
-                      height={200}
-                      className="w-full h-auto object-contain hidden md:block"
-                      priority
-                    />
+                    {/* Desktop Images */}
+                    <div className="hidden md:flex flex-col gap-4">
+                      <Image
+                        src="/MONEYBACK DESKTOP.png"
+                        alt="100% Money-Back Guarantee"
+                        width={800}
+                        height={200}
+                        className="w-full h-auto object-contain"
+                        priority
+                      />
+                      <Image
+                        src="/timeline-desktoppng.png"
+                        alt="Product Timeline"
+                        width={800}
+                        height={200}
+                        className="w-full h-auto object-contain"
+                        priority
+                      />
+                    </div>
                     {/* Mobile Images (Zero padding container) */}
-                    <div className="w-full flex-col block md:hidden">
+                    <div className="w-full flex flex-col md:hidden">
                       <Image
                         src="/MONEYBACK MOBILE 2.png"
                         alt="100% Money-Back Guarantee"
@@ -694,7 +704,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
                 {/* Additional Trust Graphic */}
                 <div className={`mt-4 flex justify-center bg-[#FAF9F6] py-1 ${product.title.toLowerCase().includes('starter')
-                  ? 'hidden md:flex'
+                  ? 'hidden'
                   : '-mx-4 sm:-mx-6 lg:mx-0'
                   }`}>
                   <Image
