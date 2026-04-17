@@ -37,11 +37,12 @@ interface Product {
 
 interface ProductPageProps {
   slug: string
+  initialProduct?: Product | null
 }
 
-export default function ProductPage({ slug }: ProductPageProps) {
-  const [product, setProduct] = useState<Product | null>(null)
-  const [loading, setLoading] = useState(true)
+export default function ProductPage({ slug, initialProduct }: ProductPageProps) {
+  const [product, setProduct] = useState<Product | null>(initialProduct || null)
+  const [loading, setLoading] = useState(!initialProduct)
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null)
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
   const [error, setError] = useState<string | null>(null)
@@ -133,10 +134,14 @@ export default function ProductPage({ slug }: ProductPageProps) {
       }
     }
 
-    if (slug) {
+    if (slug && !initialProduct) {
       fetchProduct()
+    } else if (initialProduct) {
+      if (initialProduct.variants && initialProduct.variants.length > 0) {
+        setSelectedVariant(initialProduct.variants[0])
+      }
     }
-  }, [slug])
+  }, [slug, initialProduct])
 
   useEffect(() => {
     if (!slug) return
@@ -702,20 +707,19 @@ export default function ProductPage({ slug }: ProductPageProps) {
                   </div>
                 )}
 
-                {/* Additional Trust Graphic */}
-                <div className={`mt-4 flex justify-center bg-[#FAF9F6] py-1 ${product.title.toLowerCase().includes('starter')
-                  ? 'hidden'
-                  : '-mx-4 sm:-mx-6 lg:mx-0'
-                  }`}>
-                  <Image
-                    src="/Group 65003.png"
-                    alt="Trust and Features Guarantee"
-                    width={800}
-                    height={120}
-                    className="w-full h-auto object-contain max-w-[400px]"
-                    priority
-                  />
-                </div>
+                {/* Timeline Image for Non-Starter Packs */}
+                {!product.title.toLowerCase().includes('starter') && (
+                  <div className="mt-4 flex flex-col">
+                    <Image
+                      src="/timeline-desktoppng.png"
+                      alt="Product Timeline"
+                      width={800}
+                      height={200}
+                      className="w-full h-auto object-contain"
+                      priority
+                    />
+                  </div>
+                )}
 
                 {/* Trust strip + social proof */}
                 <div className="text-sm text-gray-600 mt-4 space-y-1">

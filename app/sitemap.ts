@@ -54,12 +54,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'weekly',
       priority: 0.9,
     },
-    {
-      url: `${BASE_URL}/products/lyte`,
-      lastModified: LAST_MODIFIED,
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
+
     {
       url: `${BASE_URL}/lyte/privacy-policy`,
       lastModified: LAST_MODIFIED,

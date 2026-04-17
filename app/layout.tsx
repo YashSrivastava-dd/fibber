@@ -50,8 +50,9 @@ export const metadata: Metadata = {
   verification: {
     google: '_611OG553fYDgD9ySG0n8u91QLMwxt2q9ZgaFr-TdEg',
   },
-  other: {
-    robots: 'index, follow, archive',
+  robots: {
+    index: true,
+    follow: true,
   },
   icons: {
     icon: '/icons/I Mark - BC 01.png',
