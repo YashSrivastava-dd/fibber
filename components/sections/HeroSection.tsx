@@ -19,6 +19,7 @@ export default function HeroSection() {
             className="object-cover object-bottom"
             style={{ objectPosition: 'center 85%' }}
             priority
+            fetchPriority="high"
           />
         </div>
 
@@ -55,6 +56,7 @@ export default function HeroSection() {
           className="object-cover"
           style={{ objectPosition: 'right center' }}
           priority
+          fetchPriority="high"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-white/30 via-transparent to-transparent" />
 

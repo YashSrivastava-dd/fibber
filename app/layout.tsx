@@ -80,8 +80,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${montserrat.variable} ${playfair.variable}`} suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://cdn.shopify.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://connect.facebook.net" />
+        <link rel="dns-prefetch" href="https://connect.facebook.net" />
+      </head>
       <body className={montserrat.className} suppressHydrationWarning>
-        <Script id="gtm-base" strategy="beforeInteractive">
+        <Script id="gtm-base" strategy="afterInteractive">
           {`
             (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -108,9 +113,9 @@ export default function RootLayout({
         {/* Google Ads (gtag.js) */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=AW-17953867063"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
-        <Script id="google-ads-gtag" strategy="afterInteractive">
+        <Script id="google-ads-gtag" strategy="lazyOnload">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
@@ -119,7 +124,7 @@ export default function RootLayout({
           `}
         </Script>
         {/* Meta Pixel */}
-        <Script id="meta-pixel" strategy="afterInteractive">
+        <Script id="meta-pixel" strategy="lazyOnload">
           {`
             !function(f,b,e,v,n,t,s)
             {if(f.fbq)return;n=f.fbq=function(){n.callMethod?

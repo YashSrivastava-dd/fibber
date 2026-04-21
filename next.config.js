@@ -2,6 +2,7 @@
 const nextConfig = {
   devIndicators: false,
   images: {
+    formats: ['image/avif', 'image/webp'],
     remotePatterns: [
       {
         protocol: 'https',
@@ -16,6 +17,19 @@ const nextConfig = {
         hostname: '**',
       },
     ],
+  },
+  async headers() {
+    return [
+      {
+        source: '/_next/static/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+    ]
   },
   async redirects() {
     return [

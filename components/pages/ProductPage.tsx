@@ -66,22 +66,30 @@ export default function ProductPage({ slug, initialProduct }: ProductPageProps) 
   const ingredientsRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      // Use the existing showStickyAddToCart logic but tailored for the specific button bounds
-      if (!mainButtonRef.current) return
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          if (!mainButtonRef.current) {
+            ticking = false;
+            return;
+          }
 
-      const buttonRect = mainButtonRef.current.getBoundingClientRect()
-      let isIngredientsInView = false
+          const buttonRect = mainButtonRef.current.getBoundingClientRect()
+          let isIngredientsInView = false
 
-      if (ingredientsRef.current) {
-        const ingredientsRect = ingredientsRef.current.getBoundingClientRect()
-        isIngredientsInView = ingredientsRect.top < window.innerHeight && ingredientsRect.bottom > 0
+          if (ingredientsRef.current) {
+            const ingredientsRect = ingredientsRef.current.getBoundingClientRect()
+            isIngredientsInView = ingredientsRect.top < window.innerHeight && ingredientsRect.bottom > 0
+          }
+
+          const isPastButton = buttonRect.bottom < 0
+
+          setShowStickyAddToCart(isPastButton && !isIngredientsInView)
+          ticking = false;
+        });
+        ticking = true;
       }
-
-      // Show if we scrolled past the main button but haven't hit ingredients
-      const isPastButton = buttonRect.bottom < 0
-
-      setShowStickyAddToCart(isPastButton && !isIngredientsInView)
     }
 
     // Call initially and add listener
@@ -439,8 +447,8 @@ export default function ProductPage({ slug, initialProduct }: ProductPageProps) 
                         src={image}
                         alt={`${product.title} - Image ${index + 1}`}
                         fill
+                        sizes="80px"
                         className="object-cover"
-                        unoptimized
                       />
                     </button>
                   ))}
@@ -454,9 +462,10 @@ export default function ProductPage({ slug, initialProduct }: ProductPageProps) 
                     src={displayImages[selectedImageIndex] || product.image || '/placeholder-product.png'}
                     alt={product.title}
                     fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
                     className="object-contain sm:p-8"
                     priority
-                    unoptimized
+                    fetchPriority="high"
                   />
                 </div>
 
@@ -495,8 +504,8 @@ export default function ProductPage({ slug, initialProduct }: ProductPageProps) 
                           src={image}
                           alt={`${product.title} - Image ${index + 1}`}
                           fill
+                          sizes="64px"
                           className="object-cover"
-                          unoptimized
                         />
                       </button>
                     ))}
