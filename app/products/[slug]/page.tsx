@@ -1,5 +1,7 @@
 import ProductPage from '@/components/pages/ProductPage'
 import type { Metadata } from 'next'
+import { shopifyFetch, formatProduct } from '@/lib/shopify/client'
+import { PRODUCT_BY_HANDLE_QUERY } from '@/lib/shopify/queries'
 
 const PRODUCT_META_BY_SLUG: Record<
   string,
@@ -137,15 +139,15 @@ export async function generateMetadata({ params }: ProductProps): Promise<Metada
 }
 
 async function getProductData(slug: string) {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://fiberisefit.com'
   try {
-    const res = await fetch(`${baseUrl}/api/shopify/product/${slug}`, {
-      cache: 'no-store',
+    const data = await shopifyFetch<{ product: any }>({
+      query: PRODUCT_BY_HANDLE_QUERY,
+      variables: { handle: slug },
     })
-    if (!res.ok) return null
-    const data = await res.json()
-    return data.product || null
+    if (!data.product) return null
+    return formatProduct(data.product)
   } catch (err) {
+    console.error('SSR Product Fetch Error:', err)
     return null
   }
 }

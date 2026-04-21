@@ -21,7 +21,7 @@ function ErrorFallback({ error }: { error: Error }) {
 export default function LytePage() {
   useEffect(() => {
     console.log('LYTE Page: All components should render')
-    
+
     // Smooth scroll behavior for anchor links
     const handleAnchorClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement
@@ -79,7 +79,7 @@ export default function LytePage() {
                 <li>• Care, warranty, and safety information</li>
               </ul>
               <a
-                href="/manual/lyte.pdf"
+                href="/manual/lyte.pdf?v=2"
                 className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-white text-black text-xs sm:text-sm font-semibold tracking-[0.2em] uppercase hover:bg-gray-200 transition-colors"
               >
                 <span>Download user manual</span>
@@ -98,7 +98,7 @@ export default function LytePage() {
                 </p>
                 <div className="bg-white rounded-xl p-3">
                   <img
-                    src="https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=https%3A%2F%2Ffiberisefit.com%2Fmanual%2Flyte.pdf"
+                    src="https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=https%3A%2F%2Ffiberisefit.com%2Fmanual%2Flyte.pdf%3Fv%3D2"
                     alt="QR code to download the LYTE user manual"
                     className="h-48 w-48 object-contain"
                   />
