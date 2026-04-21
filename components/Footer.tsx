@@ -10,6 +10,7 @@ export default function Footer() {
       { name: 'Transformation Pack', href: '/products/transformation-pack' },
       { name: 'Ultimate pack', href: '/products/ultimate-pack' },
       { name: 'LYTE', href: '/products/lyte' },
+      { name: 'Blog', href: '/blogs' },
     ],
     social: [
       { name: 'Instagram', href: 'https://www.instagram.com/fiberisefit?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==' },

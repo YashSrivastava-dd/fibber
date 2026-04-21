@@ -692,3 +692,64 @@ export const ORDERS_BY_EMAIL_QUERY = `
     }
   }
 `
+
+// Storefront API: Blog Queries
+export const BLOGS_QUERY = `
+  query getBlogs($first: Int!, $after: String) {
+    articles(first: $first, after: $after, sortKey: PUBLISHED_AT, reverse: true) {
+      edges {
+        node {
+          id
+          title
+          handle
+          excerptHtml
+          publishedAt
+          image {
+            url
+            altText
+            width
+            height
+          }
+          authorV2 {
+            name
+          }
+          tags
+        }
+        cursor
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+    }
+  }
+`
+
+export const ARTICLE_BY_HANDLE_QUERY = `
+  query getArticleByHandle($handle: String!) {
+    blog(handle: "news") {
+      articleByHandle(handle: $handle) {
+        id
+        title
+        handle
+        contentHtml
+        excerptHtml
+        publishedAt
+        seo {
+          title
+          description
+        }
+        image {
+          url
+          altText
+          width
+          height
+        }
+        authorV2 {
+          name
+        }
+        tags
+      }
+    }
+  }
+`
