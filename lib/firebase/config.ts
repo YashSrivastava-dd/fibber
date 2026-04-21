@@ -23,29 +23,45 @@ const isConfigValid = () => {
   )
 }
 
-// Initialize Firebase
-let app: FirebaseApp
-if (getApps().length === 0) {
+// Lazy singleton — only initialized when first accessed
+let _app: FirebaseApp | null = null
+let _auth: Auth | null = null
+
+function getFirebaseApp(): FirebaseApp {
+  if (_app) return _app
+  if (getApps().length > 0) {
+    _app = getApps()[0]
+    return _app
+  }
   if (!isConfigValid()) {
-    console.error('Firebase configuration is missing. Please check your environment variables.')
     throw new Error(
       'Firebase configuration is incomplete. Please set all NEXT_PUBLIC_FIREBASE_* environment variables.'
     )
   }
-  try {
-    app = initializeApp(firebaseConfig)
-    console.log('✅ Firebase initialized successfully')
-    console.log('📱 Project ID:', firebaseConfig.projectId)
-    console.log('🔑 Auth Domain:', firebaseConfig.authDomain)
-  } catch (error) {
-    console.error('❌ Firebase initialization error:', error)
-    throw new Error('Failed to initialize Firebase. Please check your configuration.')
-  }
-} else {
-  app = getApps()[0]
+  _app = initializeApp(firebaseConfig)
+  return _app
 }
 
-// Initialize Auth
-export const auth = getAuth(app)
+function getFirebaseAuth(): Auth {
+  if (_auth) return _auth
+  _auth = getAuth(getFirebaseApp())
+  return _auth
+}
 
-export default app
+/** Lazy proxy — importing this file does NOT initialize Firebase.
+ *  Firebase only boots when `auth` is actually accessed at runtime. */
+export const auth: Auth = new Proxy({} as Auth, {
+  get(_target, prop, receiver) {
+    const realAuth = getFirebaseAuth()
+    const value = Reflect.get(realAuth, prop, receiver)
+    return typeof value === 'function' ? value.bind(realAuth) : value
+  },
+})
+
+export default new Proxy({} as FirebaseApp, {
+  get(_target, prop, receiver) {
+    const realApp = getFirebaseApp()
+    const value = Reflect.get(realApp, prop, receiver)
+    return typeof value === 'function' ? value.bind(realApp) : value
+  },
+})

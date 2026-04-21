@@ -1,18 +1,20 @@
+import dynamic from 'next/dynamic'
 import HeroSection from '@/components/sections/HeroSection'
 import FeaturedProductsSection from '@/components/sections/FeaturedProductsSection'
-import MeditationImageSection from '@/components/sections/MeditationImageSection'
-import EnergyResetSection from '@/components/sections/EnergyResetSection'
-import VideoSection from '@/components/sections/VideoSection'
-import ProductShowcaseSection from '@/components/sections/ProductShowcaseSection'
-import ImageTextSection from '@/components/sections/ImageTextSection'
-import JourneySection from '@/components/sections/JourneySection'
-import RitualSection from '@/components/sections/RitualSection'
-import EmpoweringSection from '@/components/sections/EmpoweringSection'
-import FullWidthVideoSection from '@/components/sections/FullWidthVideoSection'
-import TestimonialCarouselSection from '@/components/sections/TestimonialCarouselSection'
-import PressMarqueeSection from '@/components/sections/PressMarqueeSection'
 
 import type { Metadata } from 'next'
+
+// Below-fold sections — dynamically imported to reduce initial JS bundle
+const PressMarqueeSection = dynamic(() => import('@/components/sections/PressMarqueeSection'))
+const MeditationImageSection = dynamic(() => import('@/components/sections/MeditationImageSection'))
+const VideoSection = dynamic(() => import('@/components/sections/VideoSection'))
+const ImageTextSection = dynamic(() => import('@/components/sections/ImageTextSection'))
+const JourneySection = dynamic(() => import('@/components/sections/JourneySection'))
+const RitualSection = dynamic(() => import('@/components/sections/RitualSection'))
+const EnergyResetSection = dynamic(() => import('@/components/sections/EnergyResetSection'))
+const EmpoweringSection = dynamic(() => import('@/components/sections/EmpoweringSection'))
+const FullWidthVideoSection = dynamic(() => import('@/components/sections/FullWidthVideoSection'))
+const TestimonialCarouselSection = dynamic(() => import('@/components/sections/TestimonialCarouselSection'))
 
 export const metadata: Metadata = {
   title: 'Fiber Supplement for Weight Loss | Fat Burner | Ozempic Alternative',
@@ -28,9 +30,10 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <div className="w-full">
-      {/* Homepage Sections */}
+      {/* Above-the-fold — statically imported for fast LCP */}
       <HeroSection />
       <FeaturedProductsSection />
+      {/* Below-the-fold — dynamically imported, zero initial JS cost */}
       <PressMarqueeSection />
       <MeditationImageSection />
       <VideoSection />
@@ -46,4 +49,3 @@ export default function Home() {
     </div>
   )
 }
-

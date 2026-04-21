@@ -1,12 +1,13 @@
 'use client'
 
 import Image from 'next/image'
+import { useRef, useState, useEffect } from 'react'
 
 const features = [
   {
     icon: '/icons/Group 642.svg',
     title: 'Mobilises Fat',
-    description: 'Supports the body’s natural fat-utilisation pathways',
+    description: "Supports the body's natural fat-utilisation pathways",
     position: 'left-top',
   },
   {
@@ -44,6 +45,32 @@ const features = [
 export default function VideoSection() {
   const leftFeatures = features.filter(f => f.position.startsWith('left'))
   const rightFeatures = features.filter(f => f.position.startsWith('right'))
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [isVisible, setIsVisible] = useState(false)
+
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true)
+          observer.disconnect()
+        }
+      },
+      { rootMargin: '200px' }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
+    if (isVisible && videoRef.current) {
+      videoRef.current.play().catch(() => {})
+    }
+  }, [isVisible])
 
   return (
     <section className="w-full bg-fyber-ivory-dream py-10 md:py-14 lg:py-16">
@@ -77,18 +104,23 @@ export default function VideoSection() {
             ))}
           </div>
 
-          {/* Center Video */}
-          <div className="relative flex items-center justify-center order-first lg:order-none">
+          {/* Center Video — lazy loaded */}
+          <div ref={containerRef} className="relative flex items-center justify-center order-first lg:order-none">
             <div className="relative w-full max-w-sm aspect-[3/4] rounded-2xl overflow-hidden border-0 border-none shadow-none ring-0">
-              <video
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="w-full h-full object-cover border-0 outline-none"
-              >
-                <source src="/videos/conversion.webm" type="video/webm" />
-              </video>
+              {isVisible ? (
+                <video
+                  ref={videoRef}
+                  loop
+                  muted
+                  playsInline
+                  preload="none"
+                  className="w-full h-full object-cover border-0 outline-none"
+                >
+                  <source src="/videos/conversion.webm" type="video/webm" />
+                </video>
+              ) : (
+                <div className="w-full h-full bg-gray-100 animate-pulse" />
+              )}
             </div>
           </div>
 
@@ -118,4 +150,3 @@ export default function VideoSection() {
     </section>
   )
 }
-

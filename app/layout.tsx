@@ -1,14 +1,11 @@
 import type { Metadata } from 'next'
-import Script from 'next/script'
 import { Montserrat, Playfair_Display } from 'next/font/google'
 import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import CartDrawer from '@/components/CartDrawer'
 import { AuthProvider } from '@/contexts/AuthContext'
-
-const ZOHO_SALESIQ_WIDGET_CODE =
-  'siqe177a46861bb4b82d85eb4c59df214a951761db2618629297fbd07d24a413a331f93ef1564d85a3c5716b77bc37881db'
+import ThirdPartyScripts from '../components/ThirdPartyScripts'
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -26,8 +23,6 @@ const playfair = Playfair_Display({
 
 const SITE_URL = 'https://fiberisefit.com'
 const OG_IMAGE = `${SITE_URL}/icons/I%20Mark%20-%20BC%2001.png`
-const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || '1494405295572983'
-const GTM_ID = 'GTM-W8MBF3JG'
 const ORGANIZATION_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
@@ -82,20 +77,15 @@ export default function RootLayout({
     <html lang="en" className={`${montserrat.variable} ${playfair.variable}`} suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://cdn.shopify.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://connect.facebook.net" />
-        <link rel="dns-prefetch" href="https://connect.facebook.net" />
+        <link rel="dns-prefetch" href="https://cdn.shopify.com" />
+        {/* Organization structured data — zero JS cost as inline JSON */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(ORGANIZATION_SCHEMA) }}
+        />
       </head>
       <body className={montserrat.className} suppressHydrationWarning>
-        <Script id="gtm-base" strategy="afterInteractive">
-          {`
-            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-            })(window,document,'script','dataLayer','${GTM_ID}');
-          `}
-        </Script>
-        {/* Google Tag Manager (noscript) */}
+        {/* GTM noscript fallback — zero JS cost */}
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-W8MBF3JG"
@@ -110,63 +100,9 @@ export default function RootLayout({
           <Footer />
           <CartDrawer />
         </AuthProvider>
-        {/* Google Ads (gtag.js) */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=AW-17953867063"
-          strategy="lazyOnload"
-        />
-        <Script id="google-ads-gtag" strategy="lazyOnload">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'AW-17953867063');
-          `}
-        </Script>
-        {/* Meta Pixel */}
-        <Script id="meta-pixel" strategy="lazyOnload">
-          {`
-            !function(f,b,e,v,n,t,s)
-            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-            n.queue=[];t=b.createElement(e);t.async=!0;
-            t.src=v;s=b.getElementsByTagName(e)[0];
-            s.parentNode.insertBefore(t,s)}(window, document,'script',
-            'https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', '${META_PIXEL_ID}');
-            fbq('track', 'PageView');
-          `}
-        </Script>
-        <noscript>
-          <img
-            height="1"
-            width="1"
-            style={{ display: 'none' }}
-            src={`https://www.facebook.com/tr?id=${META_PIXEL_ID}&ev=PageView&noscript=1`}
-            alt=""
-          />
-        </noscript>
-        <Script
-          id="organization-schema"
-          type="application/ld+json"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(ORGANIZATION_SCHEMA) }}
-        />
-        {/* Zoho SalesIQ chat widget */}
-        {/* <Script
-          id="zoho-salesiq-ready"e
-          strategy="beforeInteractive"
-        >
-          {`window.$zoho=window.$zoho||{};$zoho.salesiq=$zoho.salesiq||{ready:function(){}};`}
-        </Script>
-        <Script
-          id="zsiqscript"
-          src={`https://salesiq.zohopublic.in/widget?wc=${ZOHO_SALESIQ_WIDGET_CODE}`}
-          strategy="afterInteractive"
-        /> */}
+        {/* ALL third-party scripts load ONLY after user interaction */}
+        <ThirdPartyScripts />
       </body>
     </html>
   )
 }
-
